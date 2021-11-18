@@ -29,16 +29,17 @@
     </b-container>
     <b-pagination
         v-model="currentPage"
-        :total-rows="rows"
-        per-page="perPage"
+        :total-rows="boardCount"
+        :per-page="perPage"
         aria-controls="my-table"
+        @page-click="pageClick"
     ></b-pagination>
     </div>
 </template>
 
 <script>
 // import BoardListRow from "@/components/board/child/BoardListRow.vue";
-import { mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
 
 const boardStore = "boardStore";
 
@@ -60,16 +61,14 @@ export default {
         { key: "content", label: "내용", tdClass: "tdClass"},
       ],
       perPage: 10,
-      rows: 12,
       currentPage: 1,
-      boardList: [],
       start: 0,
     };
   },
 
-  // computed: {
-  //   ...mapState(boardStore, ["boardList"])
-  // },
+  computed: {
+    ...mapState(boardStore, ["boardList", "boardCount"])
+  },
 
   created() {
     this.getList();
@@ -84,9 +83,6 @@ export default {
 
     getList() {
       this.getBoardList({key: 'subject', pg: this.currentPage, spp: this.perPage, start: this.start, word: ''});
-      // this.boardList = this.$state.boardList;
-      this.boardList = this.$store.state.boardList;
-      this.rows = this.boardList.length;
     },
 
     viewArticle(article) {
@@ -95,6 +91,11 @@ export default {
         params: { articleno: article.articleno },
       });
     },
+
+    pageClick: function (button, page){
+			this.currentPage = page;
+      this.getList();
+			},
   },
 };
 </script>
