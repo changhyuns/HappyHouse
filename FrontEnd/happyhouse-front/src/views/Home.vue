@@ -39,6 +39,9 @@ export default {
 </script>
 
 <style scoped>
+b-container {
+  background-image: url('main_background.jpg');
+}
 .underline-steelblue {
   display: inline-block;
   background: linear-gradient(
