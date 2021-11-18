@@ -1,5 +1,7 @@
 <template>
   <b-container class="bv-example-row mt-3 text-center">
+    <side-nav></side-nav>
+    <user-nav></user-nav>
     <h3 class="underline-hotpink">
       <b-icon icon="journals"></b-icon> Board Service
     </h3>
@@ -7,8 +9,12 @@
   </b-container>
 </template>
 <script>
+import SideNav from "../components/layout/SideNav.vue";
+import UserNav from "../components/layout/UserNav.vue";
+
 export default {
   name: "Board",
+  components: { UserNav, SideNav },
 };
 </script>
 <style scoped>

@@ -1,39 +1,42 @@
 <template>
-  <b-container class="bv-example-row mt-3 text-center">
-    <h3 class="underline-steelblue"><b-icon icon="house"></b-icon> SSAFY</h3>
-    <b-row>
-      <b-col></b-col>
-      <b-col cols="10">
-        <b-jumbotron
-          bg-variant="muted"
-          text-variant="dark"
-          border-variant="dark"
-        >
-          <template #header>SSAFY Home</template>
-
-          <template #lead>
-            슬기로운 싸피 생활 (:6기편) <br />
-            열정 하~~~~앗 Six!!!!!
-          </template>
-
-          <hr class="my-4" />
-
-          <p>Vue + Bootstrap활용.</p>
-          <p>Bootstrap-vue는 버전 <b>4.5.3</b>을 권장합니다.</p>
-          <p><b>BoardList.vue</b>를 바꿔가면서 테스트하세요.</p>
-          <p>Bootstrap의 <b>table</b> 사용법을 익히게됩니다.</p>
-        </b-jumbotron>
-      </b-col>
-      <b-col></b-col>
-    </b-row>
-  </b-container>
+  <div>
+    <body class="Home">
+      <user-nav></user-nav>
+      <div class="top">
+        <h1>Happy House</h1>
+      </div>
+      <div class="center">
+        <button>
+          <b-icon icon="search" aria-hidden="true"></b-icon>
+          <router-link :to="{ name: 'House' }"> 부동산정보</router-link>
+        </button>
+        <button>
+          <b-icon icon="list" aria-hidden="true"></b-icon>
+          <router-link :to="{ name: 'Board' }"> 게시판</router-link>
+        </button>
+        <button>
+          <b-icon icon="exclamation-circle" aria-hidden="true"></b-icon>
+          공지사항
+        </button>
+      </div>
+    </body>
+    <footer-bar></footer-bar>
+  </div>
 </template>
 
 <script>
+import UserNav from "@/components/layout/UserNav.vue";
+import FooterBar from "../components/layout/FooterBar.vue";
+
 export default {
   name: "Main",
   props: {
     msg: String,
+  },
+
+  components: {
+    UserNav,
+    FooterBar,
   },
 };
 </script>
@@ -49,5 +52,32 @@ b-container {
     rgba(255, 255, 255, 0) 70%,
     rgba(72, 190, 233, 0.3) 30%
   );
+}
+
+.top {
+  position: relative;
+  text-align: center;
+  height: 500px;
+}
+
+.center {
+  position: relative;
+  text-align: center;
+}
+
+button {
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 10px;
+  margin-inline-end: 10px;
+}
+
+.Home {
+  background-image: url(../assets/main.jpg);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  min-height: 900px;
+  min-width: 1600px;
+  background-position: top left;
 }
 </style>
