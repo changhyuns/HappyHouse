@@ -15,6 +15,7 @@ const boardStore = {
     perPage: 10,
     currentPage: 1,
     start: 0,
+    boardCount: 0,
   },
   getters: {
     getBoardListState(state) {
@@ -23,11 +24,15 @@ const boardStore = {
   },
   mutations: {
     SET_BOARD_LIST(state, response) {
-      this.state.boardList = response;
+      state.boardList = response;
     },
     SET_BOARD_DETAIL(state, response) {
-      this.state.boardDetail = response;
+      state.boardDetail = response;
     },
+
+    SET_BOARD_COUNT(state, response) {
+      state.boardCount = response;
+    }
   },
   actions: {
     async getBoardList({ commit }, param) {
@@ -42,8 +47,9 @@ const boardStore = {
         param,
         (response) => {
           console.log("listArticle GET response : ", response.data);
-          commit("SET_BOARD_LIST", response.data);
-          console.log(this.state.boardList);
+          commit("SET_BOARD_COUNT", response.data.total);
+          commit("SET_BOARD_LIST", response.data.list);
+          // console.log(this.state.boardList);
         },
         (error) => {
           console.log("error : ", error);
@@ -63,13 +69,16 @@ const boardStore = {
       );
     },
     registBoard({ commit }, data) {
+      console.log(data);
+      /*
       const params = {
         userid: data.userid,
         content: data.content,
         subject: data.subject
       };
+      */
       writeArticle(
-        params,
+        data,
         (response) => {
           console.log(commit);
           console.log(response);
