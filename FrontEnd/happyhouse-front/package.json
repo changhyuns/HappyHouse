@@ -1,5 +1,5 @@
 {
-  "name": "vue-board",
+  "name": "HappyHouse",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -52,7 +52,8 @@
         {
           "endOfLine": "auto"
         }
-      ]
+      ],
+      "no-unused-vars": "off"
     }
   },
   "browserslist": [
