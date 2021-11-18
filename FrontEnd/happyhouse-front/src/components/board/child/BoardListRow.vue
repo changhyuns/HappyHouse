@@ -24,6 +24,7 @@ export default {
     subject: String,
     hit: Number,
     regtime: String,
+    content: String,
   },
   computed: {
     // changeDateFormat() {

@@ -1,71 +1,94 @@
 <template>
-  <b-container class="bv-example-row mt-3">
-    <b-row>
-      <b-col>
-        <b-alert show><h3>글목록</h3></b-alert>
-      </b-col>
-    </b-row>
-    <b-row class="mb-1">
-      <b-col class="text-right">
-        <b-button variant="outline-primary" @click="moveWrite()"
-          >글쓰기</b-button
-        >
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col>
-        <b-table
-          striped
-          hover
-          :items="articles"
-          :fields="fields"
-          @row-clicked="viewArticle"
-        >
-        </b-table>
-      </b-col>
-    </b-row>
-  </b-container>
+  <div>
+    <b-container class="bv-example-row mt-3">
+      <b-row>
+        <b-col>
+          <b-alert show><h3>글목록</h3></b-alert>
+        </b-col>
+      </b-row>
+      <b-row class="mb-1">
+        <b-col class="text-right">
+          <b-button variant="outline-primary" @click="moveWrite()"
+            >글쓰기</b-button
+          >
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col>
+          <b-table
+            striped
+            hover
+            :items="boardList"
+            :fields="fields"
+            :current-page="currentPage"
+            @row-clicked="viewArticle"
+          >
+          </b-table>
+        </b-col>
+      </b-row>
+    </b-container>
+    <b-pagination
+        v-model="currentPage"
+        :total-rows="rows"
+        per-page="perPage"
+        aria-controls="my-table"
+    ></b-pagination>
+    </div>
 </template>
 
 <script>
-import { listArticle } from "@/api/board";
+// import BoardListRow from "@/components/board/child/BoardListRow.vue";
+import { mapActions } from "vuex";
+
+const boardStore = "boardStore";
 
 export default {
   name: "BoardList",
-  components: {},
+
+  // components: {
+  //   BoardListRow
+  // },
+
   data() {
     return {
-      articles: [],
       fields: [
         { key: "articleno", label: "글번호", tdClass: "tdClass" },
         { key: "subject", label: "제목", tdClass: "tdSubject" },
         { key: "userid", label: "작성자", tdClass: "tdClass" },
         { key: "regtime", label: "작성일", tdClass: "tdClass" },
         { key: "hit", label: "조회수", tdClass: "tdClass" },
+        { key: "content", label: "내용", tdClass: "tdClass"},
       ],
+      perPage: 10,
+      rows: 12,
+      currentPage: 1,
+      boardList: [],
+      start: 0,
     };
   },
+
+  // computed: {
+  //   ...mapState(boardStore, ["boardList"])
+  // },
+
   created() {
-    let param = {
-      pg: 1,
-      spp: 20,
-      key: null,
-      word: null,
-    };
-    listArticle(
-      param,
-      (response) => {
-        this.articles = response.data;
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+    this.getList();
   },
+
   methods: {
+    ...mapActions(boardStore, ["getBoardList"]),
+
     moveWrite() {
       this.$router.push({ name: "BoardWrite" });
     },
+
+    getList() {
+      this.getBoardList({key: 'subject', pg: this.currentPage, spp: this.perPage, start: this.start, word: ''});
+      // this.boardList = this.$state.boardList;
+      this.boardList = this.$store.state.boardList;
+      this.rows = this.boardList.length;
+    },
+
     viewArticle(article) {
       this.$router.push({
         name: "BoardView",
