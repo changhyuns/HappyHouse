@@ -25,14 +25,15 @@
     <b-row class="mb-1">
       <b-col>
         <b-card
-          :header-html="`<h3>${article.articleno}.
-          ${article.subject} [${article.hit}]</h3><div><h6>${article.userid}</div><div>${article.regtime}</h6></div>`"
+          :header-html="`<h3>${article.subject}</h3><br>
+          <div><h5>작성자 : ${article.userid}</h5></div><br>
+          <div><h5>${article.regtime}</h5></div>`"
           class="mb-2"
           border-variant="dark"
           no-body
         >
-          <b-card-body class="text-left">
-            <div v-html="message"></div>
+          <b-card-body class="text-align: center">
+            <div v-html="message" style="font-size: 30px"></div>
           </b-card-body>
         </b-card>
       </b-col>
@@ -69,7 +70,7 @@ export default {
         this.article = response.data;
       },
       (error) => {
-        console.log("삭제시 에러발생!!", error);
+        console.log("삭제 에러발생!!", error);
       }
     );
   },
@@ -85,9 +86,9 @@ export default {
       //   this.$router.push({ path: `/board/modify/${this.article.articleno}` });
     },
     removeArticle() {
-      if (confirm("정말로 삭제?")) {
+      if (confirm("게시글을 삭제하시겠습니까?")) {
         deleteArticle(this.article.articleno, () => {
-          this.$router.push({ name: "BoardList" });
+          this.$router.push({ name: "BoardList2" });
         });
       }
     },
