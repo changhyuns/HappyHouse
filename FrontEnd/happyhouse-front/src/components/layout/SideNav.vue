@@ -2,12 +2,14 @@
   <div class="SideNav">
     <div class="logo">
       <router-link :to="{ name: 'Home' }" tag="h2"
-        ><b-icon icon="house" font-scale="1"></b-icon
+        ><b-icon icon="house-fill" font-scale="1"></b-icon
       ></router-link>
     </div>
     <div class="list">
-      <router-link :to="{ name: 'House' }" tag="h2">부동산 검색</router-link>
+      <router-link :to="{ name: 'House' }" tag="h2">부동산</router-link>
       <router-link :to="{ name: 'Board' }" tag="h2">게시판</router-link>
+      <h2>편의시설</h2>
+      <h2>학교정보</h2>
     </div>
   </div>
 </template>
@@ -19,7 +21,7 @@ export default {};
 <style scoped>
 .SideNav {
   position: fixed;
-  width: 150px;
+  width: 130px;
   left: 0;
   top: 0;
   bottom: 0;
@@ -41,6 +43,7 @@ h2 {
 
 .logo h2 {
   text-align: center;
-  font-size: 20pt;
+  font-size: 30pt;
+  margin-top: 10px;
 }
 </style>

@@ -1,5 +1,10 @@
 <template>
-  <b-container v-if="houses && houses.length != 0" class="bv-example-row mt-3">
+  <b-container
+    v-if="houses && houses.length != 0"
+    class="bv-example-row"
+    id="SideAptList"
+  >
+    <h3>아파트 목록</h3>
     <house-list-row
       v-for="(house, index) in houses"
       :key="index"
@@ -36,4 +41,21 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+#SideAptList {
+  position: fixed;
+  width: 300px;
+  left: 130px;
+  top: 0;
+  bottom: 0;
+  overflow: auto;
+  background-color: #f4f0fd;
+  z-index: 10;
+  text-align: left;
+}
+
+#SideAptList h3 {
+  text-align: center;
+  margin: 30px;
+}
+</style>

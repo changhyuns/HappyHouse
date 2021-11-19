@@ -59,12 +59,17 @@ export default {
   created() {
     // this.$store.dispatch("getSido");
     // this.sidoList();
+    this.CLEAR_HOUSE_LIST();
     this.CLEAR_SIDO_LIST();
     this.getSido();
   },
   methods: {
     ...mapActions(houseStore, ["getSido", "getGugun", "getHouseList"]),
-    ...mapMutations(houseStore, ["CLEAR_SIDO_LIST", "CLEAR_GUGUN_LIST"]),
+    ...mapMutations(houseStore, [
+      "CLEAR_SIDO_LIST",
+      "CLEAR_GUGUN_LIST",
+      "CLEAR_HOUSE_LIST",
+    ]),
     // sidoList() {
     //   this.getSido();
     // },
