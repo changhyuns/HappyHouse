@@ -7,6 +7,7 @@ const houseStore = {
     guguns: [{ value: null, text: "선택하세요" }],
     houses: [],
     house: null,
+    address: { sido: null, gugun: null },
   },
 
   getters: {},
@@ -35,6 +36,26 @@ const houseStore = {
     SET_DETAIL_HOUSE: (state, house) => {
       state.house = house;
     },
+
+    SET_ADDRESS: (state, data) => {
+      state.sidos.forEach(s => {
+        if (s.value == data.sc) {
+          state.address.sido = s.text;
+        }
+      });
+
+      state.guguns.forEach(g => {
+        if (g.value == data.gc) {
+          state.address.gugun = g.text;
+        }
+      });
+    },
+
+    CLEAR_HOUSE_LIST: (state) => {
+      state.houses = [];
+      state.house = null;
+    }
+
   },
 
   actions: {
@@ -80,6 +101,7 @@ const houseStore = {
         params,
         (response) => {
           //   console.log(response.data.response.body.items.item);
+          commit("SET_ADDRESS", { sc: gugunCode.substr(0, 2), gc: gugunCode });
           commit("SET_HOUSE_LIST", response.data.response.body.items.item);
         },
         (error) => {
