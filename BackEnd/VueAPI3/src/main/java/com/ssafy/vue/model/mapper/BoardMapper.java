@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.ssafy.vue.model.BoardDto;
 import com.ssafy.vue.model.BoardParameterDto;
+import com.ssafy.vue.model.CommentDto;
 
 @Mapper
 public interface BoardMapper {
@@ -19,5 +20,7 @@ public interface BoardMapper {
 	public int modifyArticle(BoardDto boardDto) throws SQLException;
 	public void deleteMemo(int articleno) throws SQLException;
 	public int deleteArticle(int articleno) throws SQLException;
+	public int writeComment(CommentDto commentDto) throws SQLException;
+	public List<CommentDto> listComment(int articleno) throws SQLException;
 	
 }

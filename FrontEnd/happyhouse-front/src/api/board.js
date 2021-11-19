@@ -31,4 +31,8 @@ function deleteArticle(articleno, success, fail) {
   api.delete(`/board/${articleno}`).then(success).catch(fail);
 }
 
-export { listArticle, writeArticle, getArticle, modifyArticle, deleteArticle };
+function writeComment(param, success, fail) {
+  api.post(`/board/comment`, param).then(success).catch(fail);
+}
+
+export { listArticle, writeArticle, getArticle, modifyArticle, deleteArticle, writeComment };

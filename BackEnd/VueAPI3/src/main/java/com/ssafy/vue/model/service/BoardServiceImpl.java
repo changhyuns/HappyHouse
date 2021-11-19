@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ssafy.util.PageNavigation;
 import com.ssafy.vue.model.BoardDto;
 import com.ssafy.vue.model.BoardParameterDto;
+import com.ssafy.vue.model.CommentDto;
 import com.ssafy.vue.model.mapper.BoardMapper;
 
 @Service
@@ -72,5 +73,18 @@ public class BoardServiceImpl implements BoardService {
 	public boolean deleteArticle(int articleno) throws Exception {
 		sqlSession.getMapper(BoardMapper.class).deleteMemo(articleno);
 		return sqlSession.getMapper(BoardMapper.class).deleteArticle(articleno) == 1;
+	}
+
+	@Override
+	public boolean writeComment(CommentDto commentDto) throws Exception {
+		if(commentDto.getUserid() == null || commentDto.getContent() == null) {
+			throw new Exception();
+		}
+		return sqlSession.getMapper(BoardMapper.class).writeComment(commentDto) == 1;
+	}
+
+	@Override
+	public List<CommentDto> listComment(int articleno) throws Exception {
+		return sqlSession.getMapper(BoardMapper.class).listComment(articleno);
 	}
 }

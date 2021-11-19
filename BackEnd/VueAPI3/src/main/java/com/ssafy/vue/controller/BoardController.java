@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.vue.model.BoardDto;
 import com.ssafy.vue.model.BoardParameterDto;
+import com.ssafy.vue.model.CommentDto;
 import com.ssafy.vue.model.service.BoardService;
 
 import io.swagger.annotations.Api;
@@ -52,17 +53,17 @@ public class BoardController {
 		return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
 	}
 	
-	@ApiOperation(value = "게시판 글목록", notes = "모든 게시글의 정보를 반환한다.", response = List.class)
-	@GetMapping
-	public ResponseEntity<Map<String, Object>> listArticle(@ApiParam(value = "게시글을 얻기위한 부가정보.", required = true) BoardParameterDto boardParameterDto, HttpServletRequest request) throws Exception {
-		logger.info("listArticle - 호출");
-		Map<String, Object> map = new HashMap<>();
-		map.put("total", boardService.makePageNavigation(boardParameterDto).getTotalCount());
-		map.put("list", boardService.listArticle(boardParameterDto));
-		
-		System.out.println(request.getRequestURL());
-		return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
-	}
+	@ApiOperation(value = "게시판 글목록", notes = "모든 게시글의 정보를 반환한다.", response = Map.class)
+    @GetMapping
+    public ResponseEntity<Map<String, Object>> listArticle(@ApiParam(value = "게시글을 얻기위한 부가정보.", required = true) BoardParameterDto boardParameterDto, HttpServletRequest request) throws Exception {
+        logger.info("listArticle - 호출");
+        Map<String, Object> map = new HashMap<>();
+        map.put("total", boardService.makePageNavigation(boardParameterDto).getTotalCount());
+        map.put("list", boardService.listArticle(boardParameterDto));
+
+        System.out.println(request.getRequestURL());
+        return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+    }
 	
 	@ApiOperation(value = "게시판 글보기", notes = "글번호에 해당하는 게시글의 정보를 반환한다.", response = BoardDto.class)
 	@GetMapping("/{articleno}")
@@ -92,4 +93,22 @@ public class BoardController {
 		}
 		return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
 	}
+	
+	@ApiOperation(value = "게시판 댓글작성", notes = "새로운 댓글 정보를 입력한다. 그리고 DB입력 성공여부에 따라 'success' 또는 'fail' 문자열을 반환한다.", response = String.class)
+	@PostMapping("/comment")
+	public ResponseEntity<String> writeComment(@RequestBody @ApiParam(value = "댓글 정보.", required = true) CommentDto commentDto) throws Exception {
+		logger.info("writeComment - 호출");
+		if (boardService.writeComment(commentDto)) {
+			return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+		}
+		return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
+	}
+	
+	@ApiOperation(value = "댓글 목록", notes = "모든 댓글 정보를 반환한다.", response = List.class)
+    @GetMapping("/comment/{articleno}")
+    public ResponseEntity<List<CommentDto>> listComment(@PathVariable("articleno") @ApiParam(value = "게시글의 번호", required = true) int articleno) throws Exception {
+        logger.info("listComment - 호출");
+        
+        return new ResponseEntity<List<CommentDto>>(boardService.listComment(articleno), HttpStatus.OK);
+    }
 }
