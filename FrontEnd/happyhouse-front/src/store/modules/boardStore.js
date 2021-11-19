@@ -3,11 +3,17 @@ import { writeArticle } from "@/api/board.js";
 import { getArticle } from "@/api/board.js";
 import { modifyArticle } from "@/api/board.js";
 import { deleteArticle } from "@/api/board.js";
+import router from "../../router";
 
 
 const boardStore = {
   namespaced: true,
   state: {
+    board: {
+      subject: '',
+      content: '',
+      userid: '',
+    },
     boardList: [],
     boardDetail: null,
     searchWord: '',
@@ -25,6 +31,7 @@ const boardStore = {
   mutations: {
     SET_BOARD_LIST(state, response) {
       state.boardList = response;
+      console.log(state.boardList);
     },
     SET_BOARD_DETAIL(state, response) {
       state.boardDetail = response;
@@ -32,7 +39,8 @@ const boardStore = {
 
     SET_BOARD_COUNT(state, response) {
       state.boardCount = response;
-    }
+    },
+
   },
   actions: {
     async getBoardList({ commit }, param) {
@@ -68,27 +76,23 @@ const boardStore = {
         }
       );
     },
-    registBoard({ commit }, data) {
-      console.log(data);
-      /*
-      const params = {
-        userid: data.userid,
-        content: data.content,
-        subject: data.subject
-      };
-      */
+    registBoard({ commit }, param) {
+      console.log("ddddd", param);
       writeArticle(
-        data,
+        param,
         (response) => {
-          console.log(commit);
-          console.log(response);
+          console.log(commit, response);
+          alert('게시글을 작성하였습니다.');
+          router.push({ name: "BoardList2" });
         },
         (error) => {
-          console.log("error : ", error);
+          console.log(error);
+          alert('게시글 작성에 실패하였습니다');
         }
       );
     },
     modifyBoard({ commit }, data) {
+      console.log(data);
       const params = {
         userid: data.userid,
         articleno: data.articleno,

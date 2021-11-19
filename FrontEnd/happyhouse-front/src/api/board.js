@@ -3,7 +3,7 @@ import { apiInstance } from "./index.js";
 const api = apiInstance();
 
 function listArticle(param, success, fail) {
-  console.log(param);
+  console.log("param1", param);
   api.get(`/board`, { params: param }).then(success).catch(fail);
 }
 
@@ -12,7 +12,7 @@ function listArticle(param, success, fail) {
 // }
 
 function writeArticle(param, success, fail) {
-  api.post(`/board`, { params: param }).then(success).catch(fail);
+  api.post(`/board`, param).then(success).catch(fail);
 }
 
 function getArticle(articleno, success, fail) {
@@ -24,7 +24,7 @@ function getArticle(articleno, success, fail) {
 // }
 
 function modifyArticle(param, success, fail) {
-  api.put(`/board`, { params: param }).then(success).catch(fail);
+  api.put(`/board`, param).then(success).catch(fail);
 }
 
 function deleteArticle(articleno, success, fail) {

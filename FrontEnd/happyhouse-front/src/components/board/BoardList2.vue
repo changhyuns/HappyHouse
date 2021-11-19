@@ -8,7 +8,7 @@
       </b-row>
       <b-row class="mb-1">
         <b-col class="text-right">
-          <b-button variant="outline-primary" @click="moveWrite()"
+          <b-button class="btn-write" variant="outline-primary" @click="moveWrite()"
             >글쓰기</b-button
           >
         </b-col>
@@ -54,11 +54,10 @@ export default {
     return {
       fields: [
         { key: "articleno", label: "글번호", tdClass: "tdClass" },
-        { key: "subject", label: "제목", tdClass: "tdSubject" },
-        { key: "userid", label: "작성자", tdClass: "tdClass" },
+        { key: "subject", label: "제목", tdClass: "tdSubject"},
+        { key: "userid", label: "작성자", tdClass: "tdUser" },
         { key: "regtime", label: "작성일", tdClass: "tdClass" },
         { key: "hit", label: "조회수", tdClass: "tdClass" },
-        { key: "content", label: "내용", tdClass: "tdClass"},
       ],
       perPage: 10,
       currentPage: 1,
@@ -67,11 +66,12 @@ export default {
   },
 
   computed: {
-    ...mapState(boardStore, ["boardList", "boardCount"])
+    ...mapState(boardStore, ["boardList", "boardCount"]),
   },
 
   created() {
     this.getList();
+    
   },
 
   methods: {
@@ -102,11 +102,28 @@ export default {
 
 <style scope>
 .tdClass {
-  width: 50px;
+  width: 12%;
   text-align: center;
+  cursor: pointer;
 }
 .tdSubject {
-  width: 300px;
-  text-align: left;
+  width: 52%;
+  text-align: center;
+  cursor: pointer;
+}
+
+.tdUser {
+  width: 12%;
+  text-align: center;
+  color: teal;
+  font-weight: 500;
+}
+
+.pagination {
+  justify-content: center;
+}
+
+.btn-write{
+  color: mediumpurple;
 }
 </style>

@@ -2,7 +2,7 @@
   <b-row class="mb-1">
     <b-col style="text-align: left">
       <b-form @submit="onSubmit" @reset="onReset">
-        <b-form-group
+        <!-- <b-form-group
           id="userid-group"
           label="작성자:"
           label-for="userid"
@@ -16,7 +16,7 @@
             required
             placeholder="작성자 입력..."
           ></b-form-input>
-        </b-form-group>
+        </b-form-group> -->
 
         <b-form-group
           id="subject-group"
@@ -60,7 +60,11 @@
 </template>
 
 <script>
-import { writeArticle, getArticle, modifyArticle } from "@/api/board";
+import { getArticle } from "@/api/board";
+import { mapActions, mapState } from "vuex";
+
+const boardStore = "boardStore";
+const memberStore = "memberStore";
 
 export default {
   name: "BoardWriteForm",
@@ -68,7 +72,6 @@ export default {
     return {
       article: {
         articleno: 0,
-        userid: "",
         subject: "",
         content: "",
       },
@@ -83,10 +86,6 @@ export default {
       getArticle(
         this.$route.params.articleno,
         ({ data }) => {
-          // this.article.articleno = data.article.articleno;
-          // this.article.userid = data.article.userid;
-          // this.article.subject = data.article.subject;
-          // this.article.content = data.article.content;
           this.article = data;
         },
         (error) => {
@@ -96,17 +95,26 @@ export default {
       this.isUserid = true;
     }
   },
+  computed: {
+    ...mapState(memberStore, ["userInfo"]),
+  },
   methods: {
+    ...mapActions(boardStore, ["registBoard", "modifyBoard"]),
+
+    insertBoard() {
+      this.registBoard({userid: this.userInfo.userid, subject: this.article.subject, content: this.article.content});
+    },
+
     onSubmit(event) {
       event.preventDefault();
 
       let err = true;
       let msg = "";
-      !this.article.userid &&
-        ((msg = "작성자 입력해주세요"),
-        (err = false),
-        this.$refs.userid.focus());
-      err &&
+      // !this.article.userid &&
+      //   ((msg = "작성자 입력해주세요"),
+      //   (err = false),
+      //   this.$refs.userid.focus());
+      // err &&
         !this.article.subject &&
         ((msg = "제목 입력해주세요"),
         (err = false),
@@ -119,7 +127,10 @@ export default {
 
       if (!err) alert(msg);
       else
-        this.type === "register" ? this.registArticle() : this.updateArticle();
+        // this.type === "register" ? this.registArticle() : this.updateArticle();
+        this.type === "register" ? this.insertBoard() 
+                                : this.modifyBoard({articleno: this.article.articleno, userid: this.userInfo.userid, subject: this.article.subject, content: this.article.content});
+      
     },
     onReset(event) {
       event.preventDefault();
@@ -128,50 +139,9 @@ export default {
       this.article.content = "";
       this.$router.push({ name: "BoardList" });
     },
-    registArticle() {
-      writeArticle(
-        {
-          userid: this.article.userid,
-          subject: this.article.subject,
-          content: this.article.content,
-        },
-        ({ data }) => {
-          let msg = "등록 처리시 문제가 발생했습니다.";
-          if (data === "success") {
-            msg = "등록이 완료되었습니다.";
-          }
-          alert(msg);
-          this.moveList();
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-    },
-    updateArticle() {
-      modifyArticle(
-        {
-          articleno: this.article.articleno,
-          userid: this.article.userid,
-          subject: this.article.subject,
-          content: this.article.content,
-        },
-        ({ data }) => {
-          let msg = "수정 처리시 문제가 발생했습니다.";
-          if (data === "success") {
-            msg = "수정이 완료되었습니다.";
-          }
-          alert(msg);
-          // 현재 route를 /list로 변경.
-          this.$router.push({ name: "BoardList" });
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-    },
+    
     moveList() {
-      this.$router.push({ name: "BoardList" });
+      this.$router.push({ name: "BoardList2" });
     },
   },
 };
