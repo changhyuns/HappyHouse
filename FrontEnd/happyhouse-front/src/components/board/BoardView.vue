@@ -38,20 +38,39 @@
         </b-card>
       </b-col>
     </b-row>
+    <!-- <div id="comment_textarea">
+      <b-form-textarea v-model="value" debounce="500" rows="3" max-rows="5" placeholder="댓글을 남겨보세요"></b-form-textarea>
+    </div> -->
+    <div class="comment_box">
+      <div class="comment_inbox_user">
+        {{ article.userid }}
+      </div>
+      <div>
+        <textarea v-model="comment_content" placeholder="댓글을 남겨보세요" @keyup.exact.enter="submitComment()"></textarea>
+      </div>
+      <div style="align-items: right">
+        <button id="btn-registerComment" squared variant="outline-secondary" @click="submitComment()">등록</button>
+      </div>
+    </div>
   </b-container>
 </template>
 
 <script>
 // import moment from "moment";
-import { getArticle, deleteArticle } from "@/api/board";
+import { getArticle, deleteArticle, writeComment } from "@/api/board";
+import { mapState } from "vuex";
+const memberStore = "memberStore";
 
 export default {
   data() {
     return {
       article: {},
+      comment_content: '',
     };
   },
   computed: {
+    ...mapState(memberStore, ["userInfo"]),
+
     message() {
       if (this.article.content)
         return this.article.content.split("\n").join("<br>");
@@ -92,8 +111,64 @@ export default {
         });
       }
     },
+    submitComment() {
+      const prev_comment = this.comment_content;
+      if(confirm("댓글을 등록하시겠습니까?")) {
+        console.log(prev_comment);
+        writeComment({articleno: this.article.articleno, content: this.comment_content, userid: this.userInfo.userid}, () => {
+          alert('댓글 등록 완료');
+          this.comment_content = '';
+        })
+      }else{
+        this.comment_content = prev_comment;
+      }
+    },
+    nothing() {
+
+    }
   },
 };
 </script>
 
-<style></style>
+<style scoped>
+  .comment_box {
+    display: flex;
+    margin-top : 50px;
+    border: 1px solid;
+    border-radius: 10px 10px 10px 10px;
+    flex-direction: column;
+    box-sizing: border-box;
+  }
+  
+  .comment_inbox_user {
+    padding-left: 20px;
+    margin-top: 10px;
+    text-align: left;
+    font-size:20px;
+    color: teal;
+    font-weight: 500;
+  }
+
+textarea {
+  flex: 1 1 auto;
+  box-sizing: border-box;
+  width: 95%;
+  height: 100px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border: none;
+  outline: none;
+  overflow: auto;
+}
+
+#btn-registerComment {
+  margin-bottom: 20px;
+  border: 1px solid grey;
+  border-radius: 10px 10px 10px 10px;
+  background: white;
+  font-size: 15px;
+  color: grey;
+  padding: 5px 10px 5px 10px;
+}
+
+</style>

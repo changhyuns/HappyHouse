@@ -5,6 +5,7 @@ import java.util.List;
 import com.ssafy.util.PageNavigation;
 import com.ssafy.vue.model.BoardDto;
 import com.ssafy.vue.model.BoardParameterDto;
+import com.ssafy.vue.model.CommentDto;
 
 public interface BoardService {
 	public boolean writeArticle(BoardDto boardDto) throws Exception;
@@ -15,4 +16,7 @@ public interface BoardService {
 	public void updateHit(int articleno) throws Exception;
 	public boolean modifyArticle(BoardDto boardDto) throws Exception;
 	public boolean deleteArticle(int articleno) throws Exception;
+	
+	public boolean writeComment(CommentDto commentDto) throws Exception;
+	public List<CommentDto> listComment(int articleno) throws Exception;
 }

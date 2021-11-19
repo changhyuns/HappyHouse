@@ -68,6 +68,17 @@
 		delete from board
 		where articleno = #{articleno}
 	</delete>
-
+	
+	<insert id="writeComment" parameterType="CommentDto">
+		insert into comments (articleno, userid, content, regtime)
+		values (#{articleno}, #{userid}, #{content}, now())
+	</insert>
+	
+	<select id="listComment" parameterType="int" resultType="CommentDto">
+		select commentid, userid, content, regtime
+		from comments
+		where articleno = #{articleno}
+		order by commentid
+	</select>
 </mapper>
 
