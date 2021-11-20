@@ -6,6 +6,7 @@ import com.ssafy.util.PageNavigation;
 import com.ssafy.vue.model.BoardDto;
 import com.ssafy.vue.model.BoardParameterDto;
 import com.ssafy.vue.model.CommentDto;
+import com.ssafy.vue.model.CommentPlusDto;
 
 public interface BoardService {
 	public boolean writeArticle(BoardDto boardDto) throws Exception;
@@ -19,4 +20,5 @@ public interface BoardService {
 	
 	public boolean writeComment(CommentDto commentDto) throws Exception;
 	public List<CommentDto> listComment(int articleno) throws Exception;
+	public boolean plusComment(CommentPlusDto commentPlusDto) throws Exception;
 }

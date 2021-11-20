@@ -7,64 +7,81 @@
     </b-row>
     <b-row class="mb-1">
       <b-col class="text-left">
-        <b-button variant="outline-primary" @click="listArticle">목록</b-button>
+        <b-button variant="outline-primary" @click="listArticle()">목록</b-button>
+      </b-col>
+      <b-col class="text-center">
+        <b-button pill variant="outline-secondary" class="mr-2">이전 글</b-button>
+        <b-button pill variant="outline-secondary" class="ml-2">다음 글</b-button>
       </b-col>
       <b-col class="text-right">
         <b-button
           variant="outline-info"
-          size="sm"
           @click="moveModifyArticle"
           class="mr-2"
           >글수정</b-button
         >
-        <b-button variant="outline-danger" size="sm" @click="removeArticle"
+        <b-button variant="outline-danger" @click="removeArticle"
           >글삭제</b-button
         >
       </b-col>
     </b-row>
-    <b-row class="mb-1">
-      <b-col>
-        <b-card
-          :header-html="`<h3>${article.subject}</h3><br>
-          <div><h5>작성자 : ${article.userid}</h5></div><br>
-          <div><h5>${article.regtime}</h5></div>`"
-          class="mb-2"
-          border-variant="dark"
-          no-body
-        >
-          <b-card-body class="text-align: center">
-            <div v-html="message" style="font-size: 30px"></div>
-          </b-card-body>
-        </b-card>
-      </b-col>
-    </b-row>
-    <!-- <div id="comment_textarea">
-      <b-form-textarea v-model="value" debounce="500" rows="3" max-rows="5" placeholder="댓글을 남겨보세요"></b-form-textarea>
-    </div> -->
-    <div class="comment_box">
-      <div class="comment_inbox_user">
-        {{ article.userid }}
+    <div id="bcContainer">
+      <b-row class="mb-1">
+        <b-col>
+          <div class="board_box" style="background-color: #FAFAFA; border-radius: 10px;">
+            <div class="b_inbox_title">
+              {{ article.subject && article.subject }}
+            </div>
+            <div class="ml-2 mr-2">
+              <div class="b_inbox_user" style="display: inline; float: left;">
+                {{ article.userid && article.userid }}
+              </div>
+              <div class="inbox_regtime" style="display: inline; float: right;">
+              {{ changeDateFormat }}
+              </div>
+            </div>
+            <div class="pre-formatted" style="margin-bottom: 50px">
+              {{ article.content && article.content }}
+            </div>
+          </div>
+        </b-col>
+      </b-row>
+      <div class="comment_title">댓글 ({{ comments.length && comments.length }})</div> 
+      <div v-for="comment in comments" v-bind:key="comment.commentid">
+        <comment-list-row v-bind:comment="comment"/>
       </div>
-      <div>
-        <textarea v-model="comment_content" placeholder="댓글을 남겨보세요" @keyup.exact.enter="submitComment()"></textarea>
-      </div>
-      <div style="align-items: right">
-        <button id="btn-registerComment" squared variant="outline-secondary" @click="submitComment()">등록</button>
+      <div class="comment_box_write">
+        <div class="inbox_user">
+          {{ article.userid }}
+        </div>
+        <div>
+          <textarea class="autosize" ref="textarea" v-model="comment_content" placeholder="댓글을 남겨보세요"></textarea>
+        </div>
+        <div style="align-items: right">
+          <button id="btn-registerComment" squared variant="outline-secondary" @click="submitComment()">등록</button>
+        </div>
       </div>
     </div>
   </b-container>
 </template>
 
 <script>
-// import moment from "moment";
-import { getArticle, deleteArticle, writeComment } from "@/api/board";
+import moment from "moment";
+import { getArticle, deleteArticle, writeComment, listComment } from "@/api/board";
 import { mapState } from "vuex";
+import CommentListRow from './child/CommentListRow.vue';
+
 const memberStore = "memberStore";
 
 export default {
+  name: "BoardView",
+	components: { CommentListRow },
+
   data() {
     return {
       article: {},
+      comments: [],
+      comments_length: 0,
       comment_content: '',
     };
   },
@@ -76,26 +93,42 @@ export default {
         return this.article.content.split("\n").join("<br>");
       return "";
     },
-    // changeDateFormat() {
-    //   return moment(new Date(this.article.regtime)).format(
-    //     "YYYY.MM.DD hh:mm:ss"
-    //   );
-    // },
+
+    changeDateFormat() {
+      return moment(new Date(this.article.regtime)).format(
+          "MM.DD  hh:mm"
+      );
+    },
   },
   created() {
     getArticle(
       this.$route.params.articleno,
       (response) => {
         this.article = response.data;
+
+        listComment(
+          this.article.articleno,
+          (response) => {
+            this.comments = response.data;
+            this.comments_length = response.data.length;
+          },
+          (error) => {
+            console.log("댓글 불러오기 실패!", error);
+          }
+        );
       },
       (error) => {
         console.log("삭제 에러발생!!", error);
       }
     );
+    
+  },
+  mounted() {
+    this.resize();
   },
   methods: {
     listArticle() {
-      this.$router.push({ name: "BoardList" });
+      this.$router.push({ name: "BoardList2" });
     },
     moveModifyArticle() {
       this.$router.replace({
@@ -117,56 +150,109 @@ export default {
         console.log(prev_comment);
         writeComment({articleno: this.article.articleno, content: this.comment_content, userid: this.userInfo.userid}, () => {
           alert('댓글 등록 완료');
-          this.comment_content = '';
+          this.$router.go();
         })
       }else{
         this.comment_content = prev_comment;
       }
     },
-    nothing() {
-
-    }
+    resize() {
+      const { textarea } = this.$refs;
+      textarea.style.height = "1px";
+      textarea.style.height = (textarea.scrollHeight - 4) + "px";
+    },
   },
 };
 </script>
 
 <style scoped>
-  .comment_box {
+  #bcContainer {
+    border: 1px solid lightgrey;
+    padding: 0 20px 20px 20px;
+    margin-top: 30px;
+    border-radius: 10px;
+    padding-top: 20px;
+  }
+
+  .board_box {
     display: flex;
-    margin-top : 50px;
-    border: 1px solid;
+    border: none;
+    flex-direction: column;
+    box-sizing: border-box;
+    margin: 0 0 30px 0;
+  }
+
+  .pre-formatted {
+    white-space: pre;
+    font-weight: 500;
+    font-size: 30px;
+    margin: 20px 0 0 0;
+  }
+
+  .comment_title {
+    margin: 20px 0 20px 20px;
+    font-weight: 700;
+    font-size: 20px;
+    text-align: left;
+  }
+
+  .comment_box_write {
+    display: flex;
+    margin-top : 10px;
+    padding: 10px 20px 0 20px;
+    border: 1px solid grey;
     border-radius: 10px 10px 10px 10px;
     flex-direction: column;
     box-sizing: border-box;
+    overflow: hidden;
+    height: auto;
   }
   
-  .comment_inbox_user {
-    padding-left: 20px;
-    margin-top: 10px;
+  .b_inbox_title {
+    text-align: left;
+    font-size:40px;
+    font-weight: 700;
+    color: black;
+  }
+
+  .b_inbox_user {
+    text-align: left;
+    font-size:30px;
+    color: teal;
+    font-weight: 500;
+  }
+
+  .inbox_user {
     text-align: left;
     font-size:20px;
     color: teal;
     font-weight: 500;
   }
 
-textarea {
-  flex: 1 1 auto;
-  box-sizing: border-box;
-  width: 95%;
-  height: 100px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  border: none;
-  outline: none;
-  overflow: auto;
-}
+  .inbox_regtime {
+    text-align: right;
+    font-size:20px;
+    font-weight: 300;
+  }
+
+  .autosize {
+    flex: 1 1 auto;
+    box-sizing: border-box;
+    width: 100%;
+    margin-top: 10px;
+    border: none;
+    outline: none;
+    overflow: hidden;
+    min-height: 100px;
+    resize: none;
+  }
 
 #btn-registerComment {
   margin-bottom: 20px;
-  border: 1px solid grey;
-  border-radius: 10px 10px 10px 10px;
+  border: 1px solid lightgrey;
+  border-radius: 15px 15px 15px 15px;
   background: white;
-  font-size: 15px;
+  font-size: 20px;
   color: grey;
   padding: 5px 10px 5px 10px;
 }

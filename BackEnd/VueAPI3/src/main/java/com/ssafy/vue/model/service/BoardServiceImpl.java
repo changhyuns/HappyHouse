@@ -11,6 +11,7 @@ import com.ssafy.util.PageNavigation;
 import com.ssafy.vue.model.BoardDto;
 import com.ssafy.vue.model.BoardParameterDto;
 import com.ssafy.vue.model.CommentDto;
+import com.ssafy.vue.model.CommentPlusDto;
 import com.ssafy.vue.model.mapper.BoardMapper;
 
 @Service
@@ -86,5 +87,10 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public List<CommentDto> listComment(int articleno) throws Exception {
 		return sqlSession.getMapper(BoardMapper.class).listComment(articleno);
+	}
+	
+	@Override
+	public boolean plusComment(CommentPlusDto commentPlusDto) throws Exception {
+		return sqlSession.getMapper(BoardMapper.class).plusComment(commentPlusDto) == 1;
 	}
 }

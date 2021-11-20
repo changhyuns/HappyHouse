@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ssafy.vue.model.BoardDto;
 import com.ssafy.vue.model.BoardParameterDto;
 import com.ssafy.vue.model.CommentDto;
+import com.ssafy.vue.model.CommentPlusDto;
 import com.ssafy.vue.model.service.BoardService;
 
 import io.swagger.annotations.Api;
@@ -111,4 +112,16 @@ public class BoardController {
         
         return new ResponseEntity<List<CommentDto>>(boardService.listComment(articleno), HttpStatus.OK);
     }
+	
+	@ApiOperation(value = "게시판 댓글 수 수정", notes = "댓글 작성시 해당 게시글의 댓글 수를 추가한다. 그리고 DB수정 성공여부에 따라 'success' 또는 'fail' 문자열을 반환한다.", response = String.class)
+	@PutMapping("/comment")
+	public ResponseEntity<String> plusComment(@RequestBody @ApiParam(value = "수정할 댓글 수 정보", required = true) CommentPlusDto commentPlusDto) throws Exception {
+		logger.info("plusComment - 호출");
+		
+		if (boardService.plusComment(commentPlusDto)) {
+			return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+		}
+		return new ResponseEntity<String>(FAIL, HttpStatus.OK);
+	}
+
 }

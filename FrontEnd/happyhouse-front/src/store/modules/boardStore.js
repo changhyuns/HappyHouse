@@ -3,6 +3,8 @@ import { writeArticle } from "@/api/board.js";
 import { getArticle } from "@/api/board.js";
 import { modifyArticle } from "@/api/board.js";
 import { deleteArticle } from "@/api/board.js";
+import { listComment } from "@/api/board.js";
+
 import router from "../../router";
 
 
@@ -22,6 +24,8 @@ const boardStore = {
     currentPage: 1,
     start: 0,
     boardCount: 0,
+    commentList: [],
+    commentCount: 0,
   },
   getters: {
     getBoardListState(state) {
@@ -41,16 +45,16 @@ const boardStore = {
       state.boardCount = response;
     },
 
+    SET_COMMENT_LIST(state, response) {
+      state.commentList = response;
+    },
+
+    SET_COMMENT_COUNT(state, response) {
+      state.commetCount = response;
+    }
   },
   actions: {
     async getBoardList({ commit }, param) {
-      // const params = {
-      //   key: this.state.key,
-      //   pg: this.state.currentPage,
-      //   spp: this.state.perPage,
-      //   start: this.state.start,
-      //   word: this.state.searchWord,
-      // };
       await listArticle(
         param,
         (response) => {
@@ -121,58 +125,22 @@ const boardStore = {
           console.log("error : ", error);
         }
       )
-    }
+    },
 
-    // deleteQna({ commit }, articleno) {
-    //   http.delete(`/board/${articleno}`).then(response => {
-    //     console.log(response);
-    //   }).catch(error => {
-    //     console.log(error);
-    //   })
-    // }
-    // modifyQna({ commit }, data) {
-    //   http.put(`/board`, {
-    //     userid: data.userid, articleno: data.articleno, content: data.content, subject: data.subject
-    //   }).then(response => {
-    //   }).catch(error => {
-    //     console.log(error);
-    //   })
-    // },
-
-    // registQna({ commit }, data) {
-    //   http.post(`/board`, {
-    //     userid: data.userid,
-    //     content: data.content,
-    //     subject: data.subject,
-    //   }).then(response => {
-    //   }).catch(error => {
-    //     console.log(error);
-    //   })
-    // },
-
-    // getQnaList({ commit }) {
-    //   http.get(`/board`, {
-    //     params: {
-    //       key: this.state.searchType,
-    //       word: this.state.searchWord,
-    //     },
-    //   }).then(response => {
-    //     console.log(response);
-    //     commit("SET_QNA_LIST", response.data)
-    //   }).catch(error => {
-    //     console.log(error);
-    //   })
-    // },
-
-    // getQnaDetail({ commit }, articleno) {
-    //   http.get(`/board/${articleno}`).then(response => {
-    //     commit("SET_QNA_DETAIL", response.data);
-    //   }).catch(error => {
-    //     console.log(error);
-    //   })
-    // },
-
-
+    async getCommentList({ commit }, param) {
+      await listComment(
+        param,
+        (response) => {
+          console.log("listComment GET response : ", response.data);
+          commit("SET_COMMENT_COUNT", response.data.total);
+          commit("SET_COMMENT_LIST", response.data.list);
+          // console.log(this.state.boardList);
+        },
+        (error) => {
+          console.log("error : ", error);
+        }
+      );
+    },
 
   },
 };
