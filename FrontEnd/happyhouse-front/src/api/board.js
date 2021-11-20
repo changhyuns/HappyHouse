@@ -35,4 +35,12 @@ function writeComment(param, success, fail) {
   api.post(`/board/comment`, param).then(success).catch(fail);
 }
 
-export { listArticle, writeArticle, getArticle, modifyArticle, deleteArticle, writeComment };
+function listComment(articleno, success, fail) {
+  api.get(`/board/comment/${articleno}`).then(success).catch(fail);
+}
+
+function modifyCommentNumber(param, success, fail) {
+  api.put(`/board/comment`, param).then(success).catch(fail);
+}
+
+export { listArticle, writeArticle, getArticle, modifyArticle, deleteArticle, writeComment, listComment, modifyCommentNumber };
