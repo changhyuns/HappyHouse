@@ -1,21 +1,21 @@
 <template>
   <b-container
-    v-if="houses && houses.length != 0"
     class="bv-example-row"
     id="SideAptList"
   >
     <h3>아파트 목록</h3>
+    <h5 v-if="!houses || houses.length == 0">목록이 없습니다.</h5>
     <house-list-row
       v-for="(house, index) in houses"
       :key="index"
       :house="house"
     />
   </b-container>
-  <b-container v-else class="bv-example-row mt-3">
+  <!-- <b-container v-else class="bv-example-row mt-3">
     <b-row>
       <b-col><b-alert show>주택 목록이 없습니다.</b-alert></b-col>
     </b-row>
-  </b-container>
+  </b-container> -->
 </template>
 
 <script>
@@ -57,5 +57,11 @@ export default {
 #SideAptList h3 {
   text-align: center;
   margin: 30px;
+}
+
+#SideAptList h5 {
+  text-align: center;
+  margin: 30px;
+  font-weight: 400;
 }
 </style>

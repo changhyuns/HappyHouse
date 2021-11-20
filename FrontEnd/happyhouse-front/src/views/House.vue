@@ -15,7 +15,6 @@
         <house-list />
       </div>
       <div>
-        <h3>맵 영역</h3>
         <kakao-map></kakao-map>
       </div>
       <div>
@@ -61,5 +60,7 @@ h3 {
 section {
   position: relative;
   left: 430px;
+  width: 900px;
+  margin-left: 20px;
 }
 </style>
