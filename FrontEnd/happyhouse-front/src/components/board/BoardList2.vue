@@ -2,9 +2,6 @@
   <div>
     <b-container class="bv-example-row mt-3">
       <b-row>
-        <b-col>
-          <b-alert show><h3>글목록</h3></b-alert>
-        </b-col>
       </b-row>
       <b-row class="mb-1">
         <b-col class="text-right">
