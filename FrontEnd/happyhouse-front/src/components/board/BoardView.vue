@@ -1,9 +1,6 @@
 <template>
-  <b-container class="bv-example-row mt-3">
+  <b-container class="bv-example-row mt-5">
     <b-row>
-      <b-col>
-        <b-alert show><h3>글보기</h3></b-alert>
-      </b-col>
     </b-row>
     <b-row class="mb-1">
       <b-col class="text-left">
@@ -28,11 +25,11 @@
     <div id="bcContainer">
       <b-row class="mb-1">
         <b-col>
-          <div class="board_box" style="background-color: #FAFAFA; border-radius: 10px;">
-            <div class="b_inbox_title">
+          <div class="board_box" style="border-radius: 10px;">
+            <div class="b_inbox_title ml-2">
               {{ article.subject && article.subject }}
             </div>
-            <div class="ml-2 mr-2">
+            <div class="ml-3 mr-4 mt-1">
               <div class="b_inbox_user" style="display: inline; float: left;">
                 {{ article.userid && article.userid }}
               </div>
@@ -40,7 +37,7 @@
               {{ changeDateFormat }}
               </div>
             </div>
-            <div class="pre-formatted" style="margin-bottom: 50px">
+            <div class="pre-formatted" style="margin: 50px 0 50px 0">
               {{ article.content && article.content }}
             </div>
           </div>
@@ -96,7 +93,7 @@ export default {
 
     changeDateFormat() {
       return moment(new Date(this.article.regtime)).format(
-          "MM.DD  hh:mm"
+          "MM월DD일 \xa0 hh:mm"
       );
     },
   },
@@ -184,8 +181,8 @@ export default {
 
   .pre-formatted {
     white-space: pre;
-    font-weight: 500;
-    font-size: 30px;
+    font-weight: 300;
+    font-size: 20px;
     margin: 20px 0 0 0;
   }
 
@@ -213,11 +210,12 @@ export default {
     font-size:40px;
     font-weight: 700;
     color: black;
+    margin-top: 10px;
   }
 
   .b_inbox_user {
     text-align: left;
-    font-size:30px;
+    font-size:25px;
     color: teal;
     font-weight: 500;
   }
@@ -247,14 +245,14 @@ export default {
     resize: none;
   }
 
-#btn-registerComment {
-  margin-bottom: 20px;
-  border: 1px solid lightgrey;
-  border-radius: 15px 15px 15px 15px;
-  background: white;
-  font-size: 20px;
-  color: grey;
-  padding: 5px 10px 5px 10px;
-}
+  #btn-registerComment {
+    margin-bottom: 20px;
+    border: 1px solid lightgrey;
+    border-radius: 15px 15px 15px 15px;
+    background: white;
+    font-size: 20px;
+    color: grey;
+    padding: 5px 10px 5px 10px;
+  }
 
 </style>

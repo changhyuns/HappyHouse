@@ -31,7 +31,7 @@
     computed: {
       changeDateFormat() {
         return moment(new Date(this.comment.regtime)).format(
-            "MM.DD \xa0 hh:mm"
+            "MM월DD일 \xa0 hh:mm"
         );
       },
     },

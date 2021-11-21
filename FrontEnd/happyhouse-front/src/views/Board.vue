@@ -2,8 +2,8 @@
   <b-container class="bv-example-row mt-3 text-center">
     <side-nav></side-nav>
     <user-nav></user-nav>
-    <h3 class="underline-hotpink">
-      <b-icon icon="journals"></b-icon> Board Service
+    <h3 style="color: #D0A9F5">
+      자유게시판
     </h3>
     <router-view></router-view>
   </b-container>
