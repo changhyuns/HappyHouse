@@ -94,6 +94,7 @@ h2 {
   font-size: 16px;
   color: white;
   background-color: transparent;
+  margin-top: 40px;
 }
 
 .list-btn.active .link-container::before {

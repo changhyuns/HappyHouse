@@ -19,6 +19,15 @@ function getArticle(articleno, success, fail) {
   api.get(`/board/${articleno}`).then(success).catch(fail);
 }
 
+function getNext(articleno, success, fail) {
+  api.get(`board/next/${articleno}`).then(success).catch(fail);
+}
+
+function getPrev(articleno, success, fail) {
+  api.get(`board/prev/${articleno}`).then(success).catch(fail);
+}
+
+
 // function modifyArticle(article, success, fail) {
 //   api.put(`/board`, JSON.stringify(article)).then(success).catch(fail);
 // }
@@ -43,4 +52,4 @@ function modifyCommentNumber(param, success, fail) {
   api.put(`/board/comment`, param).then(success).catch(fail);
 }
 
-export { listArticle, writeArticle, getArticle, modifyArticle, deleteArticle, writeComment, listComment, modifyCommentNumber };
+export { listArticle, writeArticle, getArticle, modifyArticle, deleteArticle, writeComment, listComment, modifyCommentNumber, getPrev, getNext };

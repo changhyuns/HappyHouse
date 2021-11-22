@@ -7,8 +7,8 @@
         <b-button variant="outline-primary" @click="listArticle()">목록</b-button>
       </b-col>
       <b-col class="text-center">
-        <b-button pill variant="outline-secondary" class="mr-2">이전 글</b-button>
-        <b-button pill variant="outline-secondary" class="ml-2">다음 글</b-button>
+        <b-button pill variant="outline-secondary" class="mr-2" @click="movePrev()">이전 글</b-button>
+        <b-button pill variant="outline-secondary" class="ml-2" @click="moveNext()">다음 글</b-button>
       </b-col>
       <b-col class="text-right">
         <b-button
@@ -64,7 +64,7 @@
 
 <script>
 import moment from "moment";
-import { getArticle, deleteArticle, writeComment, listComment } from "@/api/board";
+import { getArticle, deleteArticle, writeComment, listComment, getPrev, getNext} from "@/api/board";
 import { mapState } from "vuex";
 import CommentListRow from './child/CommentListRow.vue';
 
@@ -80,6 +80,8 @@ export default {
       comments: [],
       comments_length: 0,
       comment_content: '',
+      prevNo: 0,
+      nextNo: 0
     };
   },
   computed: {
@@ -111,6 +113,29 @@ export default {
           },
           (error) => {
             console.log("댓글 불러오기 실패!", error);
+          }
+        );
+
+        getPrev(
+          this.article.articleno,
+          (response) => {
+            console.log(response.data);
+            this.prevNo = response.data;
+          },
+          (error) => {
+            console.log("이전 글 더이상 없음", error);
+          }
+        );
+
+        getNext(
+          this.article.articleno,
+          (response) => {
+            console.log(response.data);
+            this.nextNo = response.data;
+            console.log("router : ", this.$router)
+          },
+          (error) => {
+            console.log("이전 글 더이상 없음", error);
           }
         );
       },
@@ -157,6 +182,31 @@ export default {
       const { textarea } = this.$refs;
       textarea.style.height = "1px";
       textarea.style.height = (textarea.scrollHeight - 4) + "px";
+    },
+    movePrev() {
+      if(this.prevNo === 0) {
+        alert("가장 최근에 작성된 글입니다.");
+      }else {
+        // this.$router.push({
+        //   name: "BoardView",
+        //   params: { articleno: this.prevNo },
+        // }).catch(()=>{
+
+        // });
+        this.$router.go(this.prevNo);
+      }
+    },
+    moveNext() {
+      if(this.nextNo === 0) {
+        alert("더 이상 게시물이 없습니다.");
+      }else {
+        this.$router.push({
+          name: "BoardView",
+          params: { articleno: this.nextNo },
+        }).catch(()=>{
+          
+        });
+      }
     },
   },
 };
