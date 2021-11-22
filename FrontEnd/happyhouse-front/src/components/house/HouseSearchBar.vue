@@ -10,31 +10,21 @@
     <b-col class="sm-3" align="left">
       <b-button variant="outline-primary" @click="sendKeyword">검색</b-button>
     </b-col> -->
-    <b-col class="sm-3">
+    <b-col class="sm-6">
       <b-form-select
-      size="sm"
+        size="sm"
         v-model="sidoCode"
         :options="sidos"
         @change="gugunList"
       ></b-form-select>
     </b-col>
-    <b-col class="sm-3">
+    <b-col class="sm-6">
       <b-form-select
-      size="sm"
+        size="sm"
         v-model="gugunCode"
         :options="guguns"
         @change="searchApt"
       ></b-form-select>
-    </b-col>
-    <b-col class="sm-3">
-      <b-form-input
-        v-model="aptName"
-        placeholder="아파트 이름을 입력하세요."
-        @keypress.enter="sendKeyword"
-      ></b-form-input>
-    </b-col>
-    <b-col class="sm-3">
-        <b-button>검색</b-button>
     </b-col>
   </b-row>
 </template>
@@ -93,7 +83,9 @@ export default {
       if (this.sidoCode) this.getGugun(this.sidoCode);
     },
     searchApt() {
-      if (this.gugunCode) this.getHouseList(this.gugunCode);
+      if (this.gugunCode){
+        this.getHouseList({ gugunCode: this.gugunCode, curPage: 1 });
+      }
     },
   },
 };

@@ -3,12 +3,8 @@
   <div id="map_content">
     <div id="map"></div>
     <div class="button-group">
-      <!-- <button @click="changeSize(0)">Hide</button>
-      <button @click="changeSize(600)">show</button>
-      <button @click="displayMarker(markerPositions1)">marker set 1</button>
+      <button @click="makeHouseMarker()">marker set 1</button>
       <button @click="displayMarker(markerPositions2)">marker set 2</button>
-      <button @click="displayMarker([])">marker set 3 (empty)</button>
-      <button @click="displayInfoWindow">infowindow</button> -->
       <button @click="moveArea">move area</button>
     </div>
   </div>
@@ -53,7 +49,7 @@ export default {
   },
 
   computed: {
-    ...mapState(houseStore, ["address"]),
+    ...mapState(houseStore, ["address", "houses"]),
   },
   mounted() {
     if (window.kakao && window.kakao.maps) {
@@ -106,17 +102,12 @@ export default {
     initMap() {
       const container = document.getElementById("map");
       const options = {
-        center: new kakao.maps.LatLng(33.450701, 126.570667),
+        center: new kakao.maps.LatLng(37.566669392386494, 126.97843525651021),
         level: 5,
       };
       this.map = new kakao.maps.Map(container, options);
     },
-    changeSize(size) {
-      const container = document.getElementById("map");
-      container.style.width = `${size}px`;
-      container.style.height = `${size}px`;
-      this.map.relayout();
-    },
+
     displayMarker(markerPositions) {
       if (this.markers.length > 0) {
         this.markers.forEach((marker) => marker.setMap(null));
@@ -172,7 +163,7 @@ export default {
 
       this.geocoder.addressSearch(address, (result, status) => {
         // 정상적으로 검색이 완료됐으면
-        if (status === kakao.maps.services.Status.OK) {
+        if (status === kakao.maps.services.Status.OK) {          
           var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
           /*
           // 결과값으로 받은 위치를 마커로 표시합니다
@@ -193,6 +184,69 @@ export default {
           this.map.setCenter(coords);
         }
       });
+    },
+
+    makeHouseMarker() {
+      let positions = [];
+      this.houses.forEach((house) => {
+        const address =
+          this.address.sido +
+          " " +
+          this.address.gugun +
+          " " +
+          house.법정동 +
+          " " +
+          house.지번;
+        this.geocoder.addressSearch(address, (result, status) => {
+          
+          // 정상적으로 검색이 완료됐으면
+          let marker;
+          if (status === kakao.maps.services.Status.OK) {
+            let coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+            positions.push([coords.getLat(), coords.getLng()]);
+              marker = new kakao.maps.Marker({
+              map: this.map,
+              position: coords,
+            });
+
+            this.infowindow = new kakao.maps.InfoWindow({
+              content: `<div>${house.아파트}</div>`
+            })
+          }
+
+          kakao.maps.event.addListener(marker, 'mouseover', this.makeOverListener(this.map, marker, this.infowindow));
+          kakao.maps.event.addListener(marker, 'mouseout', this.makeOutListener(this.infowindow));
+        });     
+      });
+
+      /*    
+      const bp = positions.map(
+        (position) => new kakao.maps.LatLng(...position)
+      );
+    
+      const bounds = bp.reduce(
+        (bounds, latlng) => bounds.extend(latlng),
+        new kakao.maps.LatLngBounds()
+      );
+
+      this.map.setBounds(bounds);
+      */
+
+      this.moveArea();
+    },
+
+    // 인포윈도우를 표시하는 클로저를 만드는 함수입니다 
+    makeOverListener(map, marker, infowindow) {
+        return function() {
+            infowindow.open(map, marker);
+        };
+    },
+
+    // 인포윈도우를 닫는 클로저를 만드는 함수입니다 
+    makeOutListener(infowindow) {
+        return function() {
+            infowindow.close();
+        };
     },
 
     // 비동기처리해서, house list 로 넘겨줘야함 => vuex 에 등록
@@ -227,7 +281,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-#map_content{
+#map_content {
   text-align: center;
   /* justify-content: center; */
 }
