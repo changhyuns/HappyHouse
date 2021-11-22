@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 <template>
-  <div>
+  <div id="map_content">
     <div id="map"></div>
     <div class="button-group">
       <!-- <button @click="changeSize(0)">Hide</button>
@@ -227,9 +227,15 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+#map_content{
+  text-align: center;
+  /* justify-content: center; */
+}
+
 #map {
-  width: 600px;
-  height: 600px;
+  width: 800px;
+  height: 500px;
+  display: inline-block;
 }
 
 .button-group {

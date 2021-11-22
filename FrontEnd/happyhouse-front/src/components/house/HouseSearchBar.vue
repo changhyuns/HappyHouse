@@ -12,6 +12,7 @@
     </b-col> -->
     <b-col class="sm-3">
       <b-form-select
+      size="sm"
         v-model="sidoCode"
         :options="sidos"
         @change="gugunList"
@@ -19,10 +20,21 @@
     </b-col>
     <b-col class="sm-3">
       <b-form-select
+      size="sm"
         v-model="gugunCode"
         :options="guguns"
         @change="searchApt"
       ></b-form-select>
+    </b-col>
+    <b-col class="sm-3">
+      <b-form-input
+        v-model="aptName"
+        placeholder="아파트 이름을 입력하세요."
+        @keypress.enter="sendKeyword"
+      ></b-form-input>
+    </b-col>
+    <b-col class="sm-3">
+        <b-button>검색</b-button>
     </b-col>
   </b-row>
 </template>
@@ -48,6 +60,7 @@ export default {
     return {
       sidoCode: null,
       gugunCode: null,
+      aptName: null,
     };
   },
   computed: {
