@@ -8,6 +8,9 @@ const houseStore = {
     houses: [],
     house: null,
     address: { sido: null, gugun: null },
+    totalHouse: 0,
+    gugunCode: null,
+    curPage: 1,
   },
 
   getters: {},
@@ -54,6 +57,18 @@ const houseStore = {
     CLEAR_HOUSE_LIST: (state) => {
       state.houses = [];
       state.house = null;
+    },
+
+    SET_TOTAL_HOUSE: (state, count) => {
+      state.totalHouse = count;
+    },
+
+    SET_GUGUN_CODE: (state, code) => {
+      state.gugunCode = code;
+    },
+
+    SET_CUR_PAGE:(state, page) => {
+      state.curPage = page;
     }
 
   },
@@ -85,7 +100,7 @@ const houseStore = {
         }
       );
     },
-    getHouseList: ({ commit }, gugunCode) => {
+    getHouseList: ({ commit }, {gugunCode, curPage}) => {
       // vue cli enviroment variables 검색
       //.env.local file 생성.
       // 반드시 VUE_APP으로 시작해야 한다.
@@ -96,13 +111,17 @@ const houseStore = {
         LAWD_CD: gugunCode,
         DEAL_YMD: "202110",
         serviceKey: decodeURIComponent(SERVICE_KEY),
+        pageNo: curPage,
       };
       houseList(
         params,
         (response) => {
-          //   console.log(response.data.response.body.items.item);
+          // console.log(response.data.response.body.items.item);
           commit("SET_ADDRESS", { sc: gugunCode.substr(0, 2), gc: gugunCode });
+          commit("SET_GUGUN_CODE", gugunCode);
+          commit("SET_TOTAL_HOUSE", response.data.response.body.totalCount);
           commit("SET_HOUSE_LIST", response.data.response.body.items.item);
+          commit("SET_CUR_PAGE", curPage);
         },
         (error) => {
           console.log(error);

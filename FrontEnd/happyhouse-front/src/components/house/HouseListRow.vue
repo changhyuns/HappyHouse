@@ -1,22 +1,28 @@
 <template>
-  <b-row
-    class="m-2"
-    @click="selectHouse"
-    @mouseover="colorChange(true)"
-    @mouseout="colorChange(false)"
-    :class="{ 'mouse-over-bgcolor': isColor }"
-  >
-    <b-col cols="2" class="text-center align-self-center">
-      <b-img
-        thumbnail
-        src="https://picsum.photos/250/250/?image=58"
-        alt="Image 1"
-      ></b-img>
-    </b-col>
-    <b-col cols="10" class="align-self-center">
-      [{{ house.일련번호 }}] {{ house.아파트 }}
-    </b-col>
-  </b-row>
+  <div class="house_list">
+    <b-row>
+      <b-card
+        :header="house.아파트"
+        header-text-variant="white"
+        header-tag="header"
+        header-bg-variant="dark"
+        style="width: 320px"
+        @click="selectHouse()"
+      >
+        <b-card-text>
+          일련번호 : {{ house && house.일련번호 }} <br />
+          법정동 : {{ house && house.법정동 }} <br />
+          층수 : {{ house && house.층 }} <br />
+          거래금액 :
+          {{
+            house &&
+            (parseInt(house.거래금액.replace(",", "")) * 10000) | price
+          }}원 <br />
+        </b-card-text>
+      </b-card>
+    </b-row>
+    <br>
+  </div>
 </template>
 
 <script>
@@ -45,6 +51,13 @@ export default {
       this.isColor = flag;
     },
   },
+
+  filters: {
+    price(value) {
+      if (!value) return value;
+      return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
+  },
 };
 </script>
 
@@ -54,5 +67,9 @@ export default {
 }
 .mouse-over-bgcolor {
   background-color: lightblue;
+}
+
+.house_list {
+  margin-left: 30px;
 }
 </style>

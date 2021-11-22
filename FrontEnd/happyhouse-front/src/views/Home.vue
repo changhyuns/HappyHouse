@@ -43,7 +43,7 @@ export default {
 
 <style scoped>
 b-container {
-  background-image: url('main_background.jpg');
+  background-image: url("main_background.jpg");
 }
 .underline-steelblue {
   display: inline-block;
@@ -76,7 +76,7 @@ button {
   background-image: url(../assets/main.jpg);
   background-repeat: no-repeat;
   background-size: 100% 100%;
-  min-height: 900px;
+  min-height: 913px;
   min-width: 1600px;
   background-position: top left;
 }

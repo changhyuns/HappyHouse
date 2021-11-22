@@ -10,15 +10,17 @@
     <b-col class="sm-3" align="left">
       <b-button variant="outline-primary" @click="sendKeyword">검색</b-button>
     </b-col> -->
-    <b-col class="sm-3">
+    <b-col class="sm-6">
       <b-form-select
+        size="sm"
         v-model="sidoCode"
         :options="sidos"
         @change="gugunList"
       ></b-form-select>
     </b-col>
-    <b-col class="sm-3">
+    <b-col class="sm-6">
       <b-form-select
+        size="sm"
         v-model="gugunCode"
         :options="guguns"
         @change="searchApt"
@@ -48,6 +50,7 @@ export default {
     return {
       sidoCode: null,
       gugunCode: null,
+      aptName: null,
     };
   },
   computed: {
@@ -80,7 +83,9 @@ export default {
       if (this.sidoCode) this.getGugun(this.sidoCode);
     },
     searchApt() {
-      if (this.gugunCode) this.getHouseList(this.gugunCode);
+      if (this.gugunCode){
+        this.getHouseList({ gugunCode: this.gugunCode, curPage: 1 });
+      }
     },
   },
 };

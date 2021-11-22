@@ -1,28 +1,33 @@
 <template>
-  <div>
-    <nav>
+<div>
+<div>
+   <nav>
       <user-nav></user-nav>
     </nav>
+</div>
+  <div>
     <aside>
       <side-nav></side-nav>
     </aside>
     <section>
-      <h3><b-icon icon="house-fill"></b-icon> 부동산 검색</h3>
-      <div>
-        <house-search-bar></house-search-bar>
-      </div>
-      <div>
-        <house-list />
-      </div>
-      <div>
-        <h3>맵 영역</h3>
-        <kakao-map></kakao-map>
-      </div>
-      <div>
-        <house-detail />
+      <div class="map-area">
+        <h3><b-icon icon="house-fill"></b-icon> 부동산 검색</h3>
+        <div>
+          <house-search-bar></house-search-bar>
+        </div>
+        <div>
+          <house-list />
+        </div>
+        <div>
+          <kakao-map></kakao-map>
+        </div>
+        <div>
+          <house-detail />
+        </div>
       </div>
     </section>
   </div>
+</div>
 </template>
 <script>
 import HouseSearchBar from "@/components/house/HouseSearchBar.vue";
@@ -59,7 +64,15 @@ h3 {
 }
 
 section {
+  display: inline-block;
+  text-align: center;
   position: relative;
-  left: 430px;
+  left: 560px;
+  width: 900px;
+  margin-left: 20px;
+}
+
+section .map-area {
+  display: inline-block;
 }
 </style>
