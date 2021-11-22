@@ -54,7 +54,7 @@
   .comment_box {
     border: none;
     border-radius: 10px;
-    background-color: #FAFAFA;
+    background-color: #F2F2F2;
     padding: 20px 20px 0 20px;
     margin-bottom: 15px;
   }
@@ -86,8 +86,7 @@
     font-size: 20px;
     margin: 10px 0 10px 0;
     min-height: 30px;
-    background-color: #FAFAFA;
-
+    background-color: #F2F2F2;
   }
 
 </style>
