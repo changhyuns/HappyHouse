@@ -1,26 +1,27 @@
 <template>
-  <b-container
-    v-if="houses && houses.length != 0"
-    class="bv-example-row"
-    id="SideAptList"
-  >
+  <b-container class="bv-example-row" id="SideAptList">
     <h3>아파트 목록</h3>
+    <h5 v-if="!houses || houses.length == 0">목록이 없습니다.</h5>
     <house-list-row
       v-for="(house, index) in houses"
       :key="index"
       :house="house"
     />
-  </b-container>
-  <b-container v-else class="bv-example-row mt-3">
-    <b-row>
-      <b-col><b-alert show>주택 목록이 없습니다.</b-alert></b-col>
-    </b-row>
+    <b-pagination v-if="houses && houses.length !=0"
+        v-model="curPage"
+        :total-rows="totalHouse"
+        :per-page="perPage"
+        aria-controls="my-table"
+        @page-click="pageClick"
+    >
+
+    </b-pagination>
   </b-container>
 </template>
 
 <script>
 import HouseListRow from "@/components/house/HouseListRow.vue";
-import { mapState } from "vuex";
+import { mapActions, mapMutations, mapState } from "vuex";
 
 const houseStore = "houseStore";
 
@@ -30,13 +31,27 @@ export default {
     HouseListRow,
   },
   data() {
-    return {};
+    return {
+      perPage: 10,
+      // currentPage: 1,
+    };
   },
   computed: {
-    ...mapState(houseStore, ["houses"]),
+    ...mapState(houseStore, ["houses", "totalHouse", "gugunCode", "curPage"]),
+    
     // houses() {
     //   return this.$store.state.houses;
     // },
+  },
+
+  methods: {
+    ...mapActions(houseStore, ["getHouseList"]),    
+
+    pageClick: function (button, page){
+			this.currentPage = page;
+      this.getHouseList({gugunCode : this.gugunCode, curPage: this.currentPage});  
+      // 클릭했을 때, 최상단으로 이동하게 하기
+			},
   },
 };
 </script>
@@ -44,8 +59,8 @@ export default {
 <style>
 #SideAptList {
   position: fixed;
-  width: 300px;
-  left: 130px;
+  width: 400px;
+  left: 160px;
   top: 0;
   bottom: 0;
   overflow: auto;
@@ -57,5 +72,11 @@ export default {
 #SideAptList h3 {
   text-align: center;
   margin: 30px;
+}
+
+#SideAptList h5 {
+  text-align: center;
+  margin: 30px;
+  font-weight: 400;
 }
 </style>
