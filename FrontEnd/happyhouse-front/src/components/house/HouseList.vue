@@ -60,7 +60,7 @@ export default {
 #SideAptList {
   position: fixed;
   width: 400px;
-  left: 160px;
+  left: 180px;
   top: 0;
   bottom: 0;
   overflow: auto;

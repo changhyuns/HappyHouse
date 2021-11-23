@@ -2,11 +2,6 @@
 <template>
   <div id="map_content">
     <div id="map"></div>
-    <div class="button-group">
-      <button @click="makeHouseMarker()">marker set 1</button>
-      <button @click="displayMarker(markerPositions2)">marker set 2</button>
-      <button @click="moveArea">move area</button>
-    </div>
   </div>
 </template>
 
@@ -19,20 +14,6 @@ export default {
   data() {
     return {
       map: null,
-      markerPositions1: [
-        [33.452278, 126.567803],
-        [33.452671, 126.574792],
-        [33.451744, 126.572441],
-      ],
-      markerPositions2: [
-        [37.499590490909185, 127.0263723554437],
-        [37.499427948430814, 127.02794423197847],
-        [37.498553760499505, 127.02882598822454],
-        [37.497625593121384, 127.02935713582038],
-        [37.49629291770947, 127.02587362608637],
-        [37.49754540521486, 127.02546694890695],
-        [37.49646391248451, 127.02675574250912],
-      ],
       markers: [],
       infowindow: null,
       geocoder: new kakao.maps.services.Geocoder(),
@@ -49,8 +30,9 @@ export default {
   },
 
   computed: {
-    ...mapState(houseStore, ["address", "houses"]),
+    ...mapState(houseStore, ["address", "houses", "house"]),
   },
+  
   mounted() {
     if (window.kakao && window.kakao.maps) {
       this.initMap();
@@ -62,6 +44,11 @@ export default {
         "http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=efd45f08160884edeebfcd70783250b3";
       document.head.appendChild(script);
     }
+  },
+
+  watch: {
+    houses: "makeHouseMarker",
+    house: "moveToHouse",
   },
 
   created() {
@@ -157,36 +144,30 @@ export default {
 
     // ** addressSearch 의 콜백함수가 function() 으로 정의되어 있으면 안에서 this 가 undefined 됨
     // 그렇기 때문에, arrow function 으로 선언해주어야 함
-    moveArea() {
+    moveToHouse() {
       // selectbox 에서 선택된 시도 + 구군 기준으로 지도검색
-      const address = this.address.sido + " " + this.address.gugun;
+      const address =
+          this.address.sido +
+          " " +
+          this.address.gugun +
+          " " +
+          this.house.법정동 +
+          " " +
+          this.house.지번;
 
       this.geocoder.addressSearch(address, (result, status) => {
         // 정상적으로 검색이 완료됐으면
         if (status === kakao.maps.services.Status.OK) {          
           var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-          /*
-          // 결과값으로 받은 위치를 마커로 표시합니다
-          var marker = new kakao.maps.Marker({
-            map: this.map,
-            position: coords,
-          });
-
-          // 인포윈도우로 장소에 대한 설명을 표시합니다
-          var infowindow = new kakao.maps.InfoWindow({
-            content:
-              '<div style="width:150px;text-align:center;padding:6px 0;">우리회사</div>',
-          });
-          infowindow.open(this.map, marker);
-          */
-
           // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+          this.map.setLevel(2);
           this.map.setCenter(coords);
         }
       });
     },
 
     makeHouseMarker() {
+      this.removeMarker();
       let positions = [];
       this.houses.forEach((house) => {
         const address =
@@ -203,36 +184,30 @@ export default {
           let marker;
           if (status === kakao.maps.services.Status.OK) {
             let coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-            positions.push([coords.getLat(), coords.getLng()]);
               marker = new kakao.maps.Marker({
               map: this.map,
               position: coords,
             });
 
+            positions.push(coords);
+            this.markers.push(marker);
             this.infowindow = new kakao.maps.InfoWindow({
               content: `<div>${house.아파트}</div>`
             })
           }
 
+          // 주어진 영역이 모두 보이게 하기 위한 boundary 셋팅
+          const bounds = positions.reduce(
+          (bounds, latlng) => bounds.extend(latlng),
+          new kakao.maps.LatLngBounds()
+          );
+
+          this.map.setBounds(bounds);
+
           kakao.maps.event.addListener(marker, 'mouseover', this.makeOverListener(this.map, marker, this.infowindow));
           kakao.maps.event.addListener(marker, 'mouseout', this.makeOutListener(this.infowindow));
         });     
       });
-
-      /*    
-      const bp = positions.map(
-        (position) => new kakao.maps.LatLng(...position)
-      );
-    
-      const bounds = bp.reduce(
-        (bounds, latlng) => bounds.extend(latlng),
-        new kakao.maps.LatLngBounds()
-      );
-
-      this.map.setBounds(bounds);
-      */
-
-      this.moveArea();
     },
 
     // 인포윈도우를 표시하는 클로저를 만드는 함수입니다 
@@ -247,6 +222,13 @@ export default {
         return function() {
             infowindow.close();
         };
+    },
+
+    removeMarker() {
+      this.markers.forEach(marker => {
+        marker.setMap(null);
+      });
+      this.markers = [];
     },
 
     // 비동기처리해서, house list 로 넘겨줘야함 => vuex 에 등록

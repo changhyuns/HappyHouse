@@ -18,7 +18,7 @@ export default {
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@800&display=swap');
 
-h1, h2, h3 {
+h1, h2, h3, span {
   font-family: 'Nanum Gothic', sans-serif;
 }
 
