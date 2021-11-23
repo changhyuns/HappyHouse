@@ -60,6 +60,10 @@ b-container {
   height: 500px;
 }
 
+.top h1{
+  color: white;
+}
+
 .center {
   position: relative;
   text-align: center;
@@ -73,7 +77,7 @@ button {
 }
 
 .Home {
-  background-image: url(../assets/main.jpg);
+  background-image: url(../assets/main2.jpg);
   background-repeat: no-repeat;
   background-size: 100% 100%;
   min-height: 913px;

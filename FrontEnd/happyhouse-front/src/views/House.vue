@@ -69,7 +69,7 @@ section {
   position: relative;
   left: 560px;
   width: 900px;
-  margin-left: 20px;
+  margin-left: 150px;
 }
 
 section .map-area {

@@ -3,6 +3,7 @@ package com.ssafy.vue.model.service;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.vue.model.MemberDto;
 import com.ssafy.vue.model.mapper.MemberMapper;
@@ -23,6 +24,27 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public MemberDto userInfo(String userid) throws Exception {
 		return sqlSession.getMapper(MemberMapper.class).userInfo(userid);
+	}
+
+	@Override
+	@Transactional
+	public boolean registerMember(MemberDto memberDto) throws Exception {
+		if(memberDto.getUserid() == null || memberDto.getUsername() == null || memberDto.getUserpwd() == null){
+			throw new Exception();
+		}
+		return sqlSession.getMapper(MemberMapper.class).registerMember(memberDto) == 1;
+	}
+
+	@Override
+	@Transactional
+	public boolean updateMember(MemberDto memberDto) throws Exception {
+		return sqlSession.getMapper(MemberMapper.class).updateMember(memberDto) == 1;
+	}
+
+	@Override
+	@Transactional
+	public boolean deleteMember(String userid) throws Exception {
+		return sqlSession.getMapper(MemberMapper.class).deleteMember(userid) == 1;
 	}
 
 }

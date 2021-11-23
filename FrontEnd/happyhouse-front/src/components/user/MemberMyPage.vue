@@ -48,7 +48,7 @@
           <hr class="my-4" />
 
           <b-button variant="primary" href="#" class="mr-1">정보수정</b-button>
-          <b-button variant="danger" href="#">회원탈퇴</b-button>
+          <b-button variant="danger" href="#" @click="resignMember">회원탈퇴</b-button>
         </b-jumbotron>
       </b-col>
       <b-col></b-col>
@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 
 const memberStore = "memberStore";
 
@@ -66,6 +66,16 @@ export default {
   components: {},
   computed: {
     ...mapState(memberStore, ["userInfo"]),
+  },
+
+  methods: {
+    ...mapActions(memberStore, ["deleteMember"]),
+
+    resignMember() {
+      this.deleteMember(this.userInfo.userid);
+      alert("탈퇴되었습니다.");
+      if (this.$route.path != "/") this.$router.push({ name: "Home" });
+    }
   },
 };
 </script>

@@ -269,8 +269,8 @@ export default {
 }
 
 #map {
-  width: 800px;
-  height: 500px;
+  width: 1000px;
+  height: 700px;
   display: inline-block;
 }
 

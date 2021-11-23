@@ -18,5 +18,6 @@ footer {
   text-align: center;
   display: inline-block;
   width: 100%;
+  min-width: 1600px;
 }
 </style>

@@ -1,27 +1,26 @@
 <template>
-  <b-container class="bv-example-row" id="SideAptList">
-    <h3>아파트 목록</h3>
-    <h5 v-if="!houses || houses.length == 0">목록이 없습니다.</h5>
+  <b-container class="bv-example-row" id="SideAptList" href="#list">
+    <h3 v-if="!houses || houses.length == 0">목록이 없습니다.</h3>
     <house-list-row
       v-for="(house, index) in houses"
       :key="index"
       :house="house"
     />
-    <b-pagination v-if="houses && houses.length !=0"
-        v-model="curPage"
-        :total-rows="totalHouse"
-        :per-page="perPage"
-        aria-controls="my-table"
-        @page-click="pageClick"
+    <b-pagination
+      v-if="houses && houses.length != 0"
+      v-model="currentPage"
+      :total-rows="totalHouse"
+      :per-page="perPage"
+      aria-controls="my-table"
+      @page-click="pageClick"
     >
-
     </b-pagination>
   </b-container>
 </template>
 
 <script>
 import HouseListRow from "@/components/house/HouseListRow.vue";
-import { mapActions, mapMutations, mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 
 const houseStore = "houseStore";
 
@@ -33,25 +32,26 @@ export default {
   data() {
     return {
       perPage: 10,
-      // currentPage: 1,
+      currentPage: 1,
     };
   },
   computed: {
     ...mapState(houseStore, ["houses", "totalHouse", "gugunCode", "curPage"]),
-    
-    // houses() {
-    //   return this.$store.state.houses;
-    // },
   },
 
   methods: {
-    ...mapActions(houseStore, ["getHouseList"]),    
+    ...mapActions(houseStore, ["getHouseList"]),
 
-    pageClick: function (button, page){
-			this.currentPage = page;
-      this.getHouseList({gugunCode : this.gugunCode, curPage: this.currentPage});  
-      // 클릭했을 때, 최상단으로 이동하게 하기
-			},
+    pageClick: function (button, page) {
+      this.currentPage = page;
+      this.getHouseList({
+        gugunCode: this.gugunCode,
+        curPage: this.currentPage,
+      });
+
+      // 페이지 클릭했을 때, 스크롤 최상단으로 이동
+      document.getElementById("SideAptList").scrollTop = 0;
+    },
   },
 };
 </script>
@@ -59,14 +59,29 @@ export default {
 <style>
 #SideAptList {
   position: fixed;
-  width: 400px;
+  width: 450px;
+  height: 700px;
   left: 180px;
-  top: 0;
+  top: 160px;
   bottom: 0;
   overflow: auto;
-  background-color: #f4f0fd;
   z-index: 10;
   text-align: left;
+}
+
+#SideAptList::-webkit-scrollbar {
+  width: 10px;
+}
+#SideAptList::-webkit-scrollbar-thumb {
+  background-color: #2f3542;
+  border-radius: 10px;
+  background-clip: padding-box;
+  border: 2px solid transparent;
+}
+#SideAptList::-webkit-scrollbar-track {
+  background-color: grey;
+  border-radius: 10px;
+  box-shadow: inset 0px 0px 5px white;
 }
 
 #SideAptList h3 {
