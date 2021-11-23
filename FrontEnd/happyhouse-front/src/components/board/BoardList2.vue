@@ -5,9 +5,8 @@
       </b-row>
       <b-row class="mb-1">
         <b-col class="text-right">
-          <b-button class="btn-write" variant="outline-primary" @click="moveWrite()"
-            >글쓰기</b-button
-          >
+          <button class="btn-write" style="border: none; color: #170B3B; font-weight:600" @click="moveWrite()"
+            >글쓰기</button>
         </b-col>
       </b-row>
       <b-row>
@@ -35,17 +34,13 @@
 </template>
 
 <script>
-// import BoardListRow from "@/components/board/child/BoardListRow.vue";
 import { mapActions, mapState } from "vuex";
+import moment from "moment";
 
 const boardStore = "boardStore";
 
 export default {
   name: "BoardList",
-
-  // components: {
-  //   BoardListRow
-  // },
 
   data() {
     return {
@@ -64,6 +59,11 @@ export default {
 
   computed: {
     ...mapState(boardStore, ["boardList", "boardCount"]),
+    changeDateFormat() {
+      return moment(new Date(this.comment.regtime)).format(
+        "MM월DD일 \xa0 hh:mm"
+      );
+    },
   },
 
   created() {
@@ -102,18 +102,21 @@ export default {
   width: 12%;
   text-align: center;
   cursor: pointer;
+  background-color: white;
 }
 .tdSubject {
   width: 52%;
   text-align: center;
   cursor: pointer;
+  background-color: white;
 }
 
 .tdUser {
   width: 12%;
   text-align: center;
-  color: teal;
+  color: #170B3B;
   font-weight: 500;
+  background-color: white;
 }
 
 .pagination {
@@ -122,5 +125,19 @@ export default {
 
 .btn-write{
   color: mediumpurple;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  margin: 20px 10px 20px 10px;
 }
+
+th {
+
+  background-color: transparent;
+  color: #170B3B;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+
 </style>

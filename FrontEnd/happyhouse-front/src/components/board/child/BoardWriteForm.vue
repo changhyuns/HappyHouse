@@ -1,31 +1,20 @@
 <template>
   <b-row class="mb-1">
-    <b-col style="text-align: left">
+    <b-col style="text-align: left; border: 3px solid #170B3B;
+      padding: 0 20px 20px 20px;
+      margin-top: 10px;
+      border-radius: 10px;
+      padding-top: 20px;">
       <b-form @submit="onSubmit" @reset="onReset">
-        <!-- <b-form-group
-          id="userid-group"
-          label="작성자:"
-          label-for="userid"
-          description="작성자를 입력하세요."
-        >
-          <b-form-input
-            id="userid"
-            :disabled="isUserid"
-            v-model="article.userid"
-            type="text"
-            required
-            placeholder="작성자 입력..."
-          ></b-form-input>
-        </b-form-group> -->
-
         <b-form-group
+          style="font-size: 20px; font-weight: bold; width: 100%; color: #170B3B"
           id="subject-group"
-          label="제목:"
+          label="제목"
           label-for="subject"
-          description="제목을 입력하세요."
         >
           <b-form-input
             id="subject"
+            style="border: 1px solid #170B3B; font-size: 15px; "
             v-model="article.subject"
             type="text"
             required
@@ -33,8 +22,9 @@
           ></b-form-input>
         </b-form-group>
 
-        <b-form-group id="content-group" label="내용:" label-for="content">
+        <b-form-group id="content-group" label="내용" label-for="content" style="font-size: 20px; font-weight: bold; width: 100%; color: #170B3B">
           <b-form-textarea
+            style="border: 1px solid #170B3B; font-size: 15px;" 
             id="content"
             v-model="article.content"
             placeholder="내용 입력..."
@@ -42,18 +32,15 @@
             max-rows="15"
           ></b-form-textarea>
         </b-form-group>
-
-        <b-button
-          type="submit"
-          variant="primary"
-          class="m-1"
+        <div style="text-align: center">
+        <button class="btn-write" style="border: none; color: #170B3B; font-weight:600;" type="submit"
           v-if="this.type === 'register'"
-          >글작성</b-button
+          >작성</button
         >
-        <b-button type="submit" variant="primary" class="m-1" v-else
-          >글수정</b-button
+        <button class="btn-write" style="border: none; color: #170B3B; font-weight:600;" type="submit" v-else
+          >수정</button
         >
-        <b-button type="reset" variant="danger" class="m-1">초기화</b-button>
+        </div>
       </b-form>
     </b-col>
   </b-row>
@@ -62,6 +49,7 @@
 <script>
 import { getArticle } from "@/api/board";
 import { mapActions, mapState } from "vuex";
+import swal from "sweetalert";
 
 const boardStore = "boardStore";
 const memberStore = "memberStore";
@@ -105,6 +93,15 @@ export default {
       this.registBoard({userid: this.userInfo.userid, subject: this.article.subject, content: this.article.content});
     },
 
+    updateBoard() {
+      this.modifyBoard({articleno: this.article.articleno, userid: this.userInfo.userid, subject: this.article.subject, content: this.article.content});
+      swal("성공", "게시글을 수정 완료!", "success");
+      this.$router.push({
+        name: "BoardView",
+        params: { articleno: this.article.articleno }
+      });
+    },
+
     onSubmit(event) {
       event.preventDefault();
 
@@ -129,7 +126,7 @@ export default {
       else
         // this.type === "register" ? this.registArticle() : this.updateArticle();
         this.type === "register" ? this.insertBoard() 
-                                : this.modifyBoard({articleno: this.article.articleno, userid: this.userInfo.userid, subject: this.article.subject, content: this.article.content});
+                                : this.updateBoard();
       
     },
     onReset(event) {
@@ -137,7 +134,8 @@ export default {
       this.article.articleno = 0;
       this.article.subject = "";
       this.article.content = "";
-      this.$router.push({ name: "BoardList" });
+      this.$router.push({ name: "BoarUpdate", params: { articleno: this.article.articleno }},
+      );
     },
     
     moveList() {
@@ -147,4 +145,12 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+  #modifyContainer {
+    border: 1px solid #170B3B;
+    padding: 0 20px 20px 20px;
+    margin-top: 10px;
+    border-radius: 10px;
+    padding-top: 20px;
+  }
+</style>

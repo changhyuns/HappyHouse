@@ -3,7 +3,7 @@
     <side-nav></side-nav>
     <user-nav></user-nav>
     <h3 style="background-color: #170B3B; color: white; height: 40px; font-size: 30px; ">
-      커뮤니티
+      공지사항
     </h3>
     <router-view :key="$route.fullPath"></router-view>
   </b-container>
@@ -13,7 +13,7 @@ import SideNav from "../components/layout/SideNav.vue";
 import UserNav from "../components/layout/UserNav.vue";
 
 export default {
-  name: "Board",
+  name: "Notice",
   components: { UserNav, SideNav },
 };
 </script>
