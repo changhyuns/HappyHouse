@@ -3,21 +3,21 @@
     <b-row>
       <b-col>
         <div class="mt-2 mb-5" style="text-align: center; color: #170B3B; font-weight: bold; font-size: 20px;">
-          게시글 수정 <b-icon icon="journal-bookmark-fill" animation="throb" font-scale="2" style="margin-left: 10px"></b-icon>
+          공지사항 수정 <b-icon icon="journal-bookmark-fill" animation="throb" font-scale="2" style="margin-left: 10px"></b-icon>
         </div>
       </b-col>
     </b-row>
-    <board-write-form type="modify" />
+    <notice-write-form type="modify" />
   </b-container>
 </template>
 
 <script>
-import BoardWriteForm from "./child/BoardWriteForm.vue";
+import NoticeWriteForm from "./child/NoticeWriteForm.vue";
 
 export default {
-  name: "BoardUpdate",
+  name: "NoticeUpdate",
   components: {
-    BoardWriteForm,
+    NoticeWriteForm,
   },
 };
 </script>

@@ -1,7 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "@/views/Home.vue";
-import Instargram from "@/views/Instargram.vue";
 
 import Member from "@/views/Member.vue";
 import MemberLogin from "@/components/user/MemberLogin.vue";
@@ -13,6 +12,12 @@ import BoardList2 from "@/components/board/BoardList2.vue";
 import BoardWrite from "@/components/board/BoardWrite.vue";
 import BoardView from "@/components/board/BoardView.vue";
 import BoardUpdate from "@/components/board/BoardUpdate.vue";
+
+import Notice from "@/views/Notice.vue";
+import NoticeList from "@/components/notice/NoticeList.vue";
+import NoticeWrite from "@/components/notice/NoticeWrite.vue";
+import NoticeView from "@/components/notice/NoticeView.vue";
+import NoticeUpdate from "@/components/notice/NoticeUpdate.vue";
 
 import House from "@/views/House.vue";
 
@@ -46,11 +51,6 @@ const routes = [
     component: Home,
   },
   {
-    path: "/instargram",
-    name: "Instargram",
-    component: Instargram,
-  },
-  {
     path: "/user",
     name: "Member",
     component: Member,
@@ -82,6 +82,7 @@ const routes = [
       {
         path: "list",
         name: "BoardList2",
+        beforeEnter: onlyAuthUser,
         component: BoardList2,
       },
       {
@@ -112,6 +113,38 @@ const routes = [
   {
     path: "*",
     redirect: "/",
+  },
+  {
+    path: "/notice",
+    name: "Notice",
+    component: Notice,
+    redirect: "/notice/list",
+    children: [
+      {
+        path: "list",
+        name: "NoticeList",
+        beforeEnter: onlyAuthUser,
+        component: NoticeList,
+      },
+      {
+        path: "write",
+        name: "NoticeWrite",
+        beforeEnter: onlyAuthUser,
+        component: NoticeWrite,
+      },
+      {
+        path: "detail/:noticeno",
+        name: "NoticeView",
+        beforeEnter: onlyAuthUser,
+        component: NoticeView,
+      },
+      {
+        path: "update/:noticeno",
+        name: "NoticeUpdate",
+        beforeEnter: onlyAuthUser,
+        component: NoticeUpdate,
+      },
+    ],
   },
 ];
 
