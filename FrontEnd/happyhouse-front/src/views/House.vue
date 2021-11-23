@@ -21,9 +21,9 @@
         <div>
           <kakao-map></kakao-map>
         </div>
-        <div>
+        <!-- <div>
           <house-detail />
-        </div>
+        </div> -->
       </div>
     </section>
   </div>
@@ -32,7 +32,7 @@
 <script>
 import HouseSearchBar from "@/components/house/HouseSearchBar.vue";
 import HouseList from "@/components/house/HouseList.vue";
-import HouseDetail from "@/components/house/HouseDetail.vue";
+// import HouseDetail from "@/components/house/HouseDetail.vue";
 import SideNav from "../components/layout/SideNav.vue";
 import UserNav from "../components/layout/UserNav.vue";
 import KakaoMap from "../components/house/KakaoMap.vue";
@@ -42,7 +42,7 @@ export default {
   components: {
     HouseSearchBar,
     HouseList,
-    HouseDetail,
+    // HouseDetail,
     SideNav,
     UserNav,
     KakaoMap,
