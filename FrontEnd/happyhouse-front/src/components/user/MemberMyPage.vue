@@ -4,37 +4,36 @@
       <b-col></b-col>
       <b-col cols="8">
         <b-jumbotron>
-          <template #header>My Page</template>
-          <template #lead> 내 정보 확인페이지입니다. </template>
-          <hr class="my-4" />
-
-          <b-container class="mt-4">
+          <b-container class="mt-4 text-left ">
             <b-row>
               <b-col cols="2"></b-col>
-              <b-col cols="2" align-self="end">아이디</b-col
-              ><b-col cols="4" align-self="start">{{ userInfo.userid }}</b-col>
+              <b-col cols="2" align-self="end">
+                <h6>아이디</h6></b-col
+              ><b-col cols="4" align-self="start"><h6>{{ userInfo.userid }}</h6></b-col>
               <b-col cols="2"></b-col>
             </b-row>
             <b-row>
               <b-col cols="2"></b-col>
-              <b-col cols="2" align-self="end">이름</b-col
-              ><b-col cols="4" align-self="start">{{
-                userInfo.username
-              }}</b-col>
+              <b-col cols="2" align-self="end">
+                <h6>이름</h6></b-col
+              ><b-col cols="4" align-self="start">
+                <h6>{{userInfo.username}}</h6>
+                </b-col>
               <b-col cols="2"></b-col>
             </b-row>
             <b-row>
               <b-col cols="2"></b-col>
-              <b-col cols="2" align-self="end">이메일</b-col
-              ><b-col cols="4" align-self="start">{{ userInfo.email }}</b-col>
+              <b-col cols="2" align-self="end">
+                <h6>E-mail</h6></b-col
+              ><b-col cols="4" align-self="start"><h6>{{ userInfo.email }}</h6></b-col>
               <b-col cols="2"></b-col>
             </b-row>
             <b-row>
               <b-col cols="2"></b-col>
-              <b-col cols="2" align-self="end">가입일</b-col
-              ><b-col cols="4" align-self="start">{{
-                userInfo.joindate
-              }}</b-col>
+              <b-col cols="2" align-self="end">
+                <h6>가입일</h6></b-col
+              ><b-col cols="4" align-self="start">
+                <h6>{{userInfo.joindate}}</h6></b-col>
               <b-col cols="2"></b-col>
             </b-row>
           </b-container>
@@ -67,7 +66,7 @@ export default {
     resignMember() {
       this.deleteMember(this.userInfo.userid);
       alert("탈퇴되었습니다.");
-      if (this.$route.path != "/") this.$router.push({ name: "Home" });
+      if (this.$route.path != "/") this.$router.push({ name: "Main" });
     },
 
     modifyMember(){

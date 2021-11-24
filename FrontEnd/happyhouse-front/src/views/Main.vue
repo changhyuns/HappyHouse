@@ -20,10 +20,9 @@
 <script>
 import FooterBar from "../components/layout/FooterBar.vue";
 import MemberLogin from "../components/user/MemberLogin.vue";
-// import MemberLogin from '../components/user/MemberLogin.vue'
+
 export default {
   components: { FooterBar, MemberLogin },
-  //   components: { MemberLogin },
 };
 </script>
 <style scoped>
@@ -42,24 +41,26 @@ export default {
   left: -20%;
 }
 
-.title > h1{
-    font-size: 60px;
+.title > h1 {
+  font-family: 'Black Han Sans', sans-serif;
+  font-size: 60px;
 }
 
-.title > h4{
-    font-size: 30px;
+.title > h4 {
+  font-size: 30px;
 }
 
 .login {
   position: relative;
-  top: 150px;
-  left: 73%;
+  top: 130px;
+  left: 72%;
   width: 500px;
 }
 
 .login > h2 {
-    position: relative;
-    text-align: center;
-   left: -19%;
+  font-family: 'Black Han Sans', sans-serif;
+  position: relative;
+  text-align: center;
+  left: -17%;
 }
 </style>
