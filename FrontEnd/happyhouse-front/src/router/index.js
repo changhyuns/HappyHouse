@@ -50,7 +50,7 @@ const onlyAuthUser = async (to, from, next) => {
 
 const routes = [
   {
-    path:"/",
+    path: "/",
     name: "Main",
     component: Main,
   },
@@ -129,14 +129,14 @@ const routes = [
     component: House,
   },
   {
-    path:"/town",
-    name:"Town",
+    path: "/town",
+    name: "Town",
     component: Town,
   },
 
   {
-    path:"/corona",
-    name:"Corona",
+    path: "/corona",
+    name: "Corona",
     component: Corona,
   },
   {

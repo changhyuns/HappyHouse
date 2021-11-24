@@ -105,10 +105,11 @@ export default {
       this.submitFile();
       this.modifyNotice({noticeno: this.notice.noticeno, userid: this.userInfo.userid, subject: this.notice.subject, content: this.notice.content});
       swal("성공", "게시글을 수정 완료!", "success");
-      this.$router.push({
-        name: "NoticeView",
-        params: { noticeno: this.notice.noticeno }
-      });
+      // this.$router.push({
+      //   name: "NoticeView",
+      //   params: { noticeno: this.notice.noticeno }
+      // });
+      this.$router.go();
     },
 
     handleFileUpload() {

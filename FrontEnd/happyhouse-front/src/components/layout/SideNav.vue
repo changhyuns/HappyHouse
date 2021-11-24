@@ -4,7 +4,7 @@
       <router-link :to="{ name: 'Home' }" tag="h2"
         ><b-icon icon="house-fill" font-scale="1"></b-icon
         ><span style="font-size: 25px; margin-left: 5px"
-          >Home</span
+          >HappyHouse</span
         ></router-link
       >
     </div>
@@ -69,7 +69,7 @@
         active-class="active"
       >
         <div class="link-container">
-          <b-icon icon="journals" style="margin-right: 5px" />게시판
+          <b-icon icon="journals" style="margin-right: 5px" />커뮤니티
         </div>
       </router-link>
       <router-link
@@ -126,12 +126,13 @@ export default {
 <style scoped>
 .SideNav {
   position: fixed;
-  width: 180px;
+  width: 210px;
   left: 0;
   top: 0;
   bottom: 0;
   /* background-color: #d0a9f5; */
   background-color: #2a1a72;
+  padding-left: 10px;
   z-index: 10;
   text-align: left;
 }
@@ -167,7 +168,7 @@ ul li {
 
 .logo h2 {
   font-size: 20pt;
-  margin-top: 10px;
+  margin-top: 30px;
   margin-bottom: 10px;
   margin-left: 5px;
   margin-right: 5px;
@@ -175,6 +176,8 @@ ul li {
 
 .link-container {
   margin-left: 8px;
+  margin-top: 10px;
+  margin-bottom: 10px;
   /* display: inline; */
   text-align: left;
 }
@@ -186,7 +189,7 @@ div > .link-container {
 }
 
 .link-container-sub {
-  margin-left: 20px;
+  margin-left: 30px;
   font-size: 16px;
 }
 

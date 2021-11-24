@@ -11,11 +11,11 @@
         <b-button pill variant="outline-secondary" class="ml-2" @click="moveNext()">다음 글</b-button>
       </b-col>
       <b-col class="text-right">
-        <button v-if="checkWriter" class="btn-write mr-2" style="border: none; color: #170B3B; font-weight:600"
+        <button v-if="checkAdmin" class="btn-write mr-2" style="border: none; color: #170B3B; font-weight:600"
           @click="moveModifyNotice"
           >수정</button
         >
-        <button v-if="checkWriter" class="btn-write mr-2" style="border: none; color: #170B3B; font-weight:600" @click="removeNotice"
+        <button v-if="checkAdmin" class="btn-write mr-2" style="border: none; color: #170B3B; font-weight:600" @click="removeNotice"
           >삭제</button
         >
       </b-col>
@@ -29,11 +29,17 @@
             </div>
             <div class="ml-3 mr-4 mt-1">
               <div class="b_inbox_user" style="display: inline; float: left;">
-                {{ notice.userid && notice.userid }}
+                {{ notice.userid && notice.userid }} <b-icon icon="star-fill" animation="fade" v-if="checkWriterAdmin"  font-scale="1"></b-icon>
               </div>
               <div class="inbox_regtime" style="display: inline; float: right;">
               {{ changeDateFormat }}
               </div>
+            </div>
+            <div style="margin-top: 30px" v-if="checkFiles()">
+              <div v-for="(file, index) in files" v-bind:key="index">
+                <img style="width: 80%; margin-bottom: 10px;"  :src='`${file}`' alt="">
+              </div>
+              <!-- <img style="width: 90%" :src='`${files}`' alt=""> -->
             </div>
             <div class="pre-formatted" style="margin: 50px 0 50px 0">
               {{ notice.content && notice.content }}
@@ -47,7 +53,7 @@
 
 <script>
 import moment from "moment";
-import { getNotice, deleteNotice, getPrev, getNext} from "@/api/notice";
+import { getNotice, deleteNotice, getPrev, getNext, getFile } from "@/api/notice";
 import { mapState } from "vuex";
 import swal from 'sweetalert';
 
@@ -58,9 +64,12 @@ export default {
 
   data() {
     return {
-      Notice: {},
+      notice: {},
       prevNoticeNo: 0,
-      nextNoticeNo: 0
+      nextNoticeNo: 0,
+      files: [],
+      prevNo: 0,
+      nextNo: 0,
     };
   },
   computed: {
@@ -79,14 +88,29 @@ export default {
     },
 
     checkAdmin() {
-      return this.comment.userid === 'admin';
+      return this.userInfo.userid === 'admin';
     },
+
+    checkWriterAdmin() {
+      return this.notice.userid === 'admin';
+    }
   },
   created() {
     getNotice(
       this.$route.params.noticeno,
       (response) => {
         this.notice = response.data;
+
+        getFile(
+          this.notice.noticeno,
+          (response) => {
+            this.files = response.data;
+            console.log("hhehehe", this.files)
+          },
+          (error) => {
+            console.log("사진 가져오기", error);
+          }
+        )
 
         getPrev(
           this.notice.noticeno,
@@ -150,6 +174,9 @@ export default {
 
         });
       }
+    },
+    checkFiles() {
+      return this.files !== '';
     },
     moveNext() {
       if(this.nextNo === 0) {

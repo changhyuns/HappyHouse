@@ -30,6 +30,10 @@ function deleteNotice(noticeno, success, fail) {
   api.delete(`/notice/${noticeno}`).then(success).catch(fail);
 }
 
+function getFile(noticeno, success, fail) {
+  api.get(`notice/gallery/${noticeno}`).then(success).catch(fail);
+}
+
 export {
-  listNotice, writeNotice, getNotice, modifyNotice, deleteNotice, getPrev, getNext,
+  listNotice, writeNotice, getNotice, modifyNotice, deleteNotice, getPrev, getNext, getFile
 };

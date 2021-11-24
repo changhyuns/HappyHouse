@@ -1,5 +1,7 @@
 <template>
   <b-container class="bv-example-row mt-3 text-center">
+    <side-nav></side-nav>
+    <user-nav></user-nav>
     <h3 class="underline-steelblue">
       <b-icon icon="person-lines-fill"></b-icon> Member Service
     </h3>
@@ -8,8 +10,14 @@
 </template>
 
 <script>
+import SideNav from "../components/layout/SideNav.vue";
+import UserNav from "../components/layout/UserNav.vue";
 export default {
   name: "Member",
+  components:{
+    SideNav,
+    UserNav,
+  }
 };
 </script>
 

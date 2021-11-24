@@ -2,7 +2,7 @@
   <b-container class="bv-example-row mt-3 text-center">
     <side-nav></side-nav>
     <user-nav></user-nav>
-    <h3>동네 정보</h3>
+    <h3 style="background-color: #170B3B; color: white; height: 40px; font-size: 30px;">동네 정보</h3>
     <town-search-bar type="town"></town-search-bar>
     <kakao-map type="town"></kakao-map>
   </b-container>

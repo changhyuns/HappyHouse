@@ -29,7 +29,7 @@
             </div>
             <div class="ml-3 mr-4 mt-1">
               <div class="b_inbox_user" style="display: inline; float: left;">
-                {{ article.userid && article.userid }}
+                {{ article.userid && article.userid }} <b-icon icon="star-fill" animation="fade" v-if="checkWriterAdmin"  font-scale="1"></b-icon>
               </div>
               <div class="inbox_regtime" style="display: inline; float: right;">
               {{ changeDateFormat }}
@@ -105,6 +105,10 @@ export default {
     checkAdmin() {
       return this.comment.userid === 'admin';
     },
+
+    checkWriterAdmin() {
+      return this.article.userid === 'admin';
+    }
   },
   created() {
     getArticle(
@@ -154,13 +158,12 @@ export default {
             console.log("하위 댓글 개수 가져오기 실패", error);
           }
         );
-
       },
       (error) => {
         console.log("삭제 에러발생!!", error);
       }
     );
-    
+
   },
   mounted() {
     this.resize();
