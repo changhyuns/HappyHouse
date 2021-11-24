@@ -72,10 +72,11 @@ const memberStore = {
     },
 
     updateMember({ commit }, user) {
+      console.log(user);
       updateUser(user,
         (response) => {
           if (response.data === "success") {
-            console.log("delete success");
+            console.log("update success");
             commit("SET_USER_INFO", user);
           }
         }, (error) => {

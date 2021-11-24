@@ -37,7 +37,7 @@
             </div>
           </router-link>
           <router-link
-            :to="{ name: 'House' }"
+            :to="{ name: 'Town' }"
             tag="h2"
             class="list-btn"
             active-class="active"
@@ -49,7 +49,7 @@
             </div>
           </router-link>
           <router-link
-            :to="{ name: 'House' }"
+            :to="{ name: 'Corona' }"
             tag="h2"
             class="list-btn"
             active-class="active"

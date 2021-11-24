@@ -1,18 +1,11 @@
 <template>
   <b-container class="mt-4" v-if="userInfo">
     <b-row>
-      <b-col>
-        <b-alert variant="secondary" show><h3>내정보</h3></b-alert>
-      </b-col>
-    </b-row>
-    <b-row>
       <b-col></b-col>
       <b-col cols="8">
         <b-jumbotron>
           <template #header>My Page</template>
-
           <template #lead> 내 정보 확인페이지입니다. </template>
-
           <hr class="my-4" />
 
           <b-container class="mt-4">
@@ -47,8 +40,8 @@
           </b-container>
           <hr class="my-4" />
 
-          <b-button variant="primary" href="#" class="mr-1">정보수정</b-button>
-          <b-button variant="danger" href="#" @click="resignMember">회원탈퇴</b-button>
+          <b-button variant="primary" href="#" @click="modifyMember" class="mr-1">정보수정</b-button>
+          <b-button variant="danger" href="#" @click="resignMember" class="mr-1">회원탈퇴</b-button>
         </b-jumbotron>
       </b-col>
       <b-col></b-col>
@@ -75,6 +68,10 @@ export default {
       this.deleteMember(this.userInfo.userid);
       alert("탈퇴되었습니다.");
       if (this.$route.path != "/") this.$router.push({ name: "Home" });
+    },
+
+    modifyMember(){
+      this.$router.push({name: "MemberModify"});
     }
   },
 };
