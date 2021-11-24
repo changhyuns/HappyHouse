@@ -1,8 +1,7 @@
 <template>
   <footer>
     <div>
-      © 2021 HAPPY HOUSE | SSAFY | JE SO | CH SON |
-      <b-icon icon="telephone-fill"></b-icon>
+      Copyright © JE.SO CH.SON | 2021 HAPPY HOUSE | SSAFY
     </div>
   </footer>
 </template>

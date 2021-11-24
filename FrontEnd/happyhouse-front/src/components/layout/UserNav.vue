@@ -71,7 +71,7 @@ export default {
 }
 
 span {
-  color: white;
+  color: #2a1a72;
   margin-right:5px;
 }
 </style>
