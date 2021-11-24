@@ -1,40 +1,41 @@
 <template>
   <div class="user_nav">
-    <b-navbar-nav class="ml-auto" v-if="userInfo">
-      <b-nav-item class="align-self-center"
-        ><b-avatar
-          variant="primary"
-          v-text="userInfo ? userInfo.userid.charAt(0).toUpperCase() : ''"
-        ></b-avatar
-        >{{ userInfo.username }}({{ userInfo.userid }})님
-        환영합니다.</b-nav-item
-      >
-      <b-nav-item class="align-self-center"
-        ><router-link :to="{ name: 'MyPage' }" class="link align-self-center"
-          >내정보보기</router-link
-        ></b-nav-item
-      >
-      <b-nav-item class="link align-self-center" @click.prevent="onClickLogout"
-        >로그아웃</b-nav-item
-      >
-    </b-navbar-nav>
-    <b-navbar-nav class="ml-auto" v-else>
+    <b-nav v-if="userInfo" align=right>
+      <b-nav-item-dropdown right>
+        <template #button-content>
+          <span>{{ userInfo.username }}({{ userInfo.userid }})님 환영합니다.</span>
+          <b-avatar
+            variant="primary"
+            v-text="userInfo ? userInfo.userid.charAt(0).toUpperCase() : ''"
+          ></b-avatar>
+        </template>
+        <b-dropdown-item>
+          <router-link :to="{ name: 'MyPage' }">
+            <b-icon icon="person-circle"></b-icon>내정보보기</router-link
+          >
+        </b-dropdown-item>
+        <b-dropdown-item @click.prevent="onClickLogout">
+          <b-icon icon="key"></b-icon>로그아웃</b-dropdown-item
+        >
+      </b-nav-item-dropdown>
+    </b-nav>
+    <b-nav v-else align=right>
       <b-nav-item-dropdown right>
         <template #button-content>
           <b-icon icon="people" font-scale="2"></b-icon>
         </template>
-        <b-dropdown-item href="#"
-          ><router-link :to="{ name: 'SignUp' }" class="link"
+        <b-dropdown-item
+          ><router-link :to="{ name: 'SignUp' }"
             ><b-icon icon="person-circle"></b-icon> 회원가입</router-link
           ></b-dropdown-item
         >
-        <b-dropdown-item href="#"
-          ><router-link :to="{ name: 'SignIn' }" class="link"
+        <b-dropdown-item
+          ><router-link :to="{ name: 'SignIn' }"
             ><b-icon icon="key"></b-icon> 로그인</router-link
           ></b-dropdown-item
         >
       </b-nav-item-dropdown>
-    </b-navbar-nav>
+    </b-nav>
   </div>
 </template>
 
@@ -64,6 +65,12 @@ export default {
 .user_nav {
   position: relative;
   text-align: right;
-  padding-right: 20px;
+  width: 100;
+  padding-right: 10px;
+}
+
+span {
+  color: white;
+  margin-right:5px;
 }
 </style>

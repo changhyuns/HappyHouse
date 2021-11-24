@@ -2,15 +2,16 @@
   <b-container class="bv-example-row mt-3">
     <b-row>
       <b-col>
-        <h3>회원가입</h3>
+        <h3>회원 정보 수정</h3>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col>
         <b-col style="text-align: left">
           <b-form @submit="onSubmit" @reset="onReset">
-            <b-form-group
-              id="username-group"
-              label="이름"
-              label-for="username"
-            >
+            <b-form-group id="username-group" label="이름" label-for="username">
               <b-form-input
+                readonly
                 id="username"
                 v-model="user.username"
                 type="text"
@@ -19,12 +20,9 @@
               </b-form-input>
             </b-form-group>
 
-            <b-form-group
-              id="userid-group"
-              label="아이디"
-              label-for="userid"
-            >
+            <b-form-group id="userid-group" label="아이디" label-for="userid">
               <b-form-input
+                readonly
                 id="userid"
                 v-model="user.userid"
                 type="text"
@@ -51,12 +49,12 @@
             <b-form-group
               id="pwdcheck-group"
               label="비밀번호 재입력"
-              label-for="userpwd"
+              label-for="pwdcheck"
             >
               <b-form-input
                 id="pwdcheck"
-                v-model="user.pwdcheck"
                 type="password"
+                v-model="pwdcheck"
                 required
               >
               </b-form-input>
@@ -69,7 +67,7 @@
                   type="text"
                   class="form-control"
                   id="emailid"
-                  v-model="user.emailid"
+                  v-model="user.email"
                   placeholder=""
                   size="25"
                 />
@@ -77,7 +75,7 @@
                 <select
                   class="form-control"
                   id="emaildomain"
-                  v-model="user.emaildomain"
+                  v-model="emaildomain"
                 >
                   <option value="ssafy.com">ssafy.com</option>
                   <option value="naver.com">naver.com</option>
@@ -88,7 +86,7 @@
             </div>
             <div class="form-group text-center">
               <b-button type="submit" variant="primary" class="m-1"
-                >회원가입</b-button
+                >완료</b-button
               >
               <b-button type="reset" variant="danger" class="m-1"
                 >초기화</b-button
@@ -102,28 +100,36 @@
 </template>
 
 <script>
-import { mapActions} from 'vuex';
-
+import { mapActions, mapState } from "vuex";
 const memberStore = "memberStore";
 
 export default {
-  name: "MemberJoin",
-
   data() {
     return {
       user: {
         username: "",
         userid: "",
         userpwd: "",
-        userpwdcheck: "",
-        emailid: "",
-        emaildomain: "",
+        email: "",
+        joindate: "",
       },
+
+      pwdcheck: "",
+      emaildomain: "",
     };
+  },
+  computed: {
+    ...mapState(memberStore, ["userInfo"]),
+  },
+
+  created() {
+    this.user.username = this.userInfo.username;
+    this.user.userid = this.userInfo.userid;
+    this.user.joindate = this.userInfo.joindate;
   },
 
   methods: {
-    ...mapActions(memberStore, ["registMember"]),
+    ...mapActions(memberStore, ["updateMember"]),
 
     onSubmit(event) {
       event.preventDefault();
@@ -146,28 +152,27 @@ export default {
         (err = false),
         this.$refs.userpwd.focus());
 
+      err &&
+        this.user.userpwd != this.pwdcheck &&
+        ((msg = "비밀번호가 동일하지 않습니다."),
+        (err = false));
+
       if (!err) alert(msg);
-      else{
-        this.insertMember();
-        alert("가입이 완료되었습니다.");
-        this.$router.push({name:"Home"});
+      else {
+        this.updateMember(this.user);
+        alert("수정이 완료되었습니다.");
+        this.$router.push({ name: "MyPage" });
       }
     },
 
     onReset(event) {
       event.preventDefault();
-      this.user.username = "";
-      this.user.userid = "";
       this.user.userpwd = "";
       this.user.emailid = "";
       this.user.emaildomain = "";
     },
-
-    insertMember(){
-      this.registMember(this.user);
-    }
   },
 };
 </script>
-<style>
-</style>
+
+<style></style>

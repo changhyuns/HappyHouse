@@ -6,6 +6,7 @@ import Member from "@/views/Member.vue";
 import MemberLogin from "@/components/user/MemberLogin.vue";
 import MemberJoin from "@/components/user/MemberJoin.vue";
 import MemberMyPage from "@/components/user/MemberMyPage.vue";
+import MemberModify from "@/components/user/MemberModify.vue";
 
 import Board from "@/views/Board.vue";
 import BoardList2 from "@/components/board/BoardList2.vue";
@@ -19,6 +20,8 @@ import NoticeWrite from "@/components/notice/NoticeWrite.vue";
 import NoticeView from "@/components/notice/NoticeView.vue";
 import NoticeUpdate from "@/components/notice/NoticeUpdate.vue";
 
+import Town from "@/views/Town.vue";
+import Corona from "@/views/Corona.vue";
 import House from "@/views/House.vue";
 
 import store from "@/store/index.js";
@@ -71,6 +74,13 @@ const routes = [
         beforeEnter: onlyAuthUser,
         component: MemberMyPage,
       },
+
+      {
+        path: "modifyMypage",
+        name: "MemberModify",
+        beforeEnter: onlyAuthUser,
+        component: MemberModify,
+      },
     ],
   },
   {
@@ -109,6 +119,17 @@ const routes = [
     path: "/house",
     name: "House",
     component: House,
+  },
+  {
+    path:"/town",
+    name:"Town",
+    component: Town,
+  },
+
+  {
+    path:"/corona",
+    name:"Corona",
+    component: Corona,
   },
   {
     path: "*",

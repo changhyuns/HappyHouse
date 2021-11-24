@@ -12,5 +12,16 @@ async function findById(userid, success, fail) {
 }
 
 // function logout(success, fail)
+function registUser(param, success, fail){
+  api.post(`/user/regist`, param).then(success).catch(fail);
+}
 
-export { login, findById };
+function updateUser(param, success, fail){
+  api.put(`/user`, param).then(success).catch(fail);
+}
+
+function deleteUser(userid, success, fail){
+  api.delete(`/user/${userid}`).then(success).catch(fail);
+}
+
+export { login, findById, registUser, updateUser, deleteUser };

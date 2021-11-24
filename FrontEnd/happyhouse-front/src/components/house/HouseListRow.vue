@@ -10,8 +10,8 @@
         @click="selectHouse()"
       >
         <b-card-text>
-          일련번호 : {{ house && house.일련번호 }} <br />
           법정동 : {{ house && house.법정동 }} <br />
+          건축년도 : {{house && house.건축년도}} <br />
           층수 : {{ house && house.층 }} <br />
           거래금액 :
           {{
@@ -70,6 +70,6 @@ export default {
 }
 
 .house_list {
-  margin-left: 30px;
+  margin-left: 60px;
 }
 </style>

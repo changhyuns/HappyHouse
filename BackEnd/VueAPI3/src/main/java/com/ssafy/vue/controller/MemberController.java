@@ -1,20 +1,25 @@
 package com.ssafy.vue.controller;
 
+import java.io.Console;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.ibatis.annotations.Delete;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.vue.model.MemberDto;
@@ -93,6 +98,41 @@ public class MemberController {
 			status = HttpStatus.ACCEPTED;
 		}
 		return new ResponseEntity<Map<String, Object>>(resultMap, status);
+	}
+
+	@ApiOperation(value = "회원가입", notes = "입력받은 회원 정보를 추가합니다.", response = Map.class)
+	@PostMapping("/regist")
+	public ResponseEntity<String> registerMember(
+		@RequestBody @ApiParam(value = "가입에 필요한 회원정보", required = true) MemberDto memberDto) throws Exception {
+		logger.debug("registerMember - 호출");
+		if(memberService.registerMember(memberDto)){
+			return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+		}
+		return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
+	}
+
+	@ApiOperation(value = "회원정보 수정", notes = "회원 정보를 수정합니다.", response = Map.class)
+	@PutMapping
+	public ResponseEntity<String> updateMember(
+		@RequestBody @ApiParam(value = "수정한 회원정보", required = true) MemberDto memberDto) throws Exception {
+		logger.debug("updateMember - 호출");
+		if(memberService.updateMember(memberDto)){
+			return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+		}
+		return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
+	}
+
+	@ApiOperation(value = "회원정보 삭제", notes = "회원 정보를 삭제합니다.", response = Map.class)
+	@DeleteMapping("/{userid}")
+	public ResponseEntity<String> deleteMember(
+		@PathVariable("userid") @ApiParam(value = "삭제하려는 회원 아이디", required = true) String userid) throws Exception {
+		logger.debug("deleteMember - 호출 " + userid);
+		
+		if(memberService.deleteMember(userid)){
+			logger.debug("deleteMember - True");
+			return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
+		}
+		return new ResponseEntity<String>(FAIL, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 }
