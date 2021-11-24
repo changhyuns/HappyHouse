@@ -9,7 +9,7 @@
     </b-th>
     <b-td>{{ hit }}</b-td>
     <b-td>{{ userid }}</b-td>
-    <b-td>{{ regtime }}</b-td>
+    <b-td>{{ changeDateFormat }}</b-td>
   </b-tr>
 </template>
 
@@ -27,9 +27,11 @@ export default {
     content: String,
   },
   computed: {
-    // changeDateFormat() {
-    //   return moment(new Date(this.regtime)).format("YY.MM.DD hh:mm:ss");
-    // },
+    changeDateFormat() {
+        return moment(new Date(this.comment.regtime)).format(
+            "MM월DD일 \xa0 hh:mm"
+        );
+      },
   },
 };
 </script>

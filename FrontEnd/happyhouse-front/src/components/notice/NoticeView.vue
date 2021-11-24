@@ -4,7 +4,7 @@
     </b-row>
     <b-row class="mb-1">
       <b-col class="text-left">
-        <button class="btn-write mr-2" style="border: none; color: #170B3B; font-weight:600" @click="listArticle()">목록</button>
+        <button class="btn-write mr-2" style="border: none; color: #170B3B; font-weight:600" @click="listNotice()">목록</button>
       </b-col>
       <b-col class="text-center">
         <b-button pill variant="outline-secondary" class="mr-2" @click="movePrev()">이전 글</b-button>
@@ -12,10 +12,10 @@
       </b-col>
       <b-col class="text-right">
         <button v-if="checkWriter" class="btn-write mr-2" style="border: none; color: #170B3B; font-weight:600"
-          @click="moveModifyArticle"
+          @click="moveModifyNotice"
           >수정</button
         >
-        <button v-if="checkWriter" class="btn-write mr-2" style="border: none; color: #170B3B; font-weight:600" @click="removeArticle"
+        <button v-if="checkWriter" class="btn-write mr-2" style="border: none; color: #170B3B; font-weight:600" @click="removeNotice"
           >삭제</button
         >
       </b-col>
@@ -23,83 +23,59 @@
     <div id="bcContainer">
       <b-row class="mb-1">
         <b-col>
-          <div class="board_box" style="border-radius: 10px;">
+          <div class="notice_box" style="border-radius: 10px;">
             <div class="b_inbox_title ml-2">
-              {{ article.subject && article.subject }}
+              {{ notice.subject && notice.subject }}
             </div>
             <div class="ml-3 mr-4 mt-1">
               <div class="b_inbox_user" style="display: inline; float: left;">
-                {{ article.userid && article.userid }}
+                {{ notice.userid && notice.userid }}
               </div>
               <div class="inbox_regtime" style="display: inline; float: right;">
               {{ changeDateFormat }}
               </div>
             </div>
             <div class="pre-formatted" style="margin: 50px 0 50px 0">
-              {{ article.content && article.content }}
+              {{ notice.content && notice.content }}
             </div>
           </div>
         </b-col>
       </b-row>
-      <div class="comment_title">댓글 ({{ this.comments_length }})</div> 
-      <div v-for="comment in comments" v-bind:key="comment.commentid">
-        <comment-list-row v-bind:comment="comment"/>
-      </div>
-      <div class="comment_box_write">
-        <div class="inbox_user">
-          {{ userInfo.userid }}
-        </div>
-        <div>
-          <textarea class="autosize" ref="textarea" v-model="comment_content" placeholder="댓글을 남겨보세요"></textarea>
-        </div>
-        <div style="align-items: right">
-          <button id="btn-registerComment" squared variant="outline-secondary" @click="submitComment()">등록</button>
-        </div>
-      </div>
     </div>
   </b-container>
 </template>
 
 <script>
 import moment from "moment";
-import { getArticle, deleteArticle, writeComment, listComment, getPrev, getNext, getSubCommentCount} from "@/api/board";
+import { getNotice, deleteNotice, getPrev, getNext} from "@/api/notice";
 import { mapState } from "vuex";
-import CommentListRow from './child/CommentListRow.vue';
 import swal from 'sweetalert';
 
 const memberStore = "memberStore";
 
 export default {
-  name: "BoardView",
-	components: { CommentListRow },
+  name: "NoticeView",
 
   data() {
     return {
-      article: {},
-      comments: [],
-      comments_length: 0,
-      comment_content: '',
-      prevNo: 0,
-      nextNo: 0
+      Notice: {},
+      prevNoticeNo: 0,
+      nextNoticeNo: 0
     };
   },
   computed: {
     ...mapState(memberStore, ["userInfo"]),
 
     message() {
-      if (this.article.content)
-        return this.article.content.split("\n").join("<br>");
+      if (this.notice.content)
+        return this.notice.content.split("\n").join("<br>");
       return "";
     },
 
     changeDateFormat() {
-      return moment(new Date(this.article.regtime)).format(
+      return moment(new Date(this.notice.regtime)).format(
           "MM월DD일 \xa0 hh:mm"
       );
-    },
-
-    checkWriter() {
-      return (this.userInfo.userid === this.article.userid || this.userInfo.userid === 'admin')
     },
 
     checkAdmin() {
@@ -107,25 +83,13 @@ export default {
     },
   },
   created() {
-    getArticle(
-      this.$route.params.articleno,
+    getNotice(
+      this.$route.params.noticeno,
       (response) => {
-        this.article = response.data;
-
-        listComment(
-          this.article.articleno,
-          (response) => {
-            this.comments = response.data;
-            console.log("comments", this.comments);
-            this.comments_length = response.data.length;
-          },
-          (error) => {
-            console.log("댓글 불러오기 실패!", error);
-          }
-        );
+        this.notice = response.data;
 
         getPrev(
-          this.article.articleno,
+          this.notice.noticeno,
           (response) => {
             this.prevNo = response.data;
           },
@@ -135,7 +99,7 @@ export default {
         );
 
         getNext(
-          this.article.articleno,
+          this.notice.noticeno,
           (response) => {
             this.nextNo = response.data;
           },
@@ -143,21 +107,9 @@ export default {
             console.log("이전 글 더이상 없음", error);
           }
         );
-
-        getSubCommentCount(
-          this.article.articleno,
-          (response) => {
-            console.log(response);
-            this.comments_length += response.data;
-          },
-          (error) => {
-            console.log("하위 댓글 개수 가져오기 실패", error);
-          }
-        );
-
       },
       (error) => {
-        console.log("삭제 에러발생!!", error);
+        console.log(error);
       }
     );
     
@@ -166,37 +118,21 @@ export default {
     this.resize();
   },
   methods: {
-    listArticle() {
-      this.$router.push({ name: "BoardList2" });
+    listNotice() {
+      this.$router.push({ name: "NoticeList" });
     },
-    moveModifyArticle() {
+    moveModifyNotice() {
       this.$router.push({
-        name: "BoardUpdate",
-        params: { articleno: this.article.articleno },
+        name: "NoticeUpdate",
+        params: { noticeno: this.notice.noticeno },
       });
-      //   this.$router.push({ path: `/board/modify/${this.article.articleno}` });
     },
-    removeArticle() {
+    removeNotice() {
       if (confirm("게시글을 삭제하시겠습니까?")) {
-        deleteArticle(this.article.articleno, () => {
-          this.$router.push({ name: "BoardList2" });
+        deleteNotice(this.notice.noticeno, () => {
+          this.$router.push({ name: "NoticeList" });
         });
       }
-    },
-    submitComment() {
-      swal("댓글을 등록하시겠습니까?", {
-        buttons: ["취소", "등록"],
-      })
-      .then((willSubmit) => {
-        if(willSubmit) {
-          writeComment({articleno: this.article.articleno, content: this.comment_content, userid: this.userInfo.userid}, () => {
-            swal("댓글 등록 완료!", {
-              icon: "success",
-            });
-            this.$router.go();
-          })
-        }
-      });
     },
     resize() {
       const { textarea } = this.$refs;
@@ -205,11 +141,11 @@ export default {
     },
     movePrev() {
       if(this.prevNo === 0) {
-        swal("가장 최근에 작성된 게시글입니다.", "더 이상 등록된 글이 없습니다", "warning");
+        swal("가장 최근에 작성된 공지입니다.", "더 이상 등록된 공지가 없습니다", "warning");
       }else {
         this.$router.push({
-          name: "BoardView",
-          params: { articleno: this.prevNo },
+          name: "NoticeView",
+          params: { noticeno: this.prevNoticeNo },
         }).catch(()=>{
 
         });
@@ -217,11 +153,11 @@ export default {
     },
     moveNext() {
       if(this.nextNo === 0) {
-        swal("마지막 글입니다.", "더 이상 등록된 글이 없습니다", "warning");
+        swal("마지막 공지입니다.", "더 이상 등록된 공지가 없습니다", "warning");
       }else {
         this.$router.push({
-          name: "BoardView",
-          params: { articleno: this.nextNo },
+          name: "NoticeView",
+          params: { noticeno: this.nextNoticeNo },
         }).catch(()=>{
           
         });
@@ -240,7 +176,7 @@ export default {
     padding-top: 20px;
   }
 
-  .board_box {
+  .notice_box {
     display: flex;
     border: none;
     flex-direction: column;

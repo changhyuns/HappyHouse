@@ -16,7 +16,7 @@
         </button>
         <button>
           <b-icon icon="exclamation-circle" aria-hidden="true"></b-icon>
-          공지사항
+          <router-link :to="{ name: 'Notice' }"> 공지사항</router-link>
         </button>
       </div>
     </body>
@@ -42,9 +42,6 @@ export default {
 </script>
 
 <style scoped>
-b-container {
-  background-image: url("main_background.jpg");
-}
 .underline-steelblue {
   display: inline-block;
   background: linear-gradient(
