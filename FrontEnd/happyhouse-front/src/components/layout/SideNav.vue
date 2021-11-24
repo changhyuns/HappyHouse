@@ -56,7 +56,7 @@
             v-if="this.foldHouseList"
           >
             <div class="link-container-sub">
-              <b-icon icon="exclamation-circle" style="margin-right: 5px" />
+              <b-icon icon="exclamation-triangle" style="margin-right: 5px" />
               코로나 진료소
             </div>
           </router-link>
@@ -72,12 +72,22 @@
           <b-icon icon="journals" style="margin-right: 5px" />게시판
         </div>
       </router-link>
-      <h2 class="list-btn" active-class="active">
+      <router-link
+        :to="{ name: 'Notice' }"
+        tag="h2"
+        class="list-btn"
+        active-class="active"
+      >
+        <div class="link-container">
+          <b-icon icon="check2-square" style="margin-right: 5px" />공지사항
+        </div>
+      </router-link>
+      <!-- <h2 class="list-btn" active-class="active">
         <div class="link-container">편의시설</div>
       </h2>
       <h2 class="list-btn" active-class="active">
         <div class="link-container">학교정보</div>
-      </h2>
+      </h2> -->
     </div>
   </div>
 </template>
@@ -177,6 +187,7 @@ div > .link-container {
 
 .link-container-sub {
   margin-left: 20px;
+  font-size: 16px;
 }
 
 .list-btn:focus {

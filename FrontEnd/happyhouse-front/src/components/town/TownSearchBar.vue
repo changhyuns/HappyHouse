@@ -16,20 +16,21 @@
         @change="dongList"
       ></b-form-select>
     </b-col>
-    <!-- <b-col class="sm-4">
+    <b-col class="sm-4">
       <b-form-select
         size="sm"
         v-model="dongCode"
         :options="dongs"
+        @change="setAddress"
       ></b-form-select>
-    </b-col> -->
+    </b-col>
   </b-row>
 </template>
 
 <script>
 import { mapState, mapActions, mapMutations } from "vuex";
 
-const houseStore = "houseStore";
+const coronaStore = "coronaStore";
 
 export default {
   name: "TownSearchBar",
@@ -40,23 +41,31 @@ export default {
       dongCode: null,
     };
   },
-  computed: {
-    ...mapState(houseStore, ["sidos", "guguns"]),
-    
+
+  props: {
+    type: { type: String },
   },
+
+  computed: {
+    ...mapState(coronaStore, ["sidos", "guguns", "dongs"]),
+  },
+
   created() {
-    this.CLEAR_HOUSE_LIST();
     this.CLEAR_SIDO_LIST();
+    this.CLEAR_GUGUN_LIST();
+    this.CLEAR_DONG_LIST();
     this.getSido();
+    // this.getClinicList();
   },
   methods: {
-    ...mapActions(houseStore, ["getSido", "getGugun", "getHouseList"]),
-    ...mapMutations(houseStore, [
+    ...mapActions(coronaStore, ["getSido", "getGugun", "getDong"]),
+    ...mapMutations(coronaStore, [
       "CLEAR_SIDO_LIST",
       "CLEAR_GUGUN_LIST",
-      "CLEAR_HOUSE_LIST",
+      "CLEAR_DONG_LIST",
+      "SET_ADDRESS",
     ]),
-   
+
     gugunList() {
       this.CLEAR_GUGUN_LIST();
       this.gugunCode = null;
@@ -64,10 +73,19 @@ export default {
     },
 
     dongList() {
-      if (this.gugunCode){
-          console.log("change");
+      this.CLEAR_DONG_LIST();
+      this.dongCode = null;
+      if (this.gugunCode) {
+        this.getDong(this.gugunCode);
       }
     },
+
+    setAddress(){
+      // 동까지 셋팅이 되면 카카오 맵 지도 이동시킬 주소 셋팅
+      if(this.dongCode){
+        this.SET_ADDRESS({sc:this.sidoCode, gc:this.gugunCode, dc:this.dongCode});
+      }
+    }
   },
 };
 </script>

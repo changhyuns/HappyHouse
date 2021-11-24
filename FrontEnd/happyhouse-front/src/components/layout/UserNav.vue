@@ -52,10 +52,11 @@ export default {
   methods: {
     ...mapMutations(memberStore, ["SET_IS_LOGIN", "SET_USER_INFO"]),
     onClickLogout() {
+      alert("로그아웃 되었습니다.");
       this.SET_IS_LOGIN(false);
       this.SET_USER_INFO(null);
       sessionStorage.removeItem("access-token");
-      if (this.$route.path != "/") this.$router.push({ name: "Home" });
+      if (this.$route.path != "/") this.$router.push({ name: "Main" });
     },
   },
 };

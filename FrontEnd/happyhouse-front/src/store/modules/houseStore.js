@@ -1,4 +1,4 @@
-import { sidoList, gugunList, houseList } from "@/api/house.js";
+import { sidoList, gugunList, houseList, dongList } from "@/api/house.js";
 
 const houseStore = {
   namespaced: true,
@@ -11,6 +11,7 @@ const houseStore = {
     totalHouse: 0,
     gugunCode: null,
     curPage: 1,
+    dongs: [{ value: null, text: "선택하세요" }],
   },
 
   getters: {},
@@ -26,11 +27,19 @@ const houseStore = {
         state.guguns.push({ value: gugun.gugunCode, text: gugun.gugunName });
       });
     },
+    SET_DONG_LIST: (state, dongs) => {
+      dongs.forEach((dong) => {
+        state.dongs.push({value: dong.dongCode, text: dong.dongName})
+      });
+    },
     CLEAR_SIDO_LIST: (state) => {
       state.sidos = [{ value: null, text: "선택하세요" }];
     },
     CLEAR_GUGUN_LIST: (state) => {
       state.guguns = [{ value: null, text: "선택하세요" }];
+    },
+    CLEAR_DONG_LIST: (state) => {
+      state.dongs = [{ value: null, text: "선택하세요" }];
     },
     SET_HOUSE_LIST: (state, houses) => {
       //   console.log(houses);
@@ -100,6 +109,21 @@ const houseStore = {
         }
       );
     },
+    getDong: ({commit}, gugunCode) => {
+      const params = {
+        gugun: gugunCode,
+      };
+      dongList(
+        params,
+        ({data}) => {
+          commit("SET_DONG_LIST", data);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+
     getHouseList: ({ commit }, {gugunCode, curPage}) => {
       // vue cli enviroment variables 검색
       //.env.local file 생성.
