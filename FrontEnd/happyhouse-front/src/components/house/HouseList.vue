@@ -39,6 +39,10 @@ export default {
     ...mapState(houseStore, ["houses", "totalHouse", "gugunCode", "curPage"]),
   },
 
+  watch:{
+    gugunCode:'setPage'
+  },
+
   methods: {
     ...mapActions(houseStore, ["getHouseList"]),
 
@@ -52,7 +56,13 @@ export default {
       // 페이지 클릭했을 때, 스크롤 최상단으로 이동
       document.getElementById("SideAptList").scrollTop = 0;
     },
+
+    setPage(){
+      this.currentPage = 1;
+      document.getElementById("SideAptList").scrollTop = 0;
+    }
   },
+
 };
 </script>
 

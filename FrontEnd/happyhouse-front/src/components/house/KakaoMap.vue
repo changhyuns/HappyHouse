@@ -1,10 +1,7 @@
 /* eslint-disable no-unused-vars */
 <template>
   <div id="map_content">
-    <div id="map" v-if="this.type != 'town'"></div>
-    <div v-if="this.type == 'town'">
-      차트영역 {{ martCount }}
-    </div>
+    <div id="map"></div>
   </div>
 </template>
 
@@ -33,25 +30,22 @@ export default {
 
   computed: {
     ...mapState(houseStore, ["address", "houses", "house"]),
-    ...mapState(coronaStore, ["coronaClinic", "address"]),
+    ...mapState(coronaStore, ["coronaClinic", "coronaAddress"]),
   },
 
   props: {
-    type: { type: String },
+    type: String,
   },
 
   mounted() {
-    if (this.type != "town") {
-      if (window.kakao && window.kakao.maps) {
-        this.initMap();
-      } else {
-        const script = document.createElement("script");
+    if (window.kakao && window.kakao.maps) {
+      this.initMap();
+    } else {
+      const script = document.createElement("script");
 
-        script.onload = () => kakao.maps.load(this.initMap);
-        script.src =
-          "http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=efd45f08160884edeebfcd70783250b3";
-        document.head.appendChild(script);
-      }
+      script.onload = () => kakao.maps.load(this.initMap);
+      script.src = "http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=efd45f08160884edeebfcd70783250b3";
+      document.head.appendChild(script);
     }
 
     if (this.type == "corona") {
@@ -112,9 +106,7 @@ export default {
         this.markers.forEach((marker) => marker.setMap(null));
       }
 
-      const positions = markerPositions.map(
-        (position) => new kakao.maps.LatLng(...position)
-      );
+      const positions = markerPositions.map((position) => new kakao.maps.LatLng(...position));
 
       if (positions.length > 0) {
         this.markers = positions.map(
@@ -125,10 +117,7 @@ export default {
             })
         );
 
-        const bounds = positions.reduce(
-          (bounds, latlng) => bounds.extend(latlng),
-          new kakao.maps.LatLngBounds()
-        );
+        const bounds = positions.reduce((bounds, latlng) => bounds.extend(latlng), new kakao.maps.LatLngBounds());
 
         this.map.setBounds(bounds);
       }
@@ -158,14 +147,7 @@ export default {
     // 그렇기 때문에, arrow function 으로 선언해주어야 함
     moveToHouse() {
       // selectbox 에서 선택된 시도 + 구군 기준으로 지도검색
-      const address =
-        this.address.sido +
-        " " +
-        this.address.gugun +
-        " " +
-        this.house.법정동 +
-        " " +
-        this.house.지번;
+      const address = this.address.sido + " " + this.address.gugun + " " + this.house.법정동 + " " + this.house.지번;
 
       this.geocoder.addressSearch(address, (result, status) => {
         // 정상적으로 검색이 완료됐으면
@@ -182,14 +164,7 @@ export default {
       this.removeMarker();
       let positions = [];
       this.houses.forEach((house) => {
-        const address =
-          this.address.sido +
-          " " +
-          this.address.gugun +
-          " " +
-          house.법정동 +
-          " " +
-          house.지번;
+        const address = this.address.sido + " " + this.address.gugun + " " + house.법정동 + " " + house.지번;
         this.geocoder.addressSearch(address, (result, status) => {
           // 정상적으로 검색이 완료됐으면
           let marker;
@@ -205,42 +180,17 @@ export default {
             this.infowindow = new kakao.maps.InfoWindow({
               content: `<div>${house.아파트}</div>`,
             });
+
+            kakao.maps.event.addListener(marker, "mouseover", this.makeOverListener(this.map, marker, this.infowindow));
+            kakao.maps.event.addListener(marker, "mouseout", this.makeOutListener(this.infowindow));
           }
 
           // 주어진 영역이 모두 보이게 하기 위한 boundary 셋팅
-          const bounds = positions.reduce(
-            (bounds, latlng) => bounds.extend(latlng),
-            new kakao.maps.LatLngBounds()
-          );
+          const bounds = positions.reduce((bounds, latlng) => bounds.extend(latlng), new kakao.maps.LatLngBounds());
 
           this.map.setBounds(bounds);
-
-          kakao.maps.event.addListener(
-            marker,
-            "mouseover",
-            this.makeOverListener(this.map, marker, this.infowindow)
-          );
-          kakao.maps.event.addListener(
-            marker,
-            "mouseout",
-            this.makeOutListener(this.infowindow)
-          );
         });
       });
-    },
-
-    // 인포윈도우를 표시하는 클로저를 만드는 함수입니다
-    makeOverListener(map, marker, infowindow) {
-      return function () {
-        infowindow.open(map, marker);
-      };
-    },
-
-    // 인포윈도우를 닫는 클로저를 만드는 함수입니다
-    makeOutListener(infowindow) {
-      return function () {
-        infowindow.close();
-      };
     },
 
     makeCoronaMarker() {
@@ -262,22 +212,26 @@ export default {
               content: `<div>${corona.시설명}</div>`,
             });
 
-            kakao.maps.event.addListener(
-              marker,
-              "mouseover",
-              this.makeOverListener(this.map, marker, this.infowindow)
-            );
-            kakao.maps.event.addListener(
-              marker,
-              "mouseout",
-              this.makeOutListener(this.infowindow)
-            );
+            kakao.maps.event.addListener(marker, "mouseover", this.makeOverListener(this.map, marker, this.infowindow));
+            kakao.maps.event.addListener(marker, "mouseout", this.makeOutListener(this.infowindow));
           }
         });
       });
     },
 
-    
+    // 인포윈도우를 표시하는 클로저를 만드는 함수입니다
+    makeOverListener(map, marker, infowindow) {
+      return function () {
+        infowindow.open(map, marker);
+      };
+    },
+
+    // 인포윈도우를 닫는 클로저를 만드는 함수입니다
+    makeOutListener(infowindow) {
+      return function () {
+        infowindow.close();
+      };
+    },
 
     removeMarker() {
       this.markers.forEach((marker) => {
@@ -287,8 +241,7 @@ export default {
     },
 
     moveToDong() {
-      const moveAddress =
-        this.address.sido + " " + this.address.gugun + " " + this.address.dong;
+      const moveAddress = this.coronaAddress.sido + " " + this.coronaAddress.gugun + " " + this.coronaAddress.dong;
       if (this.type != "town") {
         this.geocoder.addressSearch(moveAddress, (result, status) => {
           // 정상적으로 검색이 완료됐으면
@@ -304,7 +257,7 @@ export default {
           // 정상적으로 검색이 완료됐으면
           if (status === kakao.maps.services.Status.OK) {
             var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-            this.commercialArea(coords);
+            //this.commercialArea(coords);
           }
         });
       }

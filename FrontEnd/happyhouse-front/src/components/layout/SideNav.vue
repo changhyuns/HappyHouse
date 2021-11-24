@@ -33,7 +33,7 @@
           >
             <div class="link-container-sub">
               <b-icon icon="map" style="margin-right: 5px" />
-              아파트 검색
+              매물 검색
             </div>
           </router-link>
           <router-link
@@ -44,7 +44,7 @@
             v-if="this.foldHouseList"
           >
             <div class="link-container-sub">
-              <b-icon icon="question-square" style="margin-right: 5px" />
+              <b-icon icon="shop" style="margin-right: 5px" />
               동네 정보조회
             </div>
           </router-link>
@@ -79,15 +79,14 @@
         active-class="active"
       >
         <div class="link-container">
-          <b-icon icon="check2-square" style="margin-right: 5px" />공지사항
+          <b-icon icon="bell" style="margin-right: 5px" />공지사항
         </div>
       </router-link>
-      <!-- <h2 class="list-btn" active-class="active">
-        <div class="link-container">편의시설</div>
-      </h2>
-      <h2 class="list-btn" active-class="active">
-        <div class="link-container">학교정보</div>
-      </h2> -->
+      <router-link :to="{name:'MyPage'}" tag="h2" class="list-btn" active-class="active">
+        <div class="link-container">
+          <b-icon icon="person" style="margin-right: 5px"/>내 정보
+        </div>
+      </router-link>
     </div>
   </div>
 </template>

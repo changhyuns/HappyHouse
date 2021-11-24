@@ -7,7 +7,7 @@ const coronaStore = {
         sidos: [{ value: null, text: "선택하세요" }],
         guguns: [{ value: null, text: "선택하세요" }],
         dongs: [{ value: null, text: "선택하세요" }],
-        address: { sido: null, gugun: null, dong: null },
+        coronaAddress: { sido: null, gugun: null, dong: null },
         total: 0,
         gugunCode: null,
         curPage: 1,
@@ -43,23 +43,23 @@ const coronaStore = {
         },
 
         SET_ADDRESS: (state, data) => {
-            state.address = {}
+            state.coronaAddress = {}
             
             state.sidos.forEach(s => {
                 if (s.value == data.sc) {
-                    state.address.sido = s.text;
+                    state.coronaAddress.sido = s.text;
                 }
             });
 
             state.guguns.forEach(g => {
                 if (g.value == data.gc) {
-                    state.address.gugun = g.text;
+                    state.coronaAddress.gugun = g.text;
                 }
             });
 
             state.dongs.forEach(d => {
                 if (d.value == data.dc) {
-                    state.address.dong = d.text;
+                    state.coronaAddress.dong = d.text;
                 }
             })
         },
