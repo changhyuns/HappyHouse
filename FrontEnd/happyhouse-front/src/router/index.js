@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "@/views/Home.vue";
+import Main from "@/views/Main.vue";
 
 import Member from "@/views/Member.vue";
 import MemberLogin from "@/components/user/MemberLogin.vue";
@@ -40,7 +41,7 @@ const onlyAuthUser = async (to, from, next) => {
   if (checkUserInfo === null) {
     alert("로그인이 필요한 페이지입니다..");
     // next({ name: "SignIn" });
-    router.push({ name: "SignIn" });
+    router.push({ name: "Main" });
   } else {
     console.log("로그인 했다.");
     next();
@@ -49,8 +50,15 @@ const onlyAuthUser = async (to, from, next) => {
 
 const routes = [
   {
-    path: "/",
+    path:"/",
+    name: "Main",
+    component: Main,
+  },
+
+  {
+    path: "/home",
     name: "Home",
+    beforeEnter: onlyAuthUser,
     component: Home,
   },
   {

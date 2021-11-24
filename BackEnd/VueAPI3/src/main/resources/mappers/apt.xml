@@ -14,12 +14,20 @@
 		select left(gugunCode,5) gugunCode, gugunName
 		from guguncode
 		where left(gugunCode,2) = #{sido}
-		order by gugunCode
+		order by gugunName
 	</select>
 	
-	<select id="getDongInGugun" parameterType="string" resultType="houseInfoDto">
+	<!-- <select id="getDongInGugun" parameterType="string" resultType="houseInfoDto">
 		select distinct dongName, dongCode
 		from houseinfo
+		where left(dongCode, 5) = #{gugun}
+		order by dongName
+	</select> -->
+	
+
+	<select id="getDongInGugun" parameterType="string" resultType="sidoGugunCodeDto">
+		select distinct dongName, dongCode
+		from dongcode
 		where left(dongCode, 5) = #{gugun}
 		order by dongName
 	</select>

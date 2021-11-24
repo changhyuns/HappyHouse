@@ -13,6 +13,8 @@ Frontend/happyhouse-front/npm-debug.log*
 Frontend/happyhouse-front/yarn-debug.log*
 Frontend/happyhouse-front/yarn-error.log*
 Frontend/happyhouse-front/pnpm-debug.log*
+BackEnd/VueAPI3/*.log
+BackEnd/VueAPI3/log/
 
 # Editor directories and files
 Frontend/happyhouse-front/.idea
