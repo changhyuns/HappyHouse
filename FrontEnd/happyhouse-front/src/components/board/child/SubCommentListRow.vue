@@ -4,13 +4,15 @@
       <b-icon icon="arrow-return-right" aria-hidden="true" font-scale="1"></b-icon>
     </div>
     <div style="width: 100%">
-      <div style="padding-top: 5px">
+      <div style="padding-top: 5px; display: flex; align-items: center;">
         <div class="inbox_user" style="display: inline; float: left;">
-          {{ subComment && subComment.userid }} <b-icon icon="star-fill" animation="fade" v-if="checkAdmin"  font-scale="1"></b-icon>
+          {{ subComment && subComment.userid }} <b-icon icon="person-check" v-if="checkAdmin"  font-scale="1"></b-icon>
         </div>
-        <div class="inbox_regtime" style="display: inline; float: right;">
-          {{ subComment && changeDateFormat }}
-          <b-icon icon="x-square" v-if="checkWriter" aria-hidden="true" style="float: right; margin: 5px 0 0 10px; cursor: pointer" @click="removeSubComment" ></b-icon>
+        <div class="inbox_regtime" style="display: inline; float: left;">
+          <b-icon icon="dot" font-scale="1" style="margin-left: 5px"></b-icon>{{ subComment && changeDateFormat }}
+        </div>
+        <div style="display:inline; float: right;">
+          <b-icon icon="x-square" v-if="checkWriter" aria-hidden="true" style="margin-left: 10px; cursor: pointer" @click="removeSubComment" ></b-icon>
         </div>
       </div>
       <div>
@@ -92,27 +94,27 @@
 
 <style scoped>
   .subComment_box {
-    border: none;
-    border-radius: 10px;
-    background-color: #F2EFFB;
+    border-bottom: 1px solid #F2F2F2;
+    background-color: #FAFAFA;
     padding: 0 0 0 20px;
     margin-bottom: 15px;
   }
 
   .inbox_user {
     text-align: left;
-    font-size:20px;
+    font-size: 15px;
     color: #170B3B;
     font-weight: 500;
   }
 
   .inbox_regtime {
     text-align: right;
-    font-size: 20px;
+    font-size: 15px;
     font-weight: 300;
   }
 
   textarea {
+    background-color: #FAFAFA;
     flex: 1 1 auto;
     box-sizing: border-box;
     width: 100%;
@@ -126,7 +128,6 @@
     font-size: 15px;
     margin: 10px 0 10px 0;
     min-height: 30px;
-    background-color: #F2EFFB;
   }
 
 </style>

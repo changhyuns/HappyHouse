@@ -45,11 +45,11 @@ export default {
   data() {
     return {
       fields: [
-        { key: "articleno", label: "글번호", tdClass: "tdClass" },
-        { key: "subject", label: "제목", tdClass: "tdSubject"},
-        { key: "userid", label: "작성자", tdClass: "tdUser" },
-        { key: "regtime", label: "작성일", tdClass: "tdClass"},
-        { key: "hit", label: "조회수", tdClass: "tdClass"},
+        { key: "articleno", label: "글번호", tdClass: "b-tdNum" },
+        { key: "subject", label: "제목", tdClass: "b-tdSubject"},
+        { key: "userid", label: "작성자", tdClass: "b-tdUser" },
+        { key: "regtime", label: "작성일", tdClass: "b-tdClass"},
+        { key: "hit", label: "조회수", tdClass: "b-tdClass"},
       ],
       perPage: 10,
       currentPage: 1,
@@ -68,7 +68,6 @@ export default {
 
   created() {
     this.getList();
-    
   },
 
   methods: {
@@ -98,21 +97,28 @@ export default {
 </script>
 
 <style scope>
-.tdClass {
-  width: 12%;
+.b-tdClass {
+  width: 10%;
   text-align: center;
   cursor: pointer;
   background-color: white;
 }
-.tdSubject {
-  width: 52%;
+.b-tdSubject {
+  width: 60%;
   text-align: center;
+  font-weight: bold;
   cursor: pointer;
   background-color: white;
 }
-
-.tdUser {
-  width: 12%;
+.b-tdNum {
+  width: 10%;
+  text-align: center;
+  font-size: 15px;
+  cursor: pointer;
+  background-color: white;
+}
+.b-tdUser {
+  width: 10%;
   text-align: center;
   color: #170B3B;
   font-weight: 500;
@@ -124,15 +130,10 @@ export default {
 }
 
 .btn-write{
-  color: mediumpurple;
-  cursor: pointer;
-  border: none;
   background-color: transparent;
-  margin: 20px 10px 20px 10px;
 }
 
 th {
-
   background-color: transparent;
   color: #170B3B;
   font-size: 20px;

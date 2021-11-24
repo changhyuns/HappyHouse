@@ -6,16 +6,16 @@
       <b-col class="text-left">
         <button class="btn-write mr-2" style="border: none; color: #170B3B; font-weight:600" @click="listNotice()">목록</button>
       </b-col>
-      <b-col class="text-center">
+      <b-col class="text-center" style="display:flex; align-items: center; justify-content: space-between;">
         <b-button pill variant="outline-secondary" class="mr-2" @click="movePrev()">이전 글</b-button>
         <b-button pill variant="outline-secondary" class="ml-2" @click="moveNext()">다음 글</b-button>
       </b-col>
       <b-col class="text-right">
-        <button v-if="checkWriter" class="btn-write mr-2" style="border: none; color: #170B3B; font-weight:600"
+        <button v-if="checkAdmin" class="btn-write mr-2" style="border: none; color: #170B3B; font-weight:600"
           @click="moveModifyNotice"
           >수정</button
         >
-        <button v-if="checkWriter" class="btn-write mr-2" style="border: none; color: #170B3B; font-weight:600" @click="removeNotice"
+        <button v-if="checkAdmin" class="btn-write mr-2" style="border: none; color: #170B3B; font-weight:600" @click="removeNotice"
           >삭제</button
         >
       </b-col>
@@ -27,13 +27,19 @@
             <div class="b_inbox_title ml-2">
               {{ notice.subject && notice.subject }}
             </div>
-            <div class="ml-3 mr-4 mt-1">
+            <div class="ml-3 mr-4 mt-1" style="display: flex; align-items: center">
               <div class="b_inbox_user" style="display: inline; float: left;">
-                {{ notice.userid && notice.userid }}
+                  {{ notice.userid && notice.userid }}<b-icon icon="person-check" v-if="checkWriterAdmin"  font-scale="1" style="margin-left: 5px"></b-icon>
               </div>
-              <div class="inbox_regtime" style="display: inline; float: right;">
-              {{ changeDateFormat }}
+              <div class="inbox_regtime" style="display: inline; float: left;">
+              <b-icon icon="dot" font-scale="1" style="margin-left: 5px"></b-icon>{{ changeDateFormat }}
               </div>
+            </div>
+            <div v-if="checkFiles()">
+              <div v-for="(file, index) in files" v-bind:key="index">
+                <img style="width: 80%; margin-bottom: 10px;"  :src='`${file}`' alt="">
+              </div>
+              <!-- <img style="width: 90%" :src='`${files}`' alt=""> -->
             </div>
             <div class="pre-formatted" style="margin: 50px 0 50px 0">
               {{ notice.content && notice.content }}
@@ -47,7 +53,7 @@
 
 <script>
 import moment from "moment";
-import { getNotice, deleteNotice, getPrev, getNext} from "@/api/notice";
+import { getNotice, deleteNotice, getPrev, getNext, getFile } from "@/api/notice";
 import { mapState } from "vuex";
 import swal from 'sweetalert';
 
@@ -58,9 +64,10 @@ export default {
 
   data() {
     return {
-      Notice: {},
+      notice: {},
       prevNoticeNo: 0,
-      nextNoticeNo: 0
+      nextNoticeNo: 0,
+      files: [],
     };
   },
   computed: {
@@ -74,13 +81,17 @@ export default {
 
     changeDateFormat() {
       return moment(new Date(this.notice.regtime)).format(
-          "MM월DD일 \xa0 hh:mm"
+          "MM월DD일\xa0\xa0hh:mm"
       );
     },
 
     checkAdmin() {
-      return this.comment.userid === 'admin';
+      return this.userInfo.userid === 'admin';
     },
+
+    checkWriterAdmin() {
+      return this.notice.userid === 'admin';
+    }
   },
   created() {
     getNotice(
@@ -88,10 +99,21 @@ export default {
       (response) => {
         this.notice = response.data;
 
+        getFile(
+          this.notice.noticeno,
+          (response) => {
+            this.files = response.data[0];
+            console.log("hhehehe", this.files)
+          },
+          (error) => {
+            console.log("사진 가져오기", error);
+          }
+        )
+
         getPrev(
           this.notice.noticeno,
           (response) => {
-            this.prevNo = response.data;
+            this.prevNoticeNo = response.data;
           },
           (error) => {
             console.log("이전 글 더이상 없음", error);
@@ -101,7 +123,7 @@ export default {
         getNext(
           this.notice.noticeno,
           (response) => {
-            this.nextNo = response.data;
+            this.nextNoticeNo = response.data;
           },
           (error) => {
             console.log("이전 글 더이상 없음", error);
@@ -140,7 +162,7 @@ export default {
       textarea.style.height = (textarea.scrollHeight - 4) + "px";
     },
     movePrev() {
-      if(this.prevNo === 0) {
+      if(this.prevNoticeNo === 0) {
         swal("가장 최근에 작성된 공지입니다.", "더 이상 등록된 공지가 없습니다", "warning");
       }else {
         this.$router.push({
@@ -151,8 +173,11 @@ export default {
         });
       }
     },
+    checkFiles() {
+      return this.files !== '';
+    },
     moveNext() {
-      if(this.nextNo === 0) {
+      if(this.nextNoticeNo === 0) {
         swal("마지막 공지입니다.", "더 이상 등록된 공지가 없습니다", "warning");
       }else {
         this.$router.push({
@@ -169,10 +194,8 @@ export default {
 
 <style scoped>
   #bcContainer {
-    border: 1px solid #170B3B;
+    border-top: 1px solid #E6E6E6;
     padding: 0 20px 20px 20px;
-    margin-top: 10px;
-    border-radius: 10px;
     padding-top: 20px;
   }
 
@@ -190,52 +213,20 @@ export default {
     font-size: 20px;
     margin: 20px 0 0 0;
   }
-
-  .comment_title {
-    margin: 20px 0 20px 20px;
-    font-weight: 700;
-    font-size: 20px;
-    text-align: left;
-  }
-
-  .comment_box_write {
-    display: flex;
-    margin-top : 10px;
-    padding: 10px 20px 0 20px;
-    border: 1px solid #170B3B;
-    border-radius: 10px 10px 10px 10px;
-    flex-direction: column;
-    box-sizing: border-box;
-    overflow: hidden;
-    height: auto;
-  }
-  
   .b_inbox_title {
     text-align: left;
-    font-size:40px;
+    font-size:30px;
     font-weight: 700;
     color: black;
-    margin-top: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
   }
 
   .b_inbox_user {
     text-align: left;
-    font-size:25px;
+    font-size:15px;
     color: #170B3B;
     font-weight: bold;
-  }
-
-  .inbox_user {
-    text-align: left;
-    font-size:20px;
-    color: #170B3B;
-    font-weight: 500;
-  }
-
-  .inbox_regtime {
-    text-align: right;
-    font-size:20px;
-    font-weight: 300;
   }
 
   .autosize {
@@ -248,16 +239,6 @@ export default {
     overflow: hidden;
     min-height: 100px;
     resize: none;
-  }
-
-  #btn-registerComment {
-    margin-bottom: 20px;
-    border: 1px solid lightgrey;
-    border-radius: 15px 15px 15px 15px;
-    background: white;
-    font-size: 20px;
-    color: grey;
-    padding: 5px 10px 5px 10px;
   }
 
 </style>

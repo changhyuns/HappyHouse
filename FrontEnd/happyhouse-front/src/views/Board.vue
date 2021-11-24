@@ -2,7 +2,7 @@
   <b-container class="bv-example-row mt-3 text-center" style="max-width: 1000px;">
     <side-nav></side-nav>
     <user-nav></user-nav>
-    <h3 style="background-color: #170B3B; color: white; height: 40px; font-size: 30px; ">
+    <h3 style="color: white; height: 40px; font-size: 30px; ">
       커뮤니티
     </h3>
     <router-view :key="$route.fullPath"></router-view>
@@ -25,5 +25,8 @@ export default {
     rgba(255, 255, 255, 0) 70%,
     rgba(231, 27, 139, 0.3) 30%
   );
+}
+h3 {
+  background-image: url('../assets/title1.jpg'); 
 }
 </style>

@@ -31,6 +31,7 @@
             rows="10"
             max-rows="15"
           ></b-form-textarea>
+
         </b-form-group>
         <div style="text-align: center">
         <button class="btn-write" style="border: none; color: #170B3B; font-weight:600;" type="submit"
@@ -64,6 +65,8 @@ export default {
         content: "",
       },
       isUserid: false,
+      title: "",
+      files: [],
     };
   },
   props: {
@@ -86,11 +89,21 @@ export default {
   computed: {
     ...mapState(memberStore, ["userInfo"]),
   },
+  // mounted() {
+  //   axios.get('http://localhost:9999/vue/gallery/getImageList')
+  //     .then(res => {
+  //       console.log(res.data);
+  //       this.galleryDatas = res.data
+  //     }
+  //   )
+  //   .catch(error => console.log(error));
+  // },
   methods: {
     ...mapActions(boardStore, ["registBoard", "modifyBoard"]),
 
     insertBoard() {
-      this.registBoard({userid: this.userInfo.userid, subject: this.article.subject, content: this.article.content});
+      // this.registBoard({userid: this.userInfo.userid, subject: this.article.subject, content: this.article.content});
+      this.registGallery();
     },
 
     updateBoard() {
@@ -141,6 +154,8 @@ export default {
     moveList() {
       this.$router.push({ name: "BoardList2" });
     },
+
+    
   },
 };
 </script>

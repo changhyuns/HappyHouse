@@ -1,17 +1,17 @@
 <template>
 <div>
-<div>
-   <nav>
+  <div>
+    <nav>
       <user-nav></user-nav>
     </nav>
-</div>
+  </div>
   <div>
     <aside>
       <side-nav></side-nav>
     </aside>
     <section>
       <div class="map-area">
-        <h3><b-icon icon="house-fill"></b-icon> 매물 검색</h3>
+        <h3 style="color: white; height: 40px; font-size: 30px;"><b-icon icon="house-fill"></b-icon> 매물 검색</h3>
         <div>
           <house-search-bar></house-search-bar>
         </div>
@@ -57,6 +57,7 @@ export default {
 }
 
 h3 {
+  background-image: url('../assets/title1.jpg'); 
   text-align: center;
 }
 

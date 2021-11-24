@@ -6,7 +6,7 @@
       <b-col class="text-left">
         <button class="btn-write mr-2" style="border: none; color: #170B3B; font-weight:600" @click="listArticle()">목록</button>
       </b-col>
-      <b-col class="text-center">
+      <b-col class="text-center" style="display:flex; align-items: center; justify-content: space-between;">
         <b-button pill variant="outline-secondary" class="mr-2" @click="movePrev()">이전 글</b-button>
         <b-button pill variant="outline-secondary" class="ml-2" @click="moveNext()">다음 글</b-button>
       </b-col>
@@ -27,12 +27,12 @@
             <div class="b_inbox_title ml-2">
               {{ article.subject && article.subject }}
             </div>
-            <div class="ml-3 mr-4 mt-1">
+            <div class="ml-3 mr-4 mt-1" style="; display: flex; align-items: center">
               <div class="b_inbox_user" style="display: inline; float: left;">
-                {{ article.userid && article.userid }}
+                {{ article.userid && article.userid }} <b-icon icon="person-check" v-if="checkWriterAdmin"  font-scale="1"></b-icon>
               </div>
-              <div class="inbox_regtime" style="display: inline; float: right;">
-              {{ changeDateFormat }}
+              <div class="inbox_regtime" style="display: inline; float: left;">
+              <b-icon icon="dot" font-scale="1" style="margin-left: 5px"></b-icon>{{ changeDateFormat }}
               </div>
             </div>
             <div class="pre-formatted" style="margin: 50px 0 50px 0">
@@ -41,13 +41,13 @@
           </div>
         </b-col>
       </b-row>
-      <div class="comment_title">댓글 ({{ this.comments_length }})</div> 
+      <div style="border-top: 1px solid #E6E6E6; padding-top: 5px;" class="comment_title">댓글 ({{ this.comments_length }})</div> 
       <div v-for="comment in comments" v-bind:key="comment.commentid">
         <comment-list-row v-bind:comment="comment"/>
       </div>
       <div class="comment_box_write">
         <div class="inbox_user">
-          {{ userInfo.userid }}
+          {{ userInfo.userid }}<b-icon style="margin-left: 50x" icon="person-check" v-if="checkCommentWriterAdmin" font-scale="1"></b-icon>
         </div>
         <div>
           <textarea class="autosize" ref="textarea" v-model="comment_content" placeholder="댓글을 남겨보세요"></textarea>
@@ -94,7 +94,7 @@ export default {
 
     changeDateFormat() {
       return moment(new Date(this.article.regtime)).format(
-          "MM월DD일 \xa0 hh:mm"
+          "MM월DD일\xa0\xa0hh:mm"
       );
     },
 
@@ -102,8 +102,16 @@ export default {
       return (this.userInfo.userid === this.article.userid || this.userInfo.userid === 'admin')
     },
 
+    checkCommentWriterAdmin() {
+      return this.userInfo.userid === 'admin';
+    },
+
     checkAdmin() {
       return this.comment.userid === 'admin';
+    },
+
+    checkWriterAdmin() {
+      return this.article.userid === 'admin';
     },
   },
   created() {
@@ -154,13 +162,12 @@ export default {
             console.log("하위 댓글 개수 가져오기 실패", error);
           }
         );
-
       },
       (error) => {
         console.log("삭제 에러발생!!", error);
       }
     );
-    
+
   },
   mounted() {
     this.resize();
@@ -177,11 +184,22 @@ export default {
       //   this.$router.push({ path: `/board/modify/${this.article.articleno}` });
     },
     removeArticle() {
-      if (confirm("게시글을 삭제하시겠습니까?")) {
-        deleteArticle(this.article.articleno, () => {
-          this.$router.push({ name: "BoardList2" });
+      swal({
+          text: "삭제하면 되돌릴 수 없습니다.",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        })
+        .then((willDelete) => {
+          if (willDelete) {
+            deleteArticle(this.article.articleno, () => {
+              swal("게시글 삭제 완료!", {
+                icon: "success",
+              });
+              this.$router.push({ name: "BoardList2" });
+            });
+          }
         });
-      }
     },
     submitComment() {
       swal("댓글을 등록하시겠습니까?", {
@@ -233,16 +251,13 @@ export default {
 
 <style scoped>
   #bcContainer {
-    border: 1px solid #170B3B;
+    border-top: 1px solid #E6E6E6;
     padding: 0 20px 20px 20px;
-    margin-top: 10px;
-    border-radius: 10px;
     padding-top: 20px;
   }
 
   .board_box {
     display: flex;
-    border: none;
     flex-direction: column;
     box-sizing: border-box;
     margin: 0 0 30px 0;
@@ -266,7 +281,7 @@ export default {
     display: flex;
     margin-top : 10px;
     padding: 10px 20px 0 20px;
-    border: 1px solid #170B3B;
+    border: 1px solid #E6E0F8;
     border-radius: 10px 10px 10px 10px;
     flex-direction: column;
     box-sizing: border-box;
@@ -276,7 +291,7 @@ export default {
   
   .b_inbox_title {
     text-align: left;
-    font-size:40px;
+    font-size: 30px;
     font-weight: 700;
     color: black;
     margin-top: 10px;
@@ -284,7 +299,7 @@ export default {
 
   .b_inbox_user {
     text-align: left;
-    font-size:25px;
+    font-size:20px;
     color: #170B3B;
     font-weight: bold;
   }
@@ -298,7 +313,7 @@ export default {
 
   .inbox_regtime {
     text-align: right;
-    font-size:20px;
+    font-size: 15px;
     font-weight: 300;
   }
 

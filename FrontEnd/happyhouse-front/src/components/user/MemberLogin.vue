@@ -40,6 +40,22 @@
               >회원가입</b-button
             >
             </div>
+            <div style="text-align:center">
+            <b-button
+              type="button"
+              variant="primary"
+              class="m-1"
+              @click="confirm"
+              >로그인</b-button
+            >
+            <b-button
+              type="button"
+              variant="success"
+              class="m-1"
+              @click="movePage"
+              >회원가입</b-button
+            >
+            </div>
           </b-form>
         </b-card>
       </b-col>

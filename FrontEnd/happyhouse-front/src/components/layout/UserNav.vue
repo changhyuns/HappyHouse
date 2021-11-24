@@ -3,11 +3,12 @@
     <b-nav v-if="userInfo" align=right>
       <b-nav-item-dropdown right>
         <template #button-content>
-          <span>{{ userInfo.username }}({{ userInfo.userid }})님 환영합니다.</span>
+          <b-avatar src="https://d1133kioz6zzls.cloudfront.net/엥피.jpg-2021-11-25T02:42:23.429"></b-avatar>
           <b-avatar
             variant="primary"
             v-text="userInfo ? userInfo.userid.charAt(0).toUpperCase() : ''"
           ></b-avatar>
+          <span>{{ userInfo.username }}({{ userInfo.userid }})님 환영합니다.</span>
         </template>
         <b-dropdown-item>
           <router-link :to="{ name: 'MyPage' }">
@@ -48,6 +49,9 @@ export default {
   name: "UserNav",
   computed: {
     ...mapState(memberStore, ["isLogin", "userInfo"]),
+    checkUserProfile() {
+      return this.userInfo.profile !== null;
+    }
   },
   methods: {
     ...mapMutations(memberStore, ["SET_IS_LOGIN", "SET_USER_INFO"]),
@@ -71,7 +75,7 @@ export default {
 }
 
 span {
-  color: #2a1a72;
+  color: black;
   margin-right:5px;
 }
 </style>

@@ -1,13 +1,14 @@
 <template>
   <div class="comment_box">
-    <div style="padding-top: 5px">
+    <div style="padding-top: 5px; display: flex; align-items: center">
       <div class="inbox_user" style="display: inline; float: left;">
-        {{ comment.userid && comment.userid }} <b-icon icon="star-fill" animation="fade" v-if="checkAdmin"  font-scale="1"></b-icon>
+        {{ comment.userid && comment.userid }} <b-icon icon="person-check" v-if="checkAdmin"  font-scale="1"></b-icon>
       </div>
-      <div class="inbox_regtime" style="display: inline; float: right;">
-        {{ comment.regtime && changeDateFormat }}
-        <b-icon icon="x-square" v-if="checkWriter" aria-hidden="true" style="float: right; margin: 5px 0 0 10px; cursor: pointer" @click="removeComment()" ></b-icon>
+      <div class="inbox_regtime" style="display: inline; float: left;">
+        <b-icon icon="dot" font-scale="1" style="margin-left: 5px"></b-icon>{{ comment.regtime && changeDateFormat }}
       </div>
+      <b-icon icon="x-square" v-if="checkWriter" aria-hidden="true" style="margin-left: 10px; cursor: pointer" @click="removeComment" ></b-icon>
+
     </div>
     <div>
       <textarea v-model="comment.content" ref="textarea" @focus="resize" style="resize:none" readonly></textarea>
@@ -19,8 +20,9 @@
         </div>
       </div>
       <div>
-        <div>
-          <button class="btn-writeSubComment" :style="writeButtonDisplay" squared variant="outline-secondary" @click="showWriteForm()">댓글 달기</button>
+        <div @click="showWriteForm()">
+          <b-icon icon="plus-square" v-if="checkWriteCondition" aria-hidden="true" style="margin-left: 10px; cursor: pointer" ></b-icon>
+          <button class="btn-writeSubComment" :style="writeButtonDisplay" squared variant="outline-secondary">{{ writeButtonDisplay.value }}</button>
         </div>
           <div class="subComment_box_write" :style="writeBoxDisplay">
             <div class="inbox_user">
@@ -67,7 +69,8 @@
           display: 'none',
         },
         writeButtonDisplay: {
-          display: 'inline',
+          value: '답글 달기',
+          flag: true,
         }
       }
     },
@@ -89,7 +92,7 @@
 
       changeDateFormat() {
         return moment(new Date(this.comment.regtime)).format(
-            "MM월DD일 \xa0 hh:mm"
+            "MM월DD일\xa0\xa0hh:mm"
         );
       },
 
@@ -103,6 +106,10 @@
 
       checkAdmin() {
         return this.comment.userid === 'admin';
+      },
+
+      checkWriteCondition() {
+        return this.writeButtonDisplay.flag;
       }
     },
 
@@ -147,8 +154,15 @@
       },
 
       showWriteForm() {
-        this.writeBoxDisplay.display = 'flex';
-        this.writeButtonDisplay.display = 'none';
+        if(this.writeButtonDisplay.flag){
+          this.writeBoxDisplay.display = 'flex';
+          this.writeButtonDisplay.value = '숨기기';
+          this.writeButtonDisplay.flag = !this.writeButtonDisplay.flag;
+        }else {
+          this.writeBoxDisplay.display = 'none';
+          this.writeButtonDisplay.value = '댓글 달기';
+          this.writeButtonDisplay.flag = !this.writeButtonDisplay.flag;
+        }
       }
     },
 
@@ -160,23 +174,21 @@
 
 <style scoped>
   .comment_box {
-    border: none;
-    border-radius: 10px;
-    background-color: #F2EFFB;
+    border-bottom: 1px solid #E6E6E6;
     padding: 0 20px 0 20px;
     margin-bottom: 15px;
   }
 
   .inbox_user {
     text-align: left;
-    font-size:20px;
+    font-size: 15px;
     color: #170B3B;
     font-weight: 500;
   }
 
   .inbox_regtime {
     text-align: right;
-    font-size: 20px;
+    font-size: 15px;
     font-weight: 300;
   }
 
@@ -194,28 +206,27 @@
     font-size: 15px;
     margin: 10px 0 10px 0;
     min-height: 30px;
-    background-color: #F2EFFB;
   }
 
   .btn-writeSubComment {
     margin-bottom: 10px;
-    border: 1px solid #9F81F7;
-    background-color: #F2EFFB;
-    border-radius: 15px 15px 15px 15px;
+    border: none;
+    background-color: white;
     font-size: 15px;
-    color: #9F81F7;
+    color: black;
     padding: 5px 10px 5px 10px;
   }
 
   .subComment_box_write {
     margin-top : 10px;
     padding: 10px 20px 0 20px;
-    border: 1px solid #170B3B;
+    border: 1px solid #E6E0F8;
     border-radius: 10px 10px 10px 10px;
     flex-direction: column;
     box-sizing: border-box;
     overflow: hidden;
     height: auto;
+    margin-bottom: 10px;
   }
 
   .autosize {
