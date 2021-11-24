@@ -177,11 +177,22 @@ export default {
       //   this.$router.push({ path: `/board/modify/${this.article.articleno}` });
     },
     removeArticle() {
-      if (confirm("게시글을 삭제하시겠습니까?")) {
-        deleteArticle(this.article.articleno, () => {
-          this.$router.push({ name: "BoardList2" });
+      swal({
+          text: "삭제하면 되돌릴 수 없습니다.",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        })
+        .then((willDelete) => {
+          if (willDelete) {
+            deleteArticle(this.article.articleno, () => {
+              swal("게시글 삭제 완료!", {
+                icon: "success",
+              });
+              this.$router.push({ name: "BoardList2" });
+            });
+          }
         });
-      }
     },
     submitComment() {
       swal("댓글을 등록하시겠습니까?", {
