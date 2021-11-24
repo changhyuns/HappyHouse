@@ -109,7 +109,12 @@ export default {
       //   name: "NoticeView",
       //   params: { noticeno: this.notice.noticeno }
       // });
-      this.$router.go();
+      this.$router.push({
+        name: "NoticeView",
+        params: {
+          noticeno: this.notice.noticeno
+        }
+      });
     },
 
     handleFileUpload() {

@@ -1,10 +1,10 @@
 <template>
   <b-container class="bv-example-row mt-3">
     <b-row class="mb-1">
-      <b-col class="text-right" v-if="checkAdmin()">
-          <button class="btn-write" style="border: none; color: #170B3B; font-weight:600" @click="moveWrite()"
-            >글쓰기</button>
-        </b-col>
+      <b-col class="text-right" >
+        <button class="btn-write" v-if="checkAdmin()" style="border: none; color: #170B3B; font-weight:600" @click="moveWrite()"
+        >글쓰기</button>
+      </b-col>
     </b-row>
     <b-row>
         <b-col>
@@ -65,7 +65,8 @@ export default {
     },
 
     getList() {
-      this.getNoticeList({key: 'subject', pg: this.currentPage, spp: this.perPage, start: this.start, word: ''});
+      this.getNoticeList({key: 'subject', pg: this.currentPage, spp: this.perPage, start: this.start, word: ''},
+      (response) => {console.log("ghgggggggggg", response)});
     },
 
     viewNotice(notice) {

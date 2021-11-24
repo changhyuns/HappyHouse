@@ -2,7 +2,7 @@
   <b-container class="bv-example-row mt-3 text-center">
     <side-nav></side-nav>
     <user-nav></user-nav>
-    <h3 style="background-color: #170B3B; color: white; height: 40px; font-size: 30px;">코로나 진료소 위치</h3>
+    <h3 style="color: white; height: 40px; font-size: 30px;">코로나 진료소 위치</h3>
     <town-search-bar type="corona"></town-search-bar>
     <kakao-map type="corona"></kakao-map>
   </b-container>
@@ -20,6 +20,8 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+  h3 {
+    background-image: url('../assets/title1.jpg'); 
+  }
 </style>

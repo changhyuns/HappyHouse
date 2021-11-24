@@ -19,5 +19,7 @@ export default {
 };
 </script>
 <style scoped>
-
+  h3 {
+  background-image: url('../assets/title1.jpg'); 
+}
 </style>

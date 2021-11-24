@@ -9,7 +9,7 @@
       >
     </div>
     <div class="list">
-      <div class="list-btn" active-class="active" @click="viewHouseList">
+      <div class="list-btn ml-3" active-class="active" @click="viewHouseList">
         <span class="link-container"
           ><b-icon icon="search" style="margin-right: 5px" />부동산</span
         >
@@ -125,13 +125,13 @@ export default {
 <style scoped>
 .SideNav {
   position: fixed;
-  width: 210px;
+  width: 250px;
   left: 0;
   top: 0;
   bottom: 0;
   /* background-color: #d0a9f5; */
-  background-color: #2a1a72;
-  padding-left: 10px;
+  /* background-color: #2a1a72; */
+  background-image: url('../../assets/back6.jpg');
   z-index: 10;
   text-align: left;
 }
@@ -173,8 +173,9 @@ ul li {
   margin-right: 5px;
 }
 
+
 .link-container {
-  margin-left: 8px;
+  margin-left: 30px;
   margin-top: 10px;
   margin-bottom: 10px;
   /* display: inline; */
@@ -182,13 +183,13 @@ ul li {
 }
 
 div > .link-container {
-  margin-left: 5px;
+  margin-left: 15px;
   /* display: inline; */
   text-align: left;
 }
 
 .link-container-sub {
-  margin-left: 30px;
+  margin-left: 60px;
   font-size: 16px;
 }
 
@@ -200,7 +201,8 @@ div > .link-container {
   position: relative;
   background-color: white;
   /* color: #d0a9f5; */
-  color: #2a1a72;
+  /* color: #2a1a72; */
+  color: black;
   font-weight: 500;
 }
 

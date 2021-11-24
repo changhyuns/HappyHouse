@@ -13,7 +13,6 @@
 import SideNav from '../components/layout/SideNav.vue';
 import UserNav from '../components/layout/UserNav.vue';
 export default {
-  components: { UserNav, SideNav },
   name: "Member",
   components:{
     SideNav,

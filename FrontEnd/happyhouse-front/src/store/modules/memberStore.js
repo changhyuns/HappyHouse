@@ -7,6 +7,7 @@ const memberStore = {
     isLogin: false,
     isLoginError: false,
     userInfo: null,
+    userProfile: null,
   },
   getters: {
     checkUserInfo: function (state) {
@@ -24,6 +25,10 @@ const memberStore = {
       state.isLogin = true;
       state.userInfo = userInfo;
     },
+    SET_USER_PROFILE: (state, profile) => {
+      state.isLogin = true;
+      state.userProfile = profile;
+    }
   },
   actions: {
     async userConfirm({ commit }, user) {
@@ -60,14 +65,14 @@ const memberStore = {
       );
     },
 
-    registMember( {commit}, user ) {
-      registUser(user, 
+    registMember({ commit }, user) {
+      registUser(user,
         (response) => {
           if (response.data === "success") {
             console.log("regist success");
           }
         }, (error) => {
-            console.log(error);
+          console.log(error);
         })
     },
 
@@ -84,7 +89,7 @@ const memberStore = {
         })
     },
 
-    deleteMember({commit}, id) {
+    deleteMember({ commit }, id) {
       console.log("store 호출 : " + id);
       deleteUser(id,
         (response) => {

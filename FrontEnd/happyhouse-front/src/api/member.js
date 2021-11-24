@@ -11,17 +11,20 @@ async function findById(userid, success, fail) {
   await api.get(`/user/info/${userid}`).then(success).catch(fail);
 }
 
-// function logout(success, fail)
-function registUser(param, success, fail){
+function registUser(param, success, fail) {
   api.post(`/user/regist`, param).then(success).catch(fail);
 }
 
-function updateUser(param, success, fail){
+function updateUser(param, success, fail) {
   api.put(`/user`, param).then(success).catch(fail);
 }
 
-function deleteUser(userid, success, fail){
+function deleteUser(userid, success, fail) {
   api.delete(`/user/${userid}`).then(success).catch(fail);
 }
 
-export { login, findById, registUser, updateUser, deleteUser };
+function getUserProfile(userid, success, fail) {
+  api.get(`/user/profile/${userid}`).then(success).catch(fail);
+}
+
+export { login, findById, registUser, updateUser, deleteUser, getUserProfile };

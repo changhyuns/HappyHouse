@@ -68,7 +68,6 @@ export default {
 
   created() {
     this.getList();
-    
   },
 
   methods: {
@@ -99,27 +98,27 @@ export default {
 
 <style scope>
 .b-tdClass {
-  width: 12%;
+  width: 10%;
   text-align: center;
   cursor: pointer;
   background-color: white;
 }
 .b-tdSubject {
-  width: 40%;
+  width: 60%;
   text-align: center;
   font-weight: bold;
   cursor: pointer;
   background-color: white;
 }
 .b-tdNum {
-  width: 12%;
+  width: 10%;
   text-align: center;
   font-size: 15px;
   cursor: pointer;
   background-color: white;
 }
 .b-tdUser {
-  width: 12%;
+  width: 10%;
   text-align: center;
   color: #170B3B;
   font-weight: 500;
@@ -131,11 +130,7 @@ export default {
 }
 
 .btn-write{
-  color: mediumpurple;
-  cursor: pointer;
-  border: none;
   background-color: transparent;
-  margin: 20px 10px 20px 10px;
 }
 
 th {

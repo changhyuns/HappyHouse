@@ -3,7 +3,7 @@
     <b-row>
       <b-col>
         <div class="mt-2 mb-5" style="text-align: center; color: #170B3B; font-weight: bold; font-size: 20px;">
-          공지사항 수정 <b-icon icon="journal-bookmark-fill" animation="throb" font-scale="2" style="margin-left: 10px"></b-icon>
+          공지사항 수정 <b-icon icon="file-earmark-font" font-scale="2" style="margin-left: 10px"></b-icon>
         </div>
       </b-col>
     </b-row>

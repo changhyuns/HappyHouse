@@ -6,7 +6,7 @@ import { deleteArticle } from "@/api/board.js";
 import { listComment } from "@/api/board.js";
 
 import router from "../../router";
-
+import moment from "moment";
 
 const boardStore = {
   namespaced: true,
@@ -59,6 +59,9 @@ const boardStore = {
         param,
         (response) => {
           console.log("listArticle GET response : ", response.data);
+          for (let i = 0; i < response.data.list.length; i++) {
+            response.data.list[i].regtime = moment(new Date(response.data.list[i].regtime)).format("MM.DD");
+          }
           commit("SET_BOARD_COUNT", response.data.total);
           commit("SET_BOARD_LIST", response.data.list);
           // console.log(this.state.boardList);
