@@ -1,8 +1,8 @@
 <template>
-  <b-container class="bv-example-row mt-3">
+  <b-container fluid="sm" class="mt-3">
     <b-row>
       <b-col>
-        <h3>회원가입</h3>
+        <h3 style="text-align:center">회원가입</h3>
         <b-col style="text-align: left">
           <b-form @submit="onSubmit" @reset="onReset">
             <b-form-group

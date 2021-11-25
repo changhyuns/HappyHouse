@@ -26,7 +26,7 @@
             </b-form-group>
             <div style="text-align:center">
             <b-button
-              style="border:none; background-color: white; color: Black; font-weight: 500; "
+              
               type="button"
               variant="primary"
               class="m-1"

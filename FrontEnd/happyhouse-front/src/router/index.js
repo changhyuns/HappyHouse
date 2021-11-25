@@ -54,6 +54,12 @@ const routes = [
   },
 
   {
+    path: "/singup",
+    name: "SignUp",
+    component: MemberJoin,
+  },
+
+  {
     path: "/home",
     name: "Home",
     component: Home,
@@ -68,11 +74,7 @@ const routes = [
         name: "SignIn",
         component: MemberLogin,
       },
-      {
-        path: "singup",
-        name: "SignUp",
-        component: MemberJoin,
-      },
+     
       {
         path: "mypage",
         name: "MyPage",

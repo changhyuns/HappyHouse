@@ -56,7 +56,6 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
-import axios from "axios";
 
 const memberStore = "memberStore";
 
@@ -112,8 +111,9 @@ export default {
     onReset(event) {
       event.preventDefault();
       this.user.userpwd = "";
-      this.user.emailid = "";
-      this.user.emaildomain = "";
+      this.user.email = "";
+      this.emaildomain = "";
+      this.pwdcheck = "";
     },
   },
 };
