@@ -1,14 +1,16 @@
 /* eslint-disable no-unused-vars */
 <template>
   <div id="map_content">
-    <div id="map"></div>
+    <div id="map" v-if="this.type !='town'"></div>
+    <div id="map" v-if="this.type =='corona' && this.coronaClinic"></div>
   </div>
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapMutations, mapState } from "vuex";
 const houseStore = "houseStore";
 const coronaStore = "coronaStore";
+const mapStore = "mapStore";
 
 export default {
   name: "KakaoMap",
@@ -19,12 +21,6 @@ export default {
       infowindow: null,
       geocoder: new kakao.maps.services.Geocoder(),
       ps: new kakao.maps.services.Places(),
-      callbackMart: null,
-      callbackSchool: null,
-      callbackHospital: null,
-      martCount: [],
-      schoolCount: [],
-      hospitalCount: [],
     };
   },
 
@@ -56,34 +52,10 @@ export default {
   watch: {
     houses: "makeHouseMarker",
     house: "moveToHouse",
-    address: "moveToDong",
+    coronaAddress: "moveToDong",
   },
 
   created() {
-    this.callbackMart = function (result, status, pagination) {
-      if (status === kakao.maps.services.Status.OK) {
-        this.martCount.push(result.length);
-      } else {
-        this.martCount.push(0);
-      }
-    };
-
-    this.callbackSchool = function (result, status, pagination) {
-      if (status === kakao.maps.services.Status.OK) {
-        this.schoolCount.push(result.length);
-      } else {
-        this.schoolCount.push(0);
-      }
-    };
-
-    this.callbackHospital = function (result, status, pagination) {
-      if (status === kakao.maps.services.Status.OK) {
-        this.hospitalCount.push(result.length);
-      } else {
-        this.hospitalCount.push(0);
-      }
-    };
-
     if (this.type == "corona") {
       this.getClinicList();
     }
@@ -91,6 +63,7 @@ export default {
 
   methods: {
     ...mapActions(coronaStore, ["getClinicList"]),
+    ...mapMutations(mapStore, ["SET_SCHOOL_COUNT", "SET_MART_COUNT", "SET_OIL_COUNT", "SET_METRO_COUNT", "SET_PUBLIC_COUNT", "CLEAR_ALL", "SET_FLAG"]),
 
     initMap() {
       const container = document.getElementById("map");
@@ -248,41 +221,102 @@ export default {
           if (status === kakao.maps.services.Status.OK) {
             var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
             // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-            this.map.setLevel(5);
+            this.map.setLevel(6);
             this.map.setCenter(coords);
           }
         });
       } else {
-        this.geocoder.addressSearch(moveAddress, (result, status) => {
-          // 정상적으로 검색이 완료됐으면
-          if (status === kakao.maps.services.Status.OK) {
-            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-            //this.commercialArea(coords);
-          }
-        });
+        this.searchTown(moveAddress);
       }
     },
 
+    searchTown(address){
+      this.geocoder.addressSearch(address, (result, status) => {
+          // 정상적으로 검색이 완료됐으면
+          if (status === kakao.maps.services.Status.OK) {
+            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+            this.commercialArea(coords);
+          }
+        });
+
+        setTimeout(() => {
+          this.SET_FLAG(Math.random());
+        }, 100);
+    },
+
     // 비동기처리해서, house list 로 넘겨줘야함 => vuex 에 등록
-    commercialArea(coords) {
+    async commercialArea(coords) {
       // 마트
-      this.ps.categorySearch("MT1", this.callbackMart, {
+      await this.ps.categorySearch("MT1", this.callbackMart, {
         location: coords,
-        radius: 500, // 반경 1km 이내 (m단위)
+        radius: 1500, // 반경 1.5km 이내 (m단위)
       });
 
       // 학교
-      this.ps.categorySearch("SC4", this.callbackSchool, {
+      await this.ps.categorySearch("SC4", this.callbackSchool, {
         location: coords,
-        radius: 200, // 반경 1km 이내 (m단위)
+        radius: 1500, 
       });
 
-      // 병원
-      this.ps.categorySearch("HP8", this.callbackHospital, {
+      // 지하철
+      await this.ps.categorySearch("SW8", this.callbackMetro, {
         location: coords,
-        radius: 200, // 반경 1km 이내 (m단위)
+        radius: 1500, 
+      });
+
+      // 공공기관
+      await this.ps.categorySearch("PO3", this.callbackPublic, {
+        location: coords,
+        radius: 1500, 
+      });
+
+      // 주유소, 충전소
+      await this.ps.categorySearch("OL7", this.callbackOil, {
+        location: coords,
+        radius: 1500, 
       });
     },
+
+    callbackMart (result, status, pagination) {
+      if (status === kakao.maps.services.Status.OK) {
+        this.SET_MART_COUNT(pagination.totalCount);
+      } else {
+        this.SET_MART_COUNT(0);
+      }
+    },
+
+    callbackSchool (result, status, pagination) {
+      if (status === kakao.maps.services.Status.OK) {
+        this.SET_SCHOOL_COUNT(pagination.totalCount);
+      } else {
+        this.SET_SCHOOL_COUNT(0);
+      }
+    },
+
+    callbackMetro (result, status, pagination) {
+      if (status === kakao.maps.services.Status.OK) {
+        this.SET_METRO_COUNT(pagination.totalCount);
+      } else {
+        this.SET_METRO_COUNT(0);
+      }
+    },
+
+    callbackOil (result, status, pagination) {
+      if (status === kakao.maps.services.Status.OK) {
+        this.SET_OIL_COUNT(pagination.totalCount);
+      } else {
+        this.SET_OIL_COUNT(0);
+      }
+    },
+
+    callbackPublic (result, status, pagination) {
+      if (status === kakao.maps.services.Status.OK) {
+        this.SET_PUBLIC_COUNT(pagination.totalCount);
+      } else {
+        this.SET_PUBLIC_COUNT(0);
+      }
+    },
+
   },
 };
 </script>

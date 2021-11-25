@@ -4,7 +4,7 @@
       <router-link :to="{ name: 'Home' }" tag="h2"
         ><b-icon icon="house-fill" font-scale="1"></b-icon
         ><span style="font-size: 25px; margin-left: 5px"
-          >HappyHouse</span
+          >Happy House</span
         ></router-link
       >
     </div>
@@ -169,7 +169,7 @@ ul li {
   font-size: 20pt;
   margin-top: 30px;
   margin-bottom: 10px;
-  margin-left: 5px;
+  margin-left: 20px;
   margin-right: 5px;
 }
 
@@ -190,7 +190,7 @@ div > .link-container {
 
 .link-container-sub {
   margin-left: 60px;
-  font-size: 16px;
+  font-size: 18px;
 }
 
 .list-btn:focus {
