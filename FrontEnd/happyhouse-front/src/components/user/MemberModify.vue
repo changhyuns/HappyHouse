@@ -1,9 +1,9 @@
 <template>
   <b-container class="mt-4">
-    <b-jumbotron>
+    <div class="wrapper">
       <b-row>
         <b-col>
-          <h3>회원 정보 수정</h3>
+          <h3 style="color: white; font-weight: 400; font-size: 30px;">회원 정보 수정</h3>
         </b-col>
       </b-row>
       <b-container class="mt-4">
@@ -16,12 +16,12 @@
                 </b-form-group>
 
                 <b-form-group id="userid-group" label="아이디" label-for="userid">
-                  <b-form-input readonly id="userid" v-model="user.userid" type="text" required> </b-form-input>
+                  <b-form-input readonly id="userid" v-model="user.userid" type="text" required > </b-form-input>
                   <div id="idresult" class="mt-1"></div>
                 </b-form-group>
 
                 <b-form-group id="userpwd-group" label="비밀번호" label-for="userpwd">
-                  <b-form-input id="userpwd" v-model="user.userpwd" type="password" required> </b-form-input>
+                  <b-form-input id="userpwd" placeholder="변경할 비밀번호" v-model="user.userpwd" type="password" required > </b-form-input>
                 </b-form-group>
 
                 <b-form-group id="pwdcheck-group" label="비밀번호 재입력" label-for="pwdcheck">
@@ -40,17 +40,21 @@
                       <option value="gmail.com">gmail.com</option>
                     </select>
                   </div>
-                </div>
-                <div class="form-group text-center">
-                  <b-button type="submit" variant="primary" class="m-1">완료</b-button>
-                  <b-button type="reset" variant="danger" class="m-1">초기화</b-button>
+                  <!-- <div class="form-group text-center" style="margin-top: 30px">
+                    <b-button type="submit" variant="primary" class="m-1">완료</b-button>
+                    <b-button type="reset" variant="danger" class="m-1">초기화</b-button>
+                  </div> -->
+                  <div class="text-center" style="display: flex; align-items: center; justify-content: center; margin-top: 30px">
+                    <button id="btn-modify" @click="modifyMember">수 정</button>
+                    <button id="btn-resign" @click="resignMember">계정  탈퇴</button>
+                  </div>
                 </div>
               </b-form>
             </b-col>
           </b-col>
         </b-row>
       </b-container>
-    </b-jumbotron>
+    </div>
   </b-container>
 </template>
 
@@ -119,4 +123,52 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+  h3 {
+    color: white;
+    font-weight: 400;
+    font-size: 30px;
+  }
+
+  .wrapper {
+    border: 1px solid black;
+    width: 100%;
+    height: 700px;
+    background-image: url('../../assets/title1.jpg');
+    margin-top: 80px;
+    padding-top: 30px;
+  }
+
+  #btn-modify {
+    border: 1px solid white;
+    border-radius: 20px;
+    margin-right: 20px;
+    width: 20%;
+    height: 40px;
+    background-color: transparent;
+    font-weight: 600;
+    font-size: 20px;
+    color: white;
+  }
+  
+  #btn-resign {
+    border: 1px solid white;
+    border-radius: 20px;
+    margin-left: 20px;
+    width: 20%;
+    height: 40px;
+    color: white;
+    background-color: transparent;
+    font-weight: 600;
+    font-size: 20px;
+  }
+  
+  label {
+    color: white;
+  }
+
+  .d-block {
+    color: white;
+  }
+
+</style>
