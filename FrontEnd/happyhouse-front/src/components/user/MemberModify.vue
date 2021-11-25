@@ -7,7 +7,6 @@
         </b-col>
       </b-row>
       <b-container class="mt-4">
-        <b-avatar src="https://placekitten.com/300/300" size="6rem"></b-avatar>
         <b-row>
           <b-col>
             <b-col style="text-align: left">
@@ -41,10 +40,6 @@
                       <option value="gmail.com">gmail.com</option>
                     </select>
                   </div>
-                </div>
-                <label style="margin-top: 10px ;" for="profile">프로필 사진 등록</label>
-                <div class="filebox">
-                  <input type="file" id="profile" ref="files" v-on:change="handleFileUpload()" multiple />
                 </div>
                 <div class="form-group text-center">
                   <b-button type="submit" variant="primary" class="m-1">완료</b-button>
@@ -93,27 +88,6 @@ export default {
 
   methods: {
     ...mapActions(memberStore, ["updateMember"]),
-
-    submitFile() {
-      for (let i = 0; i < this.files.length; i++) {
-        let formData = new FormData();
-        formData.append('title', this.title);
-        formData.append('files', this.files[i]);
-        formData.append('userid', this.userInfo.userid);
-        axios.post('http://localhost:9999/vue/gallery/',
-          formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            }
-          }
-        ).then(function() {
-          console.log('SUCCESS!!');
-        })
-        .catch(function() {
-          console.log('FAILURE!!');
-        });
-      }
-    },
 
     onSubmit(event) {
       event.preventDefault();

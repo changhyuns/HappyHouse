@@ -73,6 +73,10 @@ export default {
   methods: {
     ...mapActions(boardStore, ["getBoardList"]),
 
+    moveMain() {
+      this.$router.push({ name: "Main" });
+    },
+
     moveWrite() {
       this.$router.push({ name: "BoardWrite" });
     },

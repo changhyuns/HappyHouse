@@ -47,7 +47,7 @@
       </div>
       <div class="comment_box_write">
         <div class="inbox_user">
-          {{ userInfo.userid }}<b-icon style="margin-left: 50x" icon="person-check" v-if="checkCommentWriterAdmin" font-scale="1"></b-icon>
+          {{ userInfo.userid }}<b-icon style="margin-left: 5px" icon="person-check" v-if="checkCommentWriterAdmin" font-scale="1"></b-icon>
         </div>
         <div>
           <textarea class="autosize" ref="textarea" v-model="comment_content" placeholder="댓글을 남겨보세요"></textarea>
@@ -63,7 +63,7 @@
 <script>
 import moment from "moment";
 import { getArticle, deleteArticle, writeComment, listComment, getPrev, getNext, getSubCommentCount} from "@/api/board";
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 import CommentListRow from './child/CommentListRow.vue';
 import swal from 'sweetalert';
 
@@ -80,7 +80,7 @@ export default {
       comments_length: 0,
       comment_content: '',
       prevNo: 0,
-      nextNo: 0
+      nextNo: 0,
     };
   },
   computed: {
@@ -113,18 +113,18 @@ export default {
     checkWriterAdmin() {
       return this.article.userid === 'admin';
     },
+
   },
   created() {
     getArticle(
       this.$route.params.articleno,
       (response) => {
         this.article = response.data;
-
         listComment(
           this.article.articleno,
           (response) => {
             this.comments = response.data;
-            console.log("comments", this.comments);
+            console.log("댓글 불러오기 성공", this.comments);
             this.comments_length = response.data.length;
           },
           (error) => {
@@ -136,6 +136,7 @@ export default {
           this.article.articleno,
           (response) => {
             this.prevNo = response.data;
+            console.log("이전 게시글 정보 불러오기 성공", response);
           },
           (error) => {
             console.log("이전 글 더이상 없음", error);
@@ -146,6 +147,7 @@ export default {
           this.article.articleno,
           (response) => {
             this.nextNo = response.data;
+            console.log("다음 게시글 정도 불러오기 성공", response);
           },
           (error) => {
             console.log("이전 글 더이상 없음", error);
@@ -169,10 +171,8 @@ export default {
     );
 
   },
-  mounted() {
-    this.resize();
-  },
   methods: {
+  
     listArticle() {
       this.$router.push({ name: "BoardList2" });
     },

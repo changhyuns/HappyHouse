@@ -46,7 +46,6 @@ const onlyAuthUser = async (to, from, next) => {
     next();
   }
 };
-
 const routes = [
   {
     path: "/",

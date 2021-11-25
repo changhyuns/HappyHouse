@@ -22,6 +22,7 @@ import FooterBar from "../components/layout/FooterBar.vue";
 import MemberLogin from "../components/user/MemberLogin.vue";
 
 export default {
+  name: 'Main',
   components: { FooterBar, MemberLogin },
 };
 </script>

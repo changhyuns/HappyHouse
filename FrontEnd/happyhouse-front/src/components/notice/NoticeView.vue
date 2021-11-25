@@ -91,7 +91,7 @@ export default {
 
     checkWriterAdmin() {
       return this.notice.userid === 'admin';
-    }
+    },
   },
   created() {
     getNotice(

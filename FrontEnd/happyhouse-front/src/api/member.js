@@ -23,8 +23,5 @@ function deleteUser(userid, success, fail) {
   api.delete(`/user/${userid}`).then(success).catch(fail);
 }
 
-function getUserProfile(userid, success, fail) {
-  api.get(`/user/profile/${userid}`).then(success).catch(fail);
-}
 
-export { login, findById, registUser, updateUser, deleteUser, getUserProfile };
+export { login, findById, registUser, updateUser, deleteUser };

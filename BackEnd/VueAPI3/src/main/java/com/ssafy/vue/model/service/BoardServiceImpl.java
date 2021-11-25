@@ -12,6 +12,7 @@ import com.ssafy.vue.model.BoardDto;
 import com.ssafy.vue.model.BoardParameterDto;
 import com.ssafy.vue.model.CommentDto;
 import com.ssafy.vue.model.CommentPlusDto;
+import com.ssafy.vue.model.SubCommentDto;
 import com.ssafy.vue.model.mapper.BoardMapper;
 
 @Service
@@ -59,6 +60,16 @@ public class BoardServiceImpl implements BoardService {
 	}
 	
 	@Override
+	public int getPrev(int articleno) throws Exception {
+		return sqlSession.getMapper(BoardMapper.class).getPrev(articleno);
+	}
+	
+	@Override
+	public int getNext(int articleno) throws Exception {
+		return sqlSession.getMapper(BoardMapper.class).getNext(articleno);
+	}
+	
+	@Override
 	public void updateHit(int articleno) throws Exception {
 		sqlSession.getMapper(BoardMapper.class).updateHit(articleno);
 	}
@@ -72,7 +83,6 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	@Transactional
 	public boolean deleteArticle(int articleno) throws Exception {
-		sqlSession.getMapper(BoardMapper.class).deleteMemo(articleno);
 		return sqlSession.getMapper(BoardMapper.class).deleteArticle(articleno) == 1;
 	}
 
@@ -92,5 +102,43 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public boolean plusComment(CommentPlusDto commentPlusDto) throws Exception {
 		return sqlSession.getMapper(BoardMapper.class).plusComment(commentPlusDto) == 1;
+	}
+	
+	@Override
+	@Transactional
+	public boolean modifyComment(CommentDto commentDto) throws Exception {
+		return sqlSession.getMapper(BoardMapper.class).modifyComment(commentDto) == 1;
+	}
+	
+	@Override
+	@Transactional
+	public boolean deleteComment(int commentid) throws Exception {
+		sqlSession.getMapper(BoardMapper.class).deleteComment(commentid);
+		return sqlSession.getMapper(BoardMapper.class).deleteComment(commentid) == 1;
+	}
+	
+	@Override
+	public boolean writeSubComment(SubCommentDto subCommentDto) throws Exception {
+		if(subCommentDto.getUserid() == null || subCommentDto.getArticleno() == 0 || subCommentDto.getContent() == null || subCommentDto.getCommentid() == 0) {
+			throw new Exception();
+		}
+		return sqlSession.getMapper(BoardMapper.class).writeSubComment(subCommentDto) == 1;
+	}
+
+	@Override
+	public List<SubCommentDto> listSubComment(int commentid) throws Exception {
+		return sqlSession.getMapper(BoardMapper.class).listSubComment(commentid);
+	}
+	
+	@Override
+	@Transactional
+	public boolean deleteSubComment(int sub_comment_id) throws Exception {
+		sqlSession.getMapper(BoardMapper.class).deleteSubComment(sub_comment_id);
+		return sqlSession.getMapper(BoardMapper.class).deleteSubComment(sub_comment_id) == 1;
+	}
+	
+	@Override
+	public int getSubCommentCount(int articleno) throws Exception {
+		return sqlSession.getMapper(BoardMapper.class).getSubCommentCount(articleno);
 	}
 }

@@ -3,11 +3,6 @@
     <b-nav v-if="userInfo" align=right>
       <b-nav-item-dropdown right>
         <template #button-content>
-          <b-avatar src="https://d1133kioz6zzls.cloudfront.net/엥피.jpg-2021-11-25T02:42:23.429"></b-avatar>
-          <b-avatar
-            variant="primary"
-            v-text="userInfo ? userInfo.userid.charAt(0).toUpperCase() : ''"
-          ></b-avatar>
           <span>{{ userInfo.username }}({{ userInfo.userid }})님 환영합니다.</span>
         </template>
         <b-dropdown-item>
@@ -31,7 +26,7 @@
           ></b-dropdown-item
         >
         <b-dropdown-item
-          ><router-link :to="{ name: 'SignIn' }"
+          ><router-link :to="{ name: 'Main' }"
             ><b-icon icon="key"></b-icon> 로그인</router-link
           ></b-dropdown-item
         >
@@ -42,6 +37,7 @@
 
 <script>
 import { mapState, mapMutations } from "vuex";
+import swal from "sweetalert";
 
 const memberStore = "memberStore";
 
@@ -49,18 +45,16 @@ export default {
   name: "UserNav",
   computed: {
     ...mapState(memberStore, ["isLogin", "userInfo"]),
-    checkUserProfile() {
-      return this.userInfo.profile !== null;
-    }
+    
   },
   methods: {
     ...mapMutations(memberStore, ["SET_IS_LOGIN", "SET_USER_INFO"]),
     onClickLogout() {
-      alert("로그아웃 되었습니다.");
+      swal('로그아웃 되었습니다.', 'success');
       this.SET_IS_LOGIN(false);
       this.SET_USER_INFO(null);
       sessionStorage.removeItem("access-token");
-      if (this.$route.path != "/") this.$router.push({ name: "Main" });
+      this.$router.push({name: 'Main'});
     },
   },
 };
