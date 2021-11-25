@@ -46,6 +46,7 @@ public class MemberServiceImpl implements MemberService {
 		return sqlSession.getMapper(MemberMapper.class).deleteMember(userid) == 1;
 	}
 
+	/*
 	@Override
 	public MemberDto findPwd(String id, String name) throws Exception {
 		return sqlSession.getMapper(MemberMapper.class).findPwd(id, name);
@@ -54,6 +55,6 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public boolean resetPwd(MemberDto memberDto) throws Exception {
 		return sqlSession.getMapper(MemberMapper.class).resetPwd(memberDto) == 1;
-	}
+	}*/
 
 }

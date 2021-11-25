@@ -9,7 +9,7 @@ public interface MemberService {
 	boolean registerMember(MemberDto memberDto) throws Exception;
 	boolean modifyMember(MemberDto memberDto) throws Exception;
 	boolean deleteMember(String userid)throws Exception;
-	MemberDto findPwd(String id, String name)throws Exception;
-	boolean resetPwd(MemberDto memberDto)throws Exception;
+	// MemberDto findPwd(String id, String name)throws Exception;
+	// boolean resetPwd(MemberDto memberDto)throws Exception;
 	
 }

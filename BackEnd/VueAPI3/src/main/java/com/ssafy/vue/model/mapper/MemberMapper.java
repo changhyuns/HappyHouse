@@ -13,7 +13,7 @@ public interface MemberMapper {
 	public MemberDto userInfo(String userid) throws SQLException;
 	public int idCheck(String checkid) throws SQLException;
 	public int registerMember(MemberDto memberDto) throws SQLException;
-	public int updateMember(MemberDto memberDto) throws SQLException;
+	public int modifyMember(MemberDto memberDto) throws SQLException;
 	public int deleteMember(String userid) throws SQLException;
 	
 }
