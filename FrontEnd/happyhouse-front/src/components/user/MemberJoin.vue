@@ -1,8 +1,8 @@
 <template>
-  <b-container fluid="sm" class="mt-3">
+  <b-container style="width: 800px" class="mt-3">
     <b-row>
       <b-col>
-        <h3 style="text-align:center; margin-top: 100px; color: white; height: 40px; font-size: 30px;">회원가입</h3>
+        <h3 style="text-align:center; margin-top: 100px; margin-bottom: 50px; color: white; height: 40px; font-size: 30px;">회원가입</h3>
         <b-col style="text-align: left">
           <b-form @submit="onSubmit" @reset="onReset">
             <b-form-group
@@ -87,8 +87,8 @@
               </div>
             </div>
             <div class="form-group text-center">
-              <button class="mr-2" @click="onSubmit">회원가입</button>
-              <button class="ml-2" @click="onReset">초기화</button>
+              <button class="mr-4" style="font-weight: 400; font-size: 25px" @click="onSubmit">회원가입</button>
+              <button class="ml-4" style="font-weight: 400; font-size: 25px" @click="onReset">초기화</button>
             </div>
           </b-form>
         </b-col>
