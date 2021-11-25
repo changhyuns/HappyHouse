@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.vue.model.MemberDto;
-import com.ssafy.vue.model.service.GalleryService;
 import com.ssafy.vue.model.service.JwtServiceImpl;
 import com.ssafy.vue.model.service.MemberService;
 
@@ -43,9 +42,6 @@ public class MemberController {
 
 	@Autowired
 	private MemberService memberService;
-	
-	@Autowired
-	private GalleryService galleryService;
 
 	@ApiOperation(value = "로그인", notes = "Access-token과 로그인 결과 메세지를 반환한다.", response = Map.class)
 	@PostMapping("/login")
@@ -102,48 +98,39 @@ public class MemberController {
 		return new ResponseEntity<Map<String, Object>>(resultMap, status);
 	}
 	
-	@ApiOperation(value="회원가입", notes="새로운 유저 회원가입 - DB insert 성공 시 'success', 실패 시 'fail'", response=String.class)
-	@PostMapping(value="/regist")
-	public ResponseEntity<String> registerMember(@RequestBody @ApiParam(value="회원 정보", required=true) MemberDto memberDto) throws Exception {
-		logger.info("registerUser - 호출");
-		
-		if (memberService.registerMember(memberDto)) {
+	@ApiOperation(value = "회원가입", notes = "입력받은 회원 정보를 추가합니다.", response = Map.class)
+	@PostMapping("/regist")
+	public ResponseEntity<String> registerMember(
+		@RequestBody @ApiParam(value = "가입에 필요한 회원정보", required = true) MemberDto memberDto) throws Exception {
+		logger.debug("registerMember - 호출");
+		if(memberService.registerMember(memberDto)){
 			return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
 		}
-		return new ResponseEntity<String>(FAIL, HttpStatus.OK);
+		return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
 	}
-	
-	@ApiOperation(value="회원정보수정", notes="회원정보수정 - DB update 성공 시 'success', 실패 시 'fail'", response=String.class)
+
+	@ApiOperation(value = "회원정보 수정", notes = "회원 정보를 수정합니다.", response = Map.class)
 	@PutMapping
-	public ResponseEntity<String> modifyMember(@RequestBody @ApiParam(value="유저 정보", required=true) MemberDto memberDto) throws Exception {
-		logger.info("modifyMember - 호출");
-		
-		if (memberService.modifyMember(memberDto)) {
+	public ResponseEntity<String> updateMember(
+		@RequestBody @ApiParam(value = "수정한 회원정보", required = true) MemberDto memberDto) throws Exception {
+		logger.debug("updateMember - 호출");
+		if(memberService.updateMember(memberDto)){
 			return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
 		}
-		return new ResponseEntity<String>(FAIL, HttpStatus.OK);
+		return new ResponseEntity<String>(FAIL, HttpStatus.NO_CONTENT);
 	}
-	
-	@ApiOperation(value="회원 비밀번호 초기화", notes="회원 비밀번호 초기화 - DB update 성공 시 'success', 실패 시 'fail'", response=String.class)
-	@PutMapping(value="/resetPwd")
-	public ResponseEntity<String> resetPwd(@RequestBody @ApiParam(value="유저 정보", required=true) MemberDto memberDto) throws Exception{
-		logger.info("resetPwd = 호출");
+
+	@ApiOperation(value = "회원정보 삭제", notes = "회원 정보를 삭제합니다.", response = Map.class)
+	@DeleteMapping("/{userid}")
+	public ResponseEntity<String> deleteMember(
+		@PathVariable("userid") @ApiParam(value = "삭제하려는 회원 아이디", required = true) String userid) throws Exception {
+		logger.debug("deleteMember - 호출 " + userid);
 		
-		if(memberService.resetPwd(memberDto)) {
+		if(memberService.deleteMember(userid)){
+			logger.debug("deleteMember - True");
 			return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
 		}
-		return new ResponseEntity<String>(FAIL, HttpStatus.OK);
-	}
-	
-	@ApiOperation(value="회원 삭제", notes="회원 삭제 - DB delete 성공 시 'success', 실패 시 'fail'", response=String.class)
-	@DeleteMapping(value="/{userid}")
-	public ResponseEntity<String> deleteMember(@RequestParam("userid") @ApiParam(value="유저 아이디", required=true) String userid) throws Exception {
-		logger.info("deleteMember - 호출");
-		
-		if (memberService.deleteMember(userid)) {
-			return new ResponseEntity<String>(SUCCESS, HttpStatus.OK);
-		}
-		return new ResponseEntity<String>(FAIL, HttpStatus.OK);
+		return new ResponseEntity<String>(FAIL, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	
 
