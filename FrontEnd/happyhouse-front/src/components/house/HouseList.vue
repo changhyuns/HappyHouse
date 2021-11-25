@@ -69,9 +69,9 @@ export default {
 <style>
 #SideAptList {
   position: fixed;
-  width: 450px;
+  width: 430px;
   height: 700px;
-  left: 180px;
+  left: 230px;
   top: 160px;
   bottom: 0;
   overflow: auto;
