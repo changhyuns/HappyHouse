@@ -2,7 +2,7 @@
   <b-container fluid="sm" class="mt-3">
     <b-row>
       <b-col>
-        <h3 style="text-align:center">회원가입</h3>
+        <h3 style="text-align:center; margin-top: 100px; color: white; height: 40px; font-size: 30px;">회원가입</h3>
         <b-col style="text-align: left">
           <b-form @submit="onSubmit" @reset="onReset">
             <b-form-group
@@ -87,12 +87,8 @@
               </div>
             </div>
             <div class="form-group text-center">
-              <b-button type="submit" variant="primary" class="m-1"
-                >회원가입</b-button
-              >
-              <b-button type="reset" variant="danger" class="m-1"
-                >초기화</b-button
-              >
+              <button class="mr-2" @click="onSubmit">회원가입</button>
+              <button class="ml-2" @click="onReset">초기화</button>
             </div>
           </b-form>
         </b-col>
@@ -116,10 +112,10 @@ export default {
         username: "",
         userid: "",
         userpwd: "",
-        userpwdcheck: "",
-        emailid: "",
-        emaildomain: "",
+        email: "",
       },
+      userpwdcheck: "",
+      emaildomain: "",
     };
   },
 
@@ -149,6 +145,7 @@ export default {
 
       if (!err) alert(msg);
       else{
+        this.user.email = this.user.email + '@' + this.emaildomain;
         this.insertMember();
         swal("가입이 완료되었습니다.", 'success');
         this.$router.push({name:"Main"});
@@ -161,7 +158,7 @@ export default {
       this.user.userid = "";
       this.user.userpwd = "";
       this.user.emailid = "";
-      this.user.emaildomain = "";
+      this.emaildomain = "";
     },
 
     insertMember() {
@@ -170,5 +167,21 @@ export default {
   },
 };
 </script>
-<style>
+<style scoped>
+  .mt-3 {
+    width: 500px;
+  }
+
+  button {
+    margin-top: 20px;
+    border: none;
+    background-image: url('../../assets/title1.jpg');
+    color: white;
+    font-weight: 300;
+    font-size: 20px;
+  }
+
+  h3 {
+    background-image: url('../../assets/title1.jpg');
+  }
 </style>
