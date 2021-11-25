@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.ssafy.vue.model.mapper.GalleryMapper">
+	
+	<insert id="uploadGallery" parameterType="GalleryDto" useGeneratedKeys="true" keyProperty="gallery_id">
+		insert into gallery (noticeno, userid, title, file_path)
+		values (#{noticeno}, #{userid}, #{title}, #{file_path})
+	</insert>
+
+	<select id="getGalleryArticle" parameterType="int" resultType="galleryDto">
+		select articleno, userid, title, file_path
+		from gallery
+		where articleno = #{articleno}
+	</select>
+	
+	<select id="getGalleryNotice" parameterType="int" resultType="galleryDto">
+		select noticeno, userid, title, file_path
+		from gallery
+		where noticeno = #{noticeno}
+	</select>
+	
+</mapper>
+

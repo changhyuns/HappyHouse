@@ -32,22 +32,13 @@
 
   export default {
     name: "SubCommentListRow",
-    // props: {
-    //   commentid: Number,
-    //   userid: String,
-    //   articleno: Number,
-    //   hit: Number,
-    //   regtime: String,
-    //   content: String,
-    // },
     props: ["subComment"],
-
     computed: {
       ...mapState(memberStore, ["userInfo"]),
 
       changeDateFormat() {
         return moment(new Date(this.subComment.regtime)).format(
-            "MM월DD일 \xa0 hh:mm"
+            "MM월DD일\xa0\xa0hh:mm"
         );
       },
 
@@ -57,7 +48,11 @@
 
       checkAdmin() {
         return this.subComment.userid === 'admin';
-      }
+      },
+
+      checkWriterProfile() {
+        return this.writerProfile !== null;
+      },
     },
 
     methods: {
@@ -85,7 +80,6 @@
         });
       },
     },
-
     mounted() {
       this.resize();
     }

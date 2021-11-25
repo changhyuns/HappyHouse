@@ -2,7 +2,7 @@
   <div class="comment_box">
     <div style="padding-top: 5px; display: flex; align-items: center">
       <div class="inbox_user" style="display: inline; float: left;">
-        {{ comment.userid && comment.userid }} <b-icon icon="person-check" v-if="checkAdmin"  font-scale="1"></b-icon>
+        {{ comment.userid && comment.userid }} <b-icon icon="person-check" v-if="checkAdmin" font-scale="1"></b-icon>
       </div>
       <div class="inbox_regtime" style="display: inline; float: left;">
         <b-icon icon="dot" font-scale="1" style="margin-left: 5px"></b-icon>{{ comment.regtime && changeDateFormat }}
@@ -42,9 +42,9 @@
 
 <script>
   import { mapState } from "vuex";
-  import moment from "moment";
   import { writeSubComment, listSubComment, deleteComment } from "@/api/board";
   import swal from "sweetalert";
+  import moment from "moment";
   import SubCommentListRow from './SubCommentListRow.vue';
 
   const memberStore = "memberStore";
@@ -52,14 +52,6 @@
   export default {
     name: "CommentListRow",
     components: { SubCommentListRow },
-    // props: {
-    //   commentid: Number,
-    //   userid: String,
-    //   articleno: Number,
-    //   hit: Number,
-    //   regtime: String,
-    //   content: String,
-    // },
     props: ["comment"],
     data() {
       return {
@@ -71,20 +63,12 @@
         writeButtonDisplay: {
           value: '답글 달기',
           flag: true,
-        }
+        },
       }
     },
+
     created() {
-      listSubComment(
-          this.comment.commentid,
-          (response) => {
-            console.log("subComment", response.data);
-            this.subComments = response.data;
-          },
-          (error) => {
-            console.log("하위 댓글 불러오기 실패!", error);
-          }
-        );
+      this.getList();
     },
 
     computed: {
@@ -110,25 +94,45 @@
 
       checkWriteCondition() {
         return this.writeButtonDisplay.flag;
-      }
+      },
+
     },
 
     methods: {
-      submitSubComment() {
-        swal("하위 댓글을 등록하시겠습니까?", {
-          buttons: ["취소", "등록"],
-        })
-        .then((willSubmit) => {
-          if(willSubmit) {
-            writeSubComment({articleno: this.comment.articleno, commentid: this.comment.commentid, content: this.subComment_content, userid: this.userInfo.userid}, () => {
-              swal("하위 댓글 등록 성공!", {
-                icon: "success",
-              });
-              this.$router.go();
-            })
+
+      getList() {
+        listSubComment(
+          this.comment.commentid,
+          (response) => {
+            this.subComments = response.data;
+            console.log("subComment", response.data);
+          },
+          (error) => {
+            console.log("하위 댓글 불러오기 실패!", error);
           }
-        });
+        );
       },
+    
+
+    checkWrittenByMe(){
+      return this.comment.userid === this.userInfo.userid;
+    },
+
+    submitSubComment() {
+      swal("하위 댓글을 등록하시겠습니까?", {
+        buttons: ["취소", "등록"],
+      })
+      .then((willSubmit) => {
+        if(willSubmit) {
+          writeSubComment({articleno: this.comment.articleno, commentid: this.comment.commentid, content: this.subComment_content, userid: this.userInfo.userid}, () => {
+            swal("하위 댓글 등록 성공!", {
+              icon: "success",
+            });
+            this.$router.go();
+          })
+        }
+      });
+    },
       resize() {
         const { textarea } = this.$refs;
         textarea.style.height = "1px";

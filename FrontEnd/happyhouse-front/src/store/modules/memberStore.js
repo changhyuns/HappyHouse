@@ -1,18 +1,19 @@
 import jwt_decode from "jwt-decode";
 import { login, findById, registUser, updateUser, deleteUser } from "@/api/member.js";
 
+
 const memberStore = {
   namespaced: true,
   state: {
     isLogin: false,
     isLoginError: false,
     userInfo: null,
-    userProfile: null,
   },
   getters: {
     checkUserInfo: function (state) {
       return state.userInfo;
     },
+
   },
   mutations: {
     SET_IS_LOGIN: (state, isLogin) => {
@@ -22,13 +23,8 @@ const memberStore = {
       state.isLoginError = isLoginError;
     },
     SET_USER_INFO: (state, userInfo) => {
-      state.isLogin = true;
       state.userInfo = userInfo;
     },
-    SET_USER_PROFILE: (state, profile) => {
-      state.isLogin = true;
-      state.userProfile = profile;
-    }
   },
   actions: {
     async userConfirm({ commit }, user) {
@@ -48,9 +44,9 @@ const memberStore = {
         () => { }
       );
     },
-    getUserInfo({ commit }, token) {
+    async getUserInfo({ commit }, token) {
       let decode_token = jwt_decode(token);
-      findById(
+      await findById(
         decode_token.userid,
         (response) => {
           if (response.data.message === "success") {

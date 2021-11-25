@@ -50,6 +50,7 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
+import swal from 'sweetalert';
 
 const memberStore = "memberStore";
 
@@ -65,7 +66,7 @@ export default {
 
     resignMember() {
       this.deleteMember(this.userInfo.userid);
-      alert("탈퇴되었습니다.");
+      swal("탈퇴되었습니다.", 'success');
       if (this.$route.path != "/") this.$router.push({ name: "Main" });
     },
 

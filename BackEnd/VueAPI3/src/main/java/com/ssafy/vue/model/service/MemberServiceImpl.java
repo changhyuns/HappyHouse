@@ -25,11 +25,10 @@ public class MemberServiceImpl implements MemberService {
 	public MemberDto userInfo(String userid) throws Exception {
 		return sqlSession.getMapper(MemberMapper.class).userInfo(userid);
 	}
-
+	
 	@Override
-	@Transactional
 	public boolean registerMember(MemberDto memberDto) throws Exception {
-		if(memberDto.getUserid() == null || memberDto.getUsername() == null || memberDto.getUserpwd() == null){
+		if(memberDto.getUserid() == null || memberDto.getUsername() == null || memberDto.getUserpwd() == null) {
 			throw new Exception();
 		}
 		return sqlSession.getMapper(MemberMapper.class).registerMember(memberDto) == 1;
@@ -37,14 +36,24 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	@Transactional
-	public boolean updateMember(MemberDto memberDto) throws Exception {
-		return sqlSession.getMapper(MemberMapper.class).updateMember(memberDto) == 1;
+	public boolean modifyMember(MemberDto memberDto) throws Exception {
+		return sqlSession.getMapper(MemberMapper.class).modifyMember(memberDto) == 1;
+	}
+	
+
+	@Override
+	public boolean deleteMember(String userid) throws Exception {
+		return sqlSession.getMapper(MemberMapper.class).deleteMember(userid) == 1;
 	}
 
 	@Override
-	@Transactional
-	public boolean deleteMember(String userid) throws Exception {
-		return sqlSession.getMapper(MemberMapper.class).deleteMember(userid) == 1;
+	public MemberDto findPwd(String id, String name) throws Exception {
+		return sqlSession.getMapper(MemberMapper.class).findPwd(id, name);
+	}
+
+	@Override
+	public boolean resetPwd(MemberDto memberDto) throws Exception {
+		return sqlSession.getMapper(MemberMapper.class).resetPwd(memberDto) == 1;
 	}
 
 }

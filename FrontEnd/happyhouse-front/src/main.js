@@ -2,6 +2,7 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
+import Vuesax from 'vuesax';
 
 // Import Bootstrap an BootstrapVue CSS files (order is important)
 import "bootstrap/dist/css/bootstrap.css";
@@ -10,7 +11,10 @@ import store from "./store";
 import memberStore from "./store/modules/memberStore";
 
 import "./fontAwesomeIcon.js";
-// Make BootstrapVue available throughout your project
+
+import 'vuesax/dist/vuesax.css'; //Vuesax styles
+Vue.use(Vuesax);
+
 Vue.use(BootstrapVue);
 // Optionally install the BootstrapVue icon components plugin
 Vue.use(IconsPlugin);

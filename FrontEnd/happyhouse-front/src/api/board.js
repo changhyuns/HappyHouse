@@ -27,10 +27,6 @@ function getPrev(articleno, success, fail) {
   api.get(`board/prev/${articleno}`).then(success).catch(fail);
 }
 
-// function modifyArticle(article, success, fail) {
-//   api.put(`/board`, JSON.stringify(article)).then(success).catch(fail);
-// }
-
 function modifyArticle(param, success, fail) {
   api.put(`/board`, param).then(success).catch(fail);
 }

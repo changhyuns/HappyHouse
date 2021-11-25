@@ -103,6 +103,7 @@
 
 <script>
 import { mapActions} from 'vuex';
+import swal from 'sweetalert';
 
 const memberStore = "memberStore";
 
@@ -149,8 +150,8 @@ export default {
       if (!err) alert(msg);
       else{
         this.insertMember();
-        alert("가입이 완료되었습니다.");
-        this.$router.push({name:"Home"});
+        swal("가입이 완료되었습니다.", 'success');
+        this.$router.push({name:"Main"});
       }
     },
 
@@ -163,7 +164,7 @@ export default {
       this.user.emaildomain = "";
     },
 
-    insertMember(){
+    insertMember() {
       this.registMember(this.user);
     }
   },
