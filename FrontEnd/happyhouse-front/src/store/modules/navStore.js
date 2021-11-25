@@ -1,7 +1,7 @@
 const navStore = {
     namespaced: true,
     state: {
-        foldHouseList: false,
+        foldHouseList: true,
     },
 
     mutations: {
