@@ -14,6 +14,26 @@ public class SidoGugunCodeDto {
 	private String gugunCode;
 	@ApiModelProperty(value = "구군이름")
 	private String gugunName;
+	@ApiModelProperty(value = "동코드")
+	private String dongCode;
+	@ApiModelProperty(value = "동이름")
+	private String dongName;
+
+	public String getDongCode() {
+		return dongCode;
+	}
+
+	public void setDongCode(String dongCode) {
+		this.dongCode = dongCode;
+	}
+
+	public String getDongName() {
+		return dongName;
+	}
+
+	public void setDongName(String dongName) {
+		this.dongName = dongName;
+	}
 
 	public String getSidoCode() {
 		return sidoCode;
