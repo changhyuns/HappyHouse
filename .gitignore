@@ -1,0 +1,26 @@
+# npm module
+Frontend/happyhouse-front/.DS_Store
+Frontend/happyhouse-front/node_modules
+Frontend/happyhouse-front/dist
+
+
+# local env files
+Frontend/happyhouse-front/.env.local
+Frontend/happyhouse-front/.env.*.local
+
+# Log files
+Frontend/happyhouse-front/npm-debug.log*
+Frontend/happyhouse-front/yarn-debug.log*
+Frontend/happyhouse-front/yarn-error.log*
+Frontend/happyhouse-front/pnpm-debug.log*
+BackEnd/VueAPI3/*.log
+BackEnd/VueAPI3/log/
+
+# Editor directories and files
+Frontend/happyhouse-front/.idea
+Frontend/happyhouse-front/.vscode
+Frontend/happyhouse-front/*.suo
+Frontend/happyhouse-front/*.ntvs*
+Frontend/happyhouse-front/*.njsproj
+Frontend/happyhouse-front/*.sln
+Frontend/happyhouse-front/*.sw?

@@ -1,34 +1,48 @@
 <template>
-  <b-container class="bv-example-row mt-3 text-center">
-    <h3 class="underline-orange">
-      <b-icon icon="house-fill"></b-icon> House Service
-    </h3>
-    <b-row>
-      <b-col>
-        <house-search-bar></house-search-bar>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col cols="6" align="left">
-        <house-list />
-      </b-col>
-      <b-col cols="6">
-        <house-detail />
-      </b-col>
-    </b-row>
-  </b-container>
+<div>
+  <div>
+    <nav>
+      <user-nav></user-nav>
+    </nav>
+  </div>
+  <div>
+    <aside>
+      <side-nav></side-nav>
+    </aside>
+    <section>
+      <div class="map-area">
+        <h3 style="color: white; height: 40px; font-size: 30px;"><b-icon icon="house-fill"></b-icon> 매물 검색</h3>
+        <div>
+          <house-search-bar></house-search-bar>
+        </div>
+        <div>
+          <house-list />
+        </div>
+        <div>
+          <kakao-map></kakao-map>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
 </template>
 <script>
 import HouseSearchBar from "@/components/house/HouseSearchBar.vue";
 import HouseList from "@/components/house/HouseList.vue";
-import HouseDetail from "@/components/house/HouseDetail.vue";
+// import HouseDetail from "@/components/house/HouseDetail.vue";
+import SideNav from "../components/layout/SideNav.vue";
+import UserNav from "../components/layout/UserNav.vue";
+import KakaoMap from "../components/house/KakaoMap.vue";
 
 export default {
   name: "House",
   components: {
     HouseSearchBar,
     HouseList,
-    HouseDetail,
+    // HouseDetail,
+    SideNav,
+    UserNav,
+    KakaoMap,
   },
 };
 </script>
@@ -40,5 +54,23 @@ export default {
     rgba(255, 255, 255, 0) 70%,
     rgba(231, 149, 27, 0.3) 30%
   );
+}
+
+h3 {
+  background-image: url('../assets/title1.jpg'); 
+  text-align: center;
+}
+
+section {
+  display: inline-block;
+  text-align: center;
+  position: relative;
+  left: 560px;
+  width: 900px;
+  margin-left: 150px;
+}
+
+section .map-area {
+  display: inline-block;
 }
 </style>

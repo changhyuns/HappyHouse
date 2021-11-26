@@ -10,11 +10,7 @@
 	</insert>
 	
 	<select id="listArticle" parameterType="map" resultType="boardDto">
-		select articleno, userid, subject, content, hit,
-				case when date_format(regtime, '%Y%m%d') = date_format(now(), '%Y%m%d')
-				then date_format(regtime, '%H:%i:%s')
-				else date_format(regtime, '%y.%m.%d')
-				end regtime
+		select articleno, userid, subject, content, hit, comments, regtime
 		from board
 		<if test="word != null and word != ''">
 			<if test="key == 'subject'">
@@ -47,6 +43,18 @@
 		where articleno = #{articleno}
 	</select>
 	
+	<select id="getNext" parameterType="int" resultType="int">
+		select max(articleno)
+		from board
+		where articleno &lt; #{articleno}
+	</select>
+	
+	<select id="getPrev" parameterType="int" resultType="int">
+		select min(articleno)
+		from board
+		where articleno &gt; #{articleno}
+	</select>
+	
 	<update id="updateHit" parameterType="int">
 		update board
 		set hit = hit + 1
@@ -59,15 +67,67 @@
 		where articleno = #{articleno}
 	</update>
 	
-	<delete id="deleteMemo" parameterType="int">
-		delete from memo
-		where articleno = #{articleno}
-	</delete>
-	
 	<delete id="deleteArticle" parameterType="int">
 		delete from board
 		where articleno = #{articleno}
 	</delete>
-
+	
+	<insert id="writeComment" parameterType="CommentDto">
+		insert into comments (articleno, userid, content, regtime)
+		values (#{articleno}, #{userid}, #{content}, now())
+	</insert>
+	
+	<select id="listComment" parameterType="int" resultType="CommentDto">
+		select commentid, articleno, userid, content, regtime
+		from comments
+		where articleno = #{articleno}
+		order by commentid desc
+	</select>
+	
+	<select id="getTotalCountComment" parameterType="int" resultType="int">
+		select count(commentid)
+		from comments
+		where articleno = #{articleno}
+	</select>
+	
+	<update id="plusComment" parameterType="CommentPlusDto">
+		update board
+		set comments = #{comments}
+		where articleno = #{articleno}
+	</update>
+	
+	<update id="modifyComment" parameterType="CommentDto">
+		update comments
+		set content = #{content}, regtime = now()
+		where commentid = #{commentid}
+	</update>
+	
+	<delete id="deleteComment" parameterType="int">
+		delete from comments
+		where commentid = #{commentid}
+	</delete>
+	
+	<insert id="writeSubComment" parameterType="SubCommentDto">
+		insert into sub_comments (commentid, articleno, userid, content, regtime)
+		values (#{commentid}, #{articleno}, #{userid}, #{content}, now())
+	</insert>
+	
+	<select id="listSubComment" parameterType="int" resultType="SubCommentDto">
+		select sub_comment_id, commentid, articleno, userid, content, regtime
+		from sub_comments
+		where commentid = #{commentid}
+		order by sub_comment_id desc
+	</select>
+	
+	<delete id="deleteSubComment" parameterType="int">
+		delete from sub_comments
+		where sub_comment_id = #{sub_commentid}
+	</delete>
+	
+	<select id="getSubCommentCount" parameterType="int" resultType="int">
+		select count(sub_comment_id)
+		from sub_comments
+		where articleno = #{articleno}
+	</select>
 </mapper>
 

@@ -93,7 +93,7 @@ const memberStore = "memberStore";
 export default {
   name: "NaviBar",
   computed: {
-    ...mapState(memberStore, ["isLogin", "userInfo"]),
+    ...mapState(memberStore, ["isLogin", "userInfo", "userProfile"]),
   },
   methods: {
     ...mapMutations(memberStore, ["SET_IS_LOGIN", "SET_USER_INFO"]),

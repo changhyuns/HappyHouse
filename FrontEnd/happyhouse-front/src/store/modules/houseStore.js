@@ -1,4 +1,4 @@
-import { sidoList, gugunList, houseList } from "@/api/house.js";
+import { sidoList, gugunList, houseList, dongList } from "@/api/house.js";
 
 const houseStore = {
   namespaced: true,
@@ -7,6 +7,11 @@ const houseStore = {
     guguns: [{ value: null, text: "선택하세요" }],
     houses: [],
     house: null,
+    address: { sido: null, gugun: null },
+    totalHouse: 0,
+    gugunCode: null,
+    curPage: 1,
+    dongs: [{ value: null, text: "선택하세요" }],
   },
 
   getters: {},
@@ -22,11 +27,19 @@ const houseStore = {
         state.guguns.push({ value: gugun.gugunCode, text: gugun.gugunName });
       });
     },
+    SET_DONG_LIST: (state, dongs) => {
+      dongs.forEach((dong) => {
+        state.dongs.push({value: dong.dongCode, text: dong.dongName})
+      });
+    },
     CLEAR_SIDO_LIST: (state) => {
       state.sidos = [{ value: null, text: "선택하세요" }];
     },
     CLEAR_GUGUN_LIST: (state) => {
       state.guguns = [{ value: null, text: "선택하세요" }];
+    },
+    CLEAR_DONG_LIST: (state) => {
+      state.dongs = [{ value: null, text: "선택하세요" }];
     },
     SET_HOUSE_LIST: (state, houses) => {
       //   console.log(houses);
@@ -35,6 +48,38 @@ const houseStore = {
     SET_DETAIL_HOUSE: (state, house) => {
       state.house = house;
     },
+
+    SET_ADDRESS: (state, data) => {
+      state.sidos.forEach(s => {
+        if (s.value == data.sc) {
+          state.address.sido = s.text;
+        }
+      });
+
+      state.guguns.forEach(g => {
+        if (g.value == data.gc) {
+          state.address.gugun = g.text;
+        }
+      });
+    },
+
+    CLEAR_HOUSE_LIST: (state) => {
+      state.houses = [];
+      state.house = null;
+    },
+
+    SET_TOTAL_HOUSE: (state, count) => {
+      state.totalHouse = count;
+    },
+
+    SET_GUGUN_CODE: (state, code) => {
+      state.gugunCode = code;
+    },
+
+    SET_CUR_PAGE:(state, page) => {
+      state.curPage = page;
+    }
+
   },
 
   actions: {
@@ -64,7 +109,22 @@ const houseStore = {
         }
       );
     },
-    getHouseList: ({ commit }, gugunCode) => {
+    getDong: ({commit}, gugunCode) => {
+      const params = {
+        gugun: gugunCode,
+      };
+      dongList(
+        params,
+        ({data}) => {
+          commit("SET_DONG_LIST", data);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+
+    getHouseList: ({ commit }, {gugunCode, curPage}) => {
       // vue cli enviroment variables 검색
       //.env.local file 생성.
       // 반드시 VUE_APP으로 시작해야 한다.
@@ -75,12 +135,17 @@ const houseStore = {
         LAWD_CD: gugunCode,
         DEAL_YMD: "202110",
         serviceKey: decodeURIComponent(SERVICE_KEY),
+        pageNo: curPage,
       };
       houseList(
         params,
         (response) => {
-          //   console.log(response.data.response.body.items.item);
+          // console.log(response.data.response.body.items.item);
+          commit("SET_ADDRESS", { sc: gugunCode.substr(0, 2), gc: gugunCode });
+          commit("SET_GUGUN_CODE", gugunCode);
+          commit("SET_TOTAL_HOUSE", response.data.response.body.totalCount);
           commit("SET_HOUSE_LIST", response.data.response.body.items.item);
+          commit("SET_CUR_PAGE", curPage);
         },
         (error) => {
           console.log(error);

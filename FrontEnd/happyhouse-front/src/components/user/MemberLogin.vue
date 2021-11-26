@@ -1,14 +1,8 @@
 <template>
-  <b-container class="bv-example-row mt-3">
+  <div>
     <b-row>
-      <b-col>
-        <b-alert variant="secondary" show><h3>로그인</h3></b-alert>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col></b-col>
       <b-col cols="8">
-        <b-card class="text-center mt-3" style="max-width: 40rem" align="left">
+        <b-card class="text-center mt-3" style="max-width: 400px" align="left">
           <b-form class="text-left">
             <b-alert show variant="danger" v-if="isLoginError"
               >아이디 또는 비밀번호를 확인하세요.</b-alert
@@ -18,7 +12,6 @@
                 id="userid"
                 v-model="user.userid"
                 required
-                placeholder="아이디 입력...."
                 @keyup.enter="confirm"
               ></b-form-input>
             </b-form-group>
@@ -28,11 +21,12 @@
                 id="userpwd"
                 v-model="user.userpwd"
                 required
-                placeholder="비밀번호 입력...."
                 @keyup.enter="confirm"
               ></b-form-input>
             </b-form-group>
+            <div style="text-align:center">
             <b-button
+              
               type="button"
               variant="primary"
               class="m-1"
@@ -46,12 +40,14 @@
               @click="movePage"
               >회원가입</b-button
             >
+            </div>
+            
           </b-form>
         </b-card>
       </b-col>
       <b-col></b-col>
     </b-row>
-  </b-container>
+  </div>
 </template>
 
 <script>
@@ -89,4 +85,5 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+</style>

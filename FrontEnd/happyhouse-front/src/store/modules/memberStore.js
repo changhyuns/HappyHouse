@@ -1,6 +1,6 @@
 import jwt_decode from "jwt-decode";
-import { login } from "@/api/member.js";
-import { findById } from "../../api/member";
+import { login, findById, registUser, updateUser, deleteUser } from "@/api/member.js";
+
 
 const memberStore = {
   namespaced: true,
@@ -13,6 +13,7 @@ const memberStore = {
     checkUserInfo: function (state) {
       return state.userInfo;
     },
+
   },
   mutations: {
     SET_IS_LOGIN: (state, isLogin) => {
@@ -22,7 +23,6 @@ const memberStore = {
       state.isLoginError = isLoginError;
     },
     SET_USER_INFO: (state, userInfo) => {
-      state.isLogin = true;
       state.userInfo = userInfo;
     },
   },
@@ -41,12 +41,12 @@ const memberStore = {
             commit("SET_IS_LOGIN_ERROR", true);
           }
         },
-        () => {}
+        () => { }
       );
     },
-    getUserInfo({ commit }, token) {
+    async getUserInfo({ commit }, token) {
       let decode_token = jwt_decode(token);
-      findById(
+      await findById(
         decode_token.userid,
         (response) => {
           if (response.data.message === "success") {
@@ -60,6 +60,46 @@ const memberStore = {
         }
       );
     },
+
+    registMember({ commit }, user) {
+      registUser(user,
+        (response) => {
+          if (response.data === "success") {
+            console.log("regist success");
+          }
+        }, (error) => {
+          console.log(error);
+        })
+    },
+
+    updateMember({ commit }, user) {
+      console.log(user);
+      updateUser(user,
+        (response) => {
+          if (response.data === "success") {
+            console.log("update success");
+            commit("SET_USER_INFO", user);
+          }
+        }, (error) => {
+          console.log(error);
+        })
+    },
+
+    deleteMember({ commit }, id) {
+      console.log("store 호출 : " + id);
+      deleteUser(id,
+        (response) => {
+          console.log("response : " + response);
+          if (response.data === "success") {
+            console.log("delete success");
+            commit("SET_USER_INFO", null);
+            commit("SET_IS_LOGIN", false);
+            sessionStorage.removeItem("access-token");
+          }
+        }, (error) => {
+          console.log(error);
+        })
+    }
   },
 };
 
